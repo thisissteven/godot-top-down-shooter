@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cfr0xa1nmisqy"]
+
+[ext_resource type="Script" uid="uid://duuefkhghxa8t" path="res://scripts/procgen/dungeon_generator.gd" id="1_xd7b8"]
+[ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://environment/walls/top_walls.tscn" id="2_eoyx7"]
+[ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://environment/walls/bottom_walls.tscn" id="3_65jun"]
+[ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://environment/tiles/tiles_base.tscn" id="4_3qfp6"]
+
+[node name="DungeonGenerator" type="Node" unique_id=1115400709]
+script = ExtResource("1_xd7b8")
+top_walls_scene = ExtResource("2_eoyx7")
+bottom_walls_scene = ExtResource("3_65jun")
+tiles_scene = ExtResource("4_3qfp6")

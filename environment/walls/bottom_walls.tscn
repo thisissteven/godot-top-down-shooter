@@ -1,16 +1,22 @@
 [gd_scene format=3 uid="uid://cv45s283crols"]
 
 [ext_resource type="Texture2D" uid="uid://dn2rg58c12idk" path="res://assets/bottom_wall.png" id="1_h6vsl"]
-[ext_resource type="Script" uid="uid://d2ah21xn3ahrj" path="res://walls/bottom_walls.gd" id="2_ma11c"]
+[ext_resource type="Script" uid="uid://d2ah21xn3ahrj" path="res://environment/walls/bottom_walls.gd" id="2_ma11c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ma11c"]
 texture = ExtResource("1_h6vsl")
 0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_6y3qg"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 0
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)

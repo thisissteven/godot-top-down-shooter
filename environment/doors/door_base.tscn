@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ch3nj1k6kpomu"]
 
-[ext_resource type="Script" uid="uid://q1suxqi0fxkv" path="res://doors/door_base.gd" id="1_neg2a"]
+[ext_resource type="Script" uid="uid://q1suxqi0fxkv" path="res://environment/doors/door_base.gd" id="1_neg2a"]
 
 [node name="DoorBase" type="Node2D" unique_id=1707612364]
 script = ExtResource("1_neg2a")

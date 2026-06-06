@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://k0tdarl476xw"]
 
 [ext_resource type="Script" uid="uid://3s01c8iv71g3" path="res://scenes/dungeon_with_script.gd" id="1_pxq7g"]
-[ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://tiles/tiles_base.tscn" id="2_xefwp"]
-[ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://walls/bottom_walls.tscn" id="3_j71am"]
-[ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://walls/top_walls.tscn" id="4_uicv5"]
-[ext_resource type="PackedScene" uid="uid://ch3nj1k6kpomu" path="res://doors/door_base.tscn" id="5_j71am"]
+[ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://environment/tiles/tiles_base.tscn" id="2_xefwp"]
+[ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://environment/walls/bottom_walls.tscn" id="3_j71am"]
+[ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://environment/walls/top_walls.tscn" id="4_uicv5"]
+[ext_resource type="PackedScene" uid="uid://ch3nj1k6kpomu" path="res://environment/doors/door_base.tscn" id="5_j71am"]
 
 [node name="DungeonWithScript" type="Node2D" unique_id=1294668304]
 script = ExtResource("1_pxq7g")
