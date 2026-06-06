@@ -80,10 +80,230 @@ func generate():
 	
 	_draw_outer_rectangle()
 	_fill_gaps()
+	_connect_regions()
 
 	_draw()
 
+func _compute_regions():
+	var region_map = []
+	for y in range(map_height):
+		region_map.append([])
+		for x in range(map_width):
+			region_map[y].append(-1)
+
+	var region_id = 0
+	var dirs = [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]
+
+	for y in range(map_height):
+		for x in range(map_width):
+
+			if not grid[y][x]: # wall
+				continue
+			if region_map[y][x] != -1:
+				continue
+
+			var q = [Vector2i(x,y)]
+			region_map[y][x] = region_id
+
+			while not q.is_empty():
+				var c = q.pop_back()
+
+				for d in dirs:
+					var nx = c.x + d.x
+					var ny = c.y + d.y
+
+					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
+						continue
+
+					if not grid[ny][nx]:
+						continue
+
+					if region_map[ny][nx] != -1:
+						continue
+
+					region_map[ny][nx] = region_id
+					q.append(Vector2i(nx, ny))
+
+			region_id += 1
+
+	return {
+		"map": region_map,
+		"count": region_id
+	}
 	
+	
+func _collect_wall_edges(region_map, region_count):
+	var edges = {}  # key: "a_b" → list of wall cells
+
+	for y in range(map_height):
+		for x in range(map_width):
+
+			if grid[y][x]:
+				continue  # only walls
+
+			var neighbors = {}
+
+			for d in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
+				var nx = x + d.x
+				var ny = y + d.y
+
+				if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
+					continue
+
+				if grid[ny][nx]:
+					continue
+
+				var r = region_map[ny][nx]
+				if r != -1:
+					neighbors[r] = true
+
+			if neighbors.size() < 2:
+				continue
+
+			var keys = neighbors.keys()
+			var a = keys[0]
+			var b = keys[1]
+
+			var key = str(min(a,b)) + "_" + str(max(a,b))
+
+			if not edges.has(key):
+				edges[key] = []
+
+			edges[key].append(Vector2i(x,y))
+
+	return edges
+
+
+var parent: Array = []
+
+func _find(a: int) -> int:
+	if parent[a] != a:
+		parent[a] = _find(parent[a])
+	return parent[a]
+
+func _union(a: int, b: int) -> void:
+	parent[_find(a)] = _find(b)
+	
+	
+func _connect_regions():
+
+	var result = _compute_regions()
+	var region_map = result["map"]
+	var region_count = result["count"]
+
+	parent = []
+	for i in range(region_count):
+		parent.append(i)
+
+	var changed := true
+
+	while changed:
+		changed = false
+
+		var best = null
+		var best_score = INF
+
+		for y in range(map_height):
+			for x in range(map_width):
+
+				# ONLY WALLS are candidates
+				if grid[y][x] == true:
+					continue
+
+				var touching := {}
+
+				for d in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
+					var nx = x + d.x
+					var ny = y + d.y
+
+					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
+						continue
+
+					# ONLY FLOORS contribute regions
+					if grid[ny][nx] == false:
+						continue
+
+					var r = region_map[ny][nx]
+					if r != -1:
+						touching[r] = true
+
+				if touching.size() < 2:
+					continue
+
+				var keys = touching.keys()
+				var a = keys[0]
+				var b = keys[1]
+
+				if _find(a) == _find(b):
+					continue
+
+				# score: prefer shorter / more central connections
+				var score = abs(x - map_width * 0.5) + abs(y - map_height * 0.5)
+
+				if score < best_score:
+					best_score = score
+					best = {
+						"a": a,
+						"b": b,
+						"pos": Vector2i(x, y)
+					}
+
+		if best != null:
+			var p = best.pos
+
+			var candidates = [
+				Vector2i(1, 0),
+				Vector2i(-1, 0),
+				Vector2i(0, 1),
+				Vector2i(0, -1)
+			]
+
+			var carved := false
+
+			for d in candidates:
+				var p2 = p + d
+
+				if p2.x < 0 or p2.x >= map_width or p2.y < 0 or p2.y >= map_height:
+					continue
+
+				# must both be walls
+				if grid[p.y][p.x] == true:
+					continue
+				if grid[p2.y][p2.x] == true:
+					continue
+
+				# ❗ strip validity check (no branching walls)
+				var p_up = (p.y > 0 and grid[p.y - 1][p.x] == false)
+				var p_down = (p.y < map_height - 1 and grid[p.y + 1][p.x] == false)
+				var p_left = (p.x > 0 and grid[p.y][p.x - 1] == false)
+				var p_right = (p.x < map_width - 1 and grid[p.y][p.x + 1] == false)
+
+				var p2_up = (p2.y > 0 and grid[p2.y - 1][p2.x] == false)
+				var p2_down = (p2.y < map_height - 1 and grid[p2.y + 1][p2.x] == false)
+				var p2_left = (p2.x > 0 and grid[p2.y][p2.x - 1] == false)
+				var p2_right = (p2.x < map_width - 1 and grid[p2.y][p2.x + 1] == false)
+
+				# enforce straight-line strip consistency
+				if d.x != 0:
+					# horizontal strip → must NOT have vertical continuation
+					if p_up or p_down or p2_up or p2_down:
+						continue
+
+				if d.y != 0:
+					# vertical strip → must NOT have horizontal continuation
+					if p_left or p_right or p2_left or p2_right:
+						continue
+
+				# valid 2-tile strip carve
+				grid[p.y][p.x] = true
+				grid[p2.y][p2.x] = true
+
+				_union(best.a, best.b)
+				changed = true
+				carved = true
+				break
+						
+										
 func _draw_outer_rectangle():
 
 	for t in range(border_thickness):
@@ -298,137 +518,55 @@ func _find_room(node):
 
 
 func _fill_gaps():
-	# true  = wall (dark striped)
-	# false = walkable (white)
+	# true  = wall
+	# false = floor
 
-	# --- Pass 1: flood-fill small enclosed walkable regions ---
-	var visited := []
-	for y in range(map_height):
-		visited.append([])
-		for x in range(map_width):
-			visited[y].append(false)
-
-	for sy in range(map_height):
-		for sx in range(map_width):
-			if grid[sy][sx] or visited[sy][sx]:
-				continue
-
-			# flood-fill connected walkable region
-			var region: Array[Vector2i] = []
-			var region_set := {}
-			var queue: Array[Vector2i] = [Vector2i(sx, sy)]
-			visited[sy][sx] = true
-
-			while not queue.is_empty():
-				var cell: Vector2i = queue.pop_back()
-				region.append(cell)
-				region_set[cell] = true
-				for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
-					var nx: int = cell.x + dir.x
-					var ny: int = cell.y + dir.y
-					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
-						continue
-					if visited[ny][nx] or grid[ny][nx]:
-						continue
-					visited[ny][nx] = true
-					queue.append(Vector2i(nx, ny))
-
-			# bounding box check
-			var min_x := region[0].x; var max_x := region[0].x
-			var min_y := region[0].y; var max_y := region[0].y
-			for cell in region:
-				if cell.x < min_x: min_x = cell.x
-				if cell.x > max_x: max_x = cell.x
-				if cell.y < min_y: min_y = cell.y
-				if cell.y > max_y: max_y = cell.y
-
-			if max_x - min_x + 1 > max_gap_width or max_y - min_y + 1 > max_gap_height:
-				continue
-
-			# --- enclosure check via escape flood-fill ---
-			var escape_queue: Array[Vector2i] = []
-			var escape_visited := {}
-
-			# start from region boundary
-			for cell in region:
-				for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
-					var nx = cell.x + dir.x
-					var ny = cell.y + dir.y
-
-					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
-						continue
-
-					var n := Vector2i(nx, ny)
-
-					# ONLY start from walkable cells not in region
-					if not grid[ny][nx] and not escape_visited.has(n) and not region_set.has(n):
-						escape_visited[n] = true
-						escape_queue.append(n)
-
-			var touches_border := false
-
-			while not escape_queue.is_empty():
-				var cell = escape_queue.pop_back()
-
-				if cell.x == 0 or cell.y == 0 or cell.x == map_width-1 or cell.y == map_height-1:
-					touches_border = true
-					break
-
-				for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
-					var nx = cell.x + dir.x
-					var ny = cell.y + dir.y
-
-					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
-						continue
-
-					var n = Vector2i(nx, ny)
-
-					if grid[ny][nx]:
-						continue
-					if escape_visited.has(n):
-						continue
-					if region_set.has(n):
-						continue
-
-					escape_visited[n] = true
-					escape_queue.append(n)
-
-			var fully_enclosed = not touches_border
-
-			if fully_enclosed:
-				for cell in region:
-					grid[cell.y][cell.x] = true
-
-	# --- Pass 2: fill 1-wide pinched dead-end walkable cells iteratively ---
 	var changed := true
+	var safety_passes := 0
+	var max_passes := 3  # prevents over-erosion
 
-	while changed:
+	while changed and safety_passes < max_passes:
 		changed = false
+		safety_passes += 1
+
+		var to_remove: Array[Vector2i] = []
 
 		for y in range(map_height):
 			for x in range(map_width):
 
 				if not grid[y][x]:
-					continue # only process WALLS
+					continue  # only check WALLS
 
 				var floor_l = (x > 0 and not grid[y][x - 1])
 				var floor_r = (x < map_width - 1 and not grid[y][x + 1])
 				var floor_u = (y > 0 and not grid[y - 1][x])
 				var floor_d = (y < map_height - 1 and not grid[y + 1][x])
 
-				# horizontal gap: FLOOR WALL FLOOR
-				if floor_l and floor_r:
-					grid[y][x] = false
-					changed = true
+				# count how many sides are floor
+				var floor_count = 0
+				if floor_l: floor_count += 1
+				if floor_r: floor_count += 1
+				if floor_u: floor_count += 1
+				if floor_d: floor_count += 1
+
+				# -------------------------------
+				# SAFE REMOVAL RULES
+				# -------------------------------
+
+				# Case 1: thin horizontal noise wall
+				if floor_l and floor_r and floor_count >= 2:
+					to_remove.append(Vector2i(x, y))
 					continue
 
-				# vertical gap: FLOOR / WALL / FLOOR
-				if floor_u and floor_d:
-					grid[y][x] = false
-					changed = true
+				# Case 2: thin vertical noise wall
+				if floor_u and floor_d and floor_count >= 2:
+					to_remove.append(Vector2i(x, y))
 					continue
 
-
+		# apply removals AFTER scan (important!)
+		for cell in to_remove:
+			grid[cell.y][cell.x] = false
+			changed = true
 func _draw():
 	if grid.is_empty():
 		return
