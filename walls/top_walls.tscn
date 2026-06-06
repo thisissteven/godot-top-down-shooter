@@ -344,3 +344,5 @@ sources/0 = SubResource("TileSetAtlasSource_vqaso")
 [node name="DungeonBase" type="TileMapLayer" unique_id=1921369934]
 tile_set = SubResource("TileSet_uuaxm")
 script = ExtResource("2_fwmgq")
+wall_padding = null
+min_open_region_size = null

@@ -2,15 +2,22 @@
 extends TileMapLayer
 
 @export_group("Map")
-@export var map_width := 64
+@export var map_width := 128
 @export var map_height := 64
 
 @export_group("Rooms")
-@export var min_room_size := 5
-@export var max_room_size := 12
+@export var min_room_size := 6
+@export var max_room_size := 6
 @export var min_split_size := 10
-@export var padding := 2
-@export var corridor_width := 2
+@export var padding := 1
+@export var corridor_width := 1
+
+@export_group("Border")
+@export var border_thickness := 12
+
+@export_group("Gap Filling")
+@export var max_gap_width := 6
+@export var max_gap_height := 6
 
 @export_group("Terrain")
 @export var terrain_set := 0
@@ -97,11 +104,113 @@ func _generate():
 	_split(root)
 	_place_rooms(root)
 	_connect(root)
+	
+	_draw_outer_rectangle()
+	_fill_thin_gaps()
 
 	_draw()
 
 
+func _fill_thin_gaps():
 
+	var visited := []
+
+	# Initialize visited map
+	for y in range(map_height):
+		visited.append([])
+
+		for x in range(map_width):
+			visited[y].append(false)
+
+
+	for y in range(map_height):
+		for x in range(map_width):
+
+			# Skip already checked cells
+			if visited[y][x]:
+				continue
+
+			# We only care about walkable pockets
+			if !grid[y][x]:
+				continue
+
+			var region := []
+			var queue := [Vector2i(x, y)]
+
+			visited[y][x] = true
+
+			var min_x = x
+			var max_x = x
+			var min_y = y
+			var max_y = y
+
+			# Flood fill connected area
+			while queue.size() > 0:
+
+				var p = queue.pop_front()
+
+				region.append(p)
+
+				min_x = min(min_x, p.x)
+				max_x = max(max_x, p.x)
+				min_y = min(min_y, p.y)
+				max_y = max(max_y, p.y)
+
+				var dirs = [
+					Vector2i(1,0),
+					Vector2i(-1,0),
+					Vector2i(0,1),
+					Vector2i(0,-1)
+				]
+
+				for d in dirs:
+
+					var nx = p.x + d.x
+					var ny = p.y + d.y
+
+					if nx < 0 \
+					or nx >= map_width \
+					or ny < 0 \
+					or ny >= map_height:
+						continue
+
+					if visited[ny][nx]:
+						continue
+
+					if !grid[ny][nx]:
+						continue
+
+					visited[ny][nx] = true
+					queue.append(Vector2i(nx, ny))
+
+
+			# Bounding dimensions
+			var w = max_x - min_x + 1
+			var h = max_y - min_y + 1
+
+			# Fill if within limits
+			if w <= max_gap_width and h <= max_gap_height:
+
+				for p in region:
+					grid[p.y][p.x] = false
+					
+					
+			
+func _draw_outer_rectangle():
+
+	for t in range(border_thickness):
+
+		# Top and bottom
+		for x in range(map_width):
+			grid[t][x] = false
+			grid[map_height - 1 - t][x] = false
+
+		# Left and right
+		for y in range(map_height):
+			grid[y][t] = false
+			grid[y][map_width - 1 - t] = false
+		
+		
 func _init_grid():
 
 	grid=[]
