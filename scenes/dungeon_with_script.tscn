@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://k0tdarl476xw"]
+
+[ext_resource type="Script" uid="uid://3s01c8iv71g3" path="res://scenes/dungeon_with_script.gd" id="1_pxq7g"]
+[ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://tiles/tiles_base.tscn" id="2_xefwp"]
+[ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://walls/bottom_walls.tscn" id="3_j71am"]
+[ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://walls/top_walls.tscn" id="4_uicv5"]
+
+[node name="DungeonWithScript" type="Node2D" unique_id=1294668304]
+script = ExtResource("1_pxq7g")
+
+[node name="Tiles" parent="." unique_id=1801516032 instance=ExtResource("2_xefwp")]
+
+[node name="BottomWalls" parent="." unique_id=2000947890 instance=ExtResource("3_j71am")]
+
+[node name="TopWalls" parent="." unique_id=1921369934 instance=ExtResource("4_uicv5")]

@@ -26,19 +26,22 @@ extends TileMapLayer
 @export_group("Seed")
 @export var seed_value := 0
 
+# Buttons in inspector
+@export var generate_now := false:
+	set(value):
+		if value:
+			generate_now=false
+			_generate_editor()
+
+@export var clear_now := false:
+	set(value):
+		if value:
+			clear_now=false
+			clear()
+
+
 var grid=[]
-
-var rng := RandomNumberGenerator.new()
-var initialized := false
-
-
-func _ready():
-	if seed_value == 0:
-		rng.randomize()
-	else:
-		rng.seed = seed_value
-
-	initialized = true
+var rng:=RandomNumberGenerator.new()
 
 
 class BSPNode:
@@ -54,11 +57,35 @@ class BSPNode:
 
 	func is_leaf():
 		return left==null and right==null
+
+
+
+func _ready():
+
+	# Don't generate during game runtime
+	if !Engine.is_editor_hint():
+		return
 		
 
-func generate():
-	if !initialized:
-		await ready   # waits until this node is ready
+func _generate_editor():
+
+	if !Engine.is_editor_hint():
+		return
+
+	if tile_set.get_terrain_sets_count()==0:
+		push_error("Create terrain set first")
+		return
+
+	if seed_value==0:
+		rng.randomize()
+	else:
+		rng.seed=seed_value
+
+	_generate()
+
+
+
+func _generate():
 
 	clear()
 
@@ -99,12 +126,14 @@ func _draw_outer_rectangle():
 		
 func _init_grid():
 
-	grid = []
+	grid=[]
 
-	for y in range(map_height):
+	for y in map_height:
+
 		grid.append([])
 
-		for x in range(map_width):
+		for x in map_width:
+
 			grid[y].append(true)
 
 
@@ -296,13 +325,11 @@ func _find_room(node):
 
 
 func _draw():
-	if grid.is_empty():
-		return
 
-	var floor_cells:Array[Vector2i] = []
+	var floor_cells:Array[Vector2i]=[]
 
-	for y in range(map_height):
-		for x in range(map_width):
+	for y in map_height:
+		for x in map_width:
 
 			if !grid[y][x]:
 				floor_cells.append(

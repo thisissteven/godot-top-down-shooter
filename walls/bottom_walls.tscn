@@ -16,6 +16,6 @@ terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_ma11c")
 
-[node name="WallBase" type="TileMapLayer" unique_id=2000947890]
+[node name="BottomWalls" type="TileMapLayer" unique_id=2000947890]
 tile_set = SubResource("TileSet_6y3qg")
 script = ExtResource("2_ma11c")

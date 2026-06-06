@@ -3,8 +3,10 @@ extends TileMapLayer
 
 @export var top_wall_layer: TileMapLayer
 
+# TileSet source ID
 @export var source_id := 0
 
+# Atlas coordinates of the 8 floor tiles
 @export var floor_tiles := [
 	Vector2i(0,0), # Main floor (90%)
 	Vector2i(1,0),
@@ -21,29 +23,31 @@ var main_floor_chance := 0.9
 
 @export var seed_value := 0
 
-var rng := RandomNumberGenerator.new()
-var initialized := false
-
-
-func _ready():
-	if seed_value == 0:
-		rng.randomize()
-	else:
-		rng.seed = seed_value
-
-	initialized = true
+# Press in inspector to generate
+@export var generate := false:
+	set(value):
+		if value:
+			generate_floor()
+			generate = false
 
 
 func generate_floor():
 
-	if !initialized:
-		await ready
+	if !Engine.is_editor_hint():
+		return
 
 	if top_wall_layer == null:
 		push_error("Top wall layer missing")
 		return
 
 	clear()
+
+	var rng := RandomNumberGenerator.new()
+	
+	if seed_value==0:
+		rng.randomize()
+	else:
+		rng.seed=seed_value
 
 	var rect = top_wall_layer.get_used_rect()
 
@@ -52,11 +56,11 @@ func generate_floor():
 
 			var cell = Vector2i(x,y)
 
-			# Skip walls
+			# Skip wall cells
 			if top_wall_layer.get_cell_source_id(cell) != -1:
 				continue
 
-			var tile = _pick_floor_tile()
+			var tile = pick_floor_tile(rng)
 
 			set_cell(
 				cell,
@@ -69,14 +73,11 @@ func generate_floor():
 	print("Floor generation complete")
 
 
-func _pick_floor_tile():
+func pick_floor_tile(rng: RandomNumberGenerator):
 
 	if rng.randf() <= main_floor_chance:
 		return floor_tiles[0]
 
 	return floor_tiles[
-		rng.randi_range(
-			1,
-			floor_tiles.size() - 1
-		)
+		rng.randi_range(1, floor_tiles.size()-1)
 	]

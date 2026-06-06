@@ -17,6 +17,6 @@ texture = ExtResource("1_wh5br")
 [sub_resource type="TileSet" id="TileSet_toqmw"]
 sources/0 = SubResource("TileSetAtlasSource_o4e6o")
 
-[node name="TilesBase" type="TileMapLayer" unique_id=1801516032]
+[node name="Tiles" type="TileMapLayer" unique_id=1801516032]
 tile_set = SubResource("TileSet_toqmw")
 script = ExtResource("2_o4e6o")

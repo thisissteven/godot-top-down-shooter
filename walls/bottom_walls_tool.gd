@@ -10,7 +10,16 @@ extends TileMapLayer
 @export var right_tile := Vector2i(2,0)
 @export var single_tile := Vector2i(3,0)
 
+@export var generate_now := false:
+	set(v):
+		if v:
+			generate_now = false
+			_generate()
+
 func generate():
+	_generate()
+
+func _generate():
 
 	clear()
 

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c88er7n67wmdh"]
+
+[ext_resource type="Script" uid="uid://wjpdf6ggmhah" path="res://scenes/dungeon_without_children.gd" id="1_ownwt"]
+
+[node name="DungeonWithoutChildren" type="Node2D" unique_id=304097680]
+script = ExtResource("1_ownwt")
