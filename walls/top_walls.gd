@@ -3,8 +3,8 @@ class_name TopWalls
 extends TileMapLayer
 
 @export_group("Map")
-@export var map_width := 128
-@export var map_height := 64
+@export var map_width := 96
+@export var map_height := 48
 
 @export_group("Rooms")
 @export var min_room_size := 6
@@ -14,11 +14,15 @@ extends TileMapLayer
 @export var corridor_width := 1
 
 @export_group("Border")
-@export var border_thickness := 12
+@export var border_thickness := 6
 
 @export_group("Gap Filling")
 @export var max_gap_width := 6
 @export var max_gap_height := 6
+
+@export_group("Door Carving Size")
+@export var horizontal_door_size := 2  # number of tiles
+@export var vertical_door_size := 2     # number of tiles
 
 @export_group("Terrain")
 @export var terrain_set := 0
@@ -251,7 +255,7 @@ func _connect_regions():
 		if best != null:
 			var p = best.pos
 
-			var candidates = [
+			var dirs = [
 				Vector2i(1, 0),
 				Vector2i(-1, 0),
 				Vector2i(0, 1),
@@ -260,19 +264,19 @@ func _connect_regions():
 
 			var carved := false
 
-			for d in candidates:
+			for d in dirs:
+
 				var p2 = p + d
 
 				if p2.x < 0 or p2.x >= map_width or p2.y < 0 or p2.y >= map_height:
 					continue
 
-				# must both be walls
-				if grid[p.y][p.x] == true:
-					continue
-				if grid[p2.y][p2.x] == true:
+				if grid[p.y][p.x] == true or grid[p2.y][p2.x] == true:
 					continue
 
-				# ❗ strip validity check (no branching walls)
+				# strip validity
+				var horizontal = (d.x != 0)
+
 				var p_up = (p.y > 0 and grid[p.y - 1][p.x] == false)
 				var p_down = (p.y < map_height - 1 and grid[p.y + 1][p.x] == false)
 				var p_left = (p.x > 0 and grid[p.y][p.x - 1] == false)
@@ -283,25 +287,63 @@ func _connect_regions():
 				var p2_left = (p2.x > 0 and grid[p2.y][p2.x - 1] == false)
 				var p2_right = (p2.x < map_width - 1 and grid[p2.y][p2.x + 1] == false)
 
-				# enforce straight-line strip consistency
-				if d.x != 0:
-					# horizontal strip → must NOT have vertical continuation
+				if horizontal:
 					if p_up or p_down or p2_up or p2_down:
 						continue
-
-				if d.y != 0:
-					# vertical strip → must NOT have horizontal continuation
+				else:
 					if p_left or p_right or p2_left or p2_right:
 						continue
 
-				# valid 2-tile strip carve
-				grid[p.y][p.x] = true
-				grid[p2.y][p2.x] = true
+				var size = 1
+				if d.x != 0:
+					size = horizontal_door_size
+				else:
+					size = vertical_door_size
 
-				_union(best.a, best.b)
-				changed = true
-				carved = true
-				break
+
+				# ---------- PRECHECK FULL SEGMENT ----------
+				var cells = []
+				var valid = true
+
+				for i in range(size):
+					var c = p + d * i
+
+					if c.x < 0 or c.x >= map_width or c.y < 0 or c.y >= map_height:
+						valid = false
+						break
+
+					# must still be wall
+					if grid[c.y][c.x] == true:
+						valid = false
+						break
+
+					# 🚨 STRIP VALIDATION (prevents 5x5 contamination)
+					var up = (c.y > 0 and grid[c.y - 1][c.x] == false)
+					var down = (c.y < map_height - 1 and grid[c.y + 1][c.x] == false)
+					var left = (c.x > 0 and grid[c.y][c.x - 1] == false)
+					var right = (c.x < map_width - 1 and grid[c.y][c.x + 1] == false)
+
+					if d.x != 0:
+						# horizontal strip → must NOT have vertical branching
+						if up or down:
+							valid = false
+							break
+					else:
+						# vertical strip → must NOT have horizontal branching
+						if left or right:
+							valid = false
+							break
+
+					cells.append(c)
+
+				# ---------- APPLY ONLY IF VALID ----------
+				if valid:
+					for c in cells:
+						grid[c.y][c.x] = true
+
+					_union(best.a, best.b)
+					changed = true
+					break
 						
 										
 func _draw_outer_rectangle():

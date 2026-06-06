@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://tiles/tiles_base.tscn" id="2_xefwp"]
 [ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://walls/bottom_walls.tscn" id="3_j71am"]
 [ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://walls/top_walls.tscn" id="4_uicv5"]
+[ext_resource type="PackedScene" uid="uid://ch3nj1k6kpomu" path="res://doors/door_base.tscn" id="5_j71am"]
 
 [node name="DungeonWithScript" type="Node2D" unique_id=1294668304]
 script = ExtResource("1_pxq7g")
@@ -13,3 +14,8 @@ script = ExtResource("1_pxq7g")
 [node name="BottomWalls" parent="." unique_id=2000947890 instance=ExtResource("3_j71am")]
 
 [node name="TopWalls" parent="." unique_id=1921369934 instance=ExtResource("4_uicv5")]
+horizontal_door_size = null
+vertical_door_size = null
+
+[node name="DoorBase" parent="." unique_id=1707612364 node_paths=PackedStringArray("top_walls") instance=ExtResource("5_j71am")]
+top_walls = NodePath("../TopWalls")
