@@ -1,4 +1,5 @@
 @tool
+class_name TopWalls
 extends TileMapLayer
 
 @export_group("Map")

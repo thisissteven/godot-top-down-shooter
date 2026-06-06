@@ -1,4 +1,5 @@
 @tool
+class_name TilesBase
 extends TileMapLayer
 
 @export var top_wall_layer: TileMapLayer
