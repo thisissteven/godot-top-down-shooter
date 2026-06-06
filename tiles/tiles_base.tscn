@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://frmrxjt8ngmj"]
+
+[ext_resource type="Texture2D" uid="uid://bnb6vxgdtlqdp" path="res://assets/station_tile.png" id="1_wh5br"]
+[ext_resource type="Script" uid="uid://18d0qf1gcaq7" path="res://tiles/tiles_base.gd" id="2_o4e6o"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o4e6o"]
+texture = ExtResource("1_wh5br")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_toqmw"]
+sources/0 = SubResource("TileSetAtlasSource_o4e6o")
+
+[node name="TilesBase" type="TileMapLayer" unique_id=1801516032]
+tile_set = SubResource("TileSet_toqmw")
+script = ExtResource("2_o4e6o")
