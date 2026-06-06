@@ -79,6 +79,7 @@ func generate():
 	_connect(root)
 	
 	_draw_outer_rectangle()
+	_fill_gaps()
 
 	_draw()
 
@@ -294,6 +295,138 @@ func _find_room(node):
 
 	return _find_room(node.right)
 
+
+
+func _fill_gaps():
+	# true  = wall (dark striped)
+	# false = walkable (white)
+
+	# --- Pass 1: flood-fill small enclosed walkable regions ---
+	var visited := []
+	for y in range(map_height):
+		visited.append([])
+		for x in range(map_width):
+			visited[y].append(false)
+
+	for sy in range(map_height):
+		for sx in range(map_width):
+			if grid[sy][sx] or visited[sy][sx]:
+				continue
+
+			# flood-fill connected walkable region
+			var region: Array[Vector2i] = []
+			var region_set := {}
+			var queue: Array[Vector2i] = [Vector2i(sx, sy)]
+			visited[sy][sx] = true
+
+			while not queue.is_empty():
+				var cell: Vector2i = queue.pop_back()
+				region.append(cell)
+				region_set[cell] = true
+				for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
+					var nx: int = cell.x + dir.x
+					var ny: int = cell.y + dir.y
+					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
+						continue
+					if visited[ny][nx] or grid[ny][nx]:
+						continue
+					visited[ny][nx] = true
+					queue.append(Vector2i(nx, ny))
+
+			# bounding box check
+			var min_x := region[0].x; var max_x := region[0].x
+			var min_y := region[0].y; var max_y := region[0].y
+			for cell in region:
+				if cell.x < min_x: min_x = cell.x
+				if cell.x > max_x: max_x = cell.x
+				if cell.y < min_y: min_y = cell.y
+				if cell.y > max_y: max_y = cell.y
+
+			if max_x - min_x + 1 > max_gap_width or max_y - min_y + 1 > max_gap_height:
+				continue
+
+			# --- enclosure check via escape flood-fill ---
+			var escape_queue: Array[Vector2i] = []
+			var escape_visited := {}
+
+			# start from region boundary
+			for cell in region:
+				for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
+					var nx = cell.x + dir.x
+					var ny = cell.y + dir.y
+
+					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
+						continue
+
+					var n := Vector2i(nx, ny)
+
+					# ONLY start from walkable cells not in region
+					if not grid[ny][nx] and not escape_visited.has(n) and not region_set.has(n):
+						escape_visited[n] = true
+						escape_queue.append(n)
+
+			var touches_border := false
+
+			while not escape_queue.is_empty():
+				var cell = escape_queue.pop_back()
+
+				if cell.x == 0 or cell.y == 0 or cell.x == map_width-1 or cell.y == map_height-1:
+					touches_border = true
+					break
+
+				for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
+					var nx = cell.x + dir.x
+					var ny = cell.y + dir.y
+
+					if nx < 0 or nx >= map_width or ny < 0 or ny >= map_height:
+						continue
+
+					var n = Vector2i(nx, ny)
+
+					if grid[ny][nx]:
+						continue
+					if escape_visited.has(n):
+						continue
+					if region_set.has(n):
+						continue
+
+					escape_visited[n] = true
+					escape_queue.append(n)
+
+			var fully_enclosed = not touches_border
+
+			if fully_enclosed:
+				for cell in region:
+					grid[cell.y][cell.x] = true
+
+	# --- Pass 2: fill 1-wide pinched dead-end walkable cells iteratively ---
+	var changed := true
+
+	while changed:
+		changed = false
+
+		for y in range(map_height):
+			for x in range(map_width):
+
+				if not grid[y][x]:
+					continue # only process WALLS
+
+				var floor_l = (x > 0 and not grid[y][x - 1])
+				var floor_r = (x < map_width - 1 and not grid[y][x + 1])
+				var floor_u = (y > 0 and not grid[y - 1][x])
+				var floor_d = (y < map_height - 1 and not grid[y + 1][x])
+
+				# horizontal gap: FLOOR WALL FLOOR
+				if floor_l and floor_r:
+					grid[y][x] = false
+					changed = true
+					continue
+
+				# vertical gap: FLOOR / WALL / FLOOR
+				if floor_u and floor_d:
+					grid[y][x] = false
+					changed = true
+					continue
 
 
 func _draw():
