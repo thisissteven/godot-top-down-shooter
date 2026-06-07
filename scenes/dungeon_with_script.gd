@@ -8,5 +8,5 @@ func _process(_delta: float) -> void:
 		await $BottomWalls.generate()
 		
 		$Tiles.top_wall_layer = $TopWalls
-		await $Tiles.generate_floor()
+		await $Tiles.generate()
 	

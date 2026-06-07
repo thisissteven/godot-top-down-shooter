@@ -25,4 +25,4 @@ func _process(_delta: float) -> void:
 		await _bottom_walls.generate()
 
 		_tiles.top_wall_layer = _top_walls
-		await _tiles.generate_floor()
+		await _tiles.generate()

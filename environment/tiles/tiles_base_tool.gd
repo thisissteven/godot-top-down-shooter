@@ -2,8 +2,8 @@
 extends TilesBase
 
 # Press in inspector to generate
-@export var generate := false:
+@export var is_generated := false:
 	set(value):
 		if value:
-			generate_floor()
-			generate = false
+			generate()
+			is_generated = false

@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://ch3nj1k6kpomu"]
 
 [ext_resource type="Script" uid="uid://q1suxqi0fxkv" path="res://environment/doors/door_placer.gd" id="1_neg2a"]
+[ext_resource type="PackedScene" uid="uid://bga17h6hjvs0" path="res://environment/doors/horizontal_door.tscn" id="2_djgxw"]
+[ext_resource type="PackedScene" uid="uid://brinbydsva6b2" path="res://environment/doors/vertical_door.tscn" id="3_ypq5t"]
 
 [node name="DoorPlacer" type="Node" unique_id=2046093895]
 script = ExtResource("1_neg2a")
+horizontal_door_scene = ExtResource("2_djgxw")
+vertical_door_scene = ExtResource("3_ypq5t")
+horizontal_door_offset = Vector2(0, 7)

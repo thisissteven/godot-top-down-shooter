@@ -11,6 +11,11 @@ extends TileMapLayer
 @export var right_tile := Vector2i(2,0)
 @export var single_tile := Vector2i(3,0)
 
+var initialized := false
+
+func _ready():
+	initialized = true
+
 func _get_available_source_ids() -> Array[int]:
 	var ids: Array[int] = []
 	if tile_set == null:
@@ -20,6 +25,9 @@ func _get_available_source_ids() -> Array[int]:
 	return ids
 
 func generate():
+	if !initialized:
+		await ready
+		
 	clear()
 	if top_wall_layer == null:
 		push_error("Assign WallTopLayer")

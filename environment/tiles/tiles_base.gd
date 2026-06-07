@@ -35,8 +35,7 @@ func _ready():
 	initialized = true
 
 
-func generate_floor():
-
+func generate():
 	if !initialized:
 		await ready
 

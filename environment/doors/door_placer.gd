@@ -1,4 +1,5 @@
 @tool
+class_name DoorPlacer
 extends Node
 
 @export var top_wall_layer: TopWalls
@@ -8,13 +9,15 @@ extends Node
 @export var horizontal_door_offset: Vector2 = Vector2(0, 0)
 @export var vertical_door_offset: Vector2 = Vector2(0, 0)
 
-@export var run: bool = false:
-	set(value):
-		if value and Engine.is_editor_hint():
-			_generate()
-		run = false
+var initialized := false
 
-func _generate() -> void:
+func _ready() -> void:
+	initialized = true
+
+func generate() -> void:
+	if !initialized:
+		await ready
+		
 	if not top_wall_layer:
 		push_error("DoorPlacer: Assign top_wall_layer in the Inspector.")
 		return
