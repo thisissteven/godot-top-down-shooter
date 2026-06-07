@@ -44,9 +44,9 @@ func generate():
 	for x in range(rect.position.x, rect.end.x):
 		for y in range(rect.position.y, rect.end.y):
 			var cell = Vector2i(x,y)
-			# Skip walls
-			if top_wall_layer.get_cell_source_id(cell) != -1:
-				continue
+			# Skip walls (uncomment 2 lines below)
+			#if top_wall_layer.get_cell_source_id(cell) != -1:
+				#continue
 			# Skip sinkhole cells (leave them empty)
 			if cell in sinkhole_cells:
 				continue

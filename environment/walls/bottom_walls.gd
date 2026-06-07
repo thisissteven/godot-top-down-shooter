@@ -56,5 +56,5 @@ func generate():
 				atlas = left_tile
 			else:
 				atlas = single_tile
-
+			print(pos, source_id, atlas)
 			set_cell(pos, source_id, atlas)
