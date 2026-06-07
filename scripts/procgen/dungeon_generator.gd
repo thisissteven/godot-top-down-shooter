@@ -5,6 +5,7 @@ extends Node
 @export var bottom_walls_scene: PackedScene
 @export var tiles_scene: PackedScene
 @export var doors_scene: PackedScene
+@export var windows_scene: PackedScene
 
 
 @export var run: bool = false:
@@ -24,7 +25,7 @@ func _generate() -> void:
 		return
 
 	# Remove previous instances
-	for node_name in ["TopWalls", "BottomWalls", "Tiles", "DoorPlacer", "Doors"]:
+	for node_name in ["TopWalls", "BottomWalls", "Tiles", "DoorPlacer", "Doors", "Windows"]:
 		var existing = parent.find_child(node_name, false, false)
 		if is_instance_valid(existing):
 			existing.queue_free()
@@ -34,7 +35,8 @@ func _generate() -> void:
 		or parent.find_child("BottomWalls", false, false) != null \
 		or parent.find_child("Tiles", false, false) != null \
 		or parent.find_child("DoorPlacer", false, false) != null \
-		or parent.find_child("Doors", false, false) != null:
+		or parent.find_child("Doors", false, false) != null \
+		or parent.find_child("Windows", false, false) != null:
 			await get_tree().process_frame
 
 	# Now safe to add — no name collisions possible
@@ -49,6 +51,7 @@ func _generate() -> void:
 	top_walls.name = "TopWalls"
 	bottom_walls.name = "BottomWalls"
 	tiles.name = "Tiles"
+	
 
 	# Set owner so nodes are saved in the scene
 	top_walls.owner = owner
@@ -73,5 +76,14 @@ func _generate() -> void:
 	door_placer.set_unique_name_in_owner(true)
 	door_placer.top_wall_layer = top_walls
 	await door_placer.generate()
+	
+	var window_placer = windows_scene.instantiate()
+	parent.add_child(window_placer)
+	window_placer.name = "Windows"
+	window_placer.owner = owner
+	window_placer.set_unique_name_in_owner(true)
+	window_placer.top_wall_layer = top_walls
+	window_placer.bottom_wall_layer = bottom_walls
+	await window_placer.generate()
 	
 	print("LevelGenerator: Done.")

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://environment/walls/bottom_walls.tscn" id="3_65jun"]
 [ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://environment/tiles/tiles_base.tscn" id="4_3qfp6"]
 [ext_resource type="PackedScene" uid="uid://ch3nj1k6kpomu" path="res://environment/doors/door_placer.tscn" id="5_ky1j1"]
+[ext_resource type="PackedScene" uid="uid://b3wptvtojweh5" path="res://environment/windows/windows.tscn" id="6_vnash"]
 
 [node name="DungeonGenerator" type="Node" unique_id=1115400709]
 script = ExtResource("1_xd7b8")
@@ -12,3 +13,4 @@ top_walls_scene = ExtResource("2_eoyx7")
 bottom_walls_scene = ExtResource("3_65jun")
 tiles_scene = ExtResource("4_3qfp6")
 doors_scene = ExtResource("5_ky1j1")
+windows_scene = ExtResource("6_vnash")

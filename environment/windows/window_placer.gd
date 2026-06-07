@@ -41,12 +41,6 @@ extends TileMapLayer
 @export var v_mid_tile := Vector2i(0, 1)
 @export var v_bot_tile := Vector2i(0, 2)
 
-@export_group("Run")
-@export var run: bool:
-	set(v):
-		if v and Engine.is_editor_hint():
-			generate()
-
 var _rng := RandomNumberGenerator.new()
 var initialized := false
 
