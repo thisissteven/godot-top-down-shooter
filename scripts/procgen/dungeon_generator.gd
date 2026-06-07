@@ -11,10 +11,6 @@ extends Node
 			_generate()
 		run = false
 
-var _top_walls: Node = null
-var _bottom_walls: Node = null
-var _tiles: Node = null
-
 func _generate() -> void:
 	if not top_walls_scene or not bottom_walls_scene or not tiles_scene:
 		push_error("LevelGenerator: Assign all three PackedScenes in the Inspector.")
@@ -25,34 +21,45 @@ func _generate() -> void:
 		push_error("LevelGenerator: Must have a parent node.")
 		return
 
-	# Remove only the previous instances of our three nodes
-	if is_instance_valid(_top_walls): _top_walls.queue_free()
-	if is_instance_valid(_bottom_walls): _bottom_walls.queue_free()
-	if is_instance_valid(_tiles): _tiles.queue_free()
-	await get_tree().process_frame
+	# Remove previous instances
+	for node_name in ["TopWalls", "BottomWalls", "Tiles"]:
+		var existing = parent.find_child(node_name, false, false)
+		if is_instance_valid(existing):
+			existing.queue_free()
 
-	_top_walls = top_walls_scene.instantiate()
-	_bottom_walls = bottom_walls_scene.instantiate()
-	_tiles = tiles_scene.instantiate()
-	
-	_top_walls.name = "TopWalls"
-	_bottom_walls.name = "BottomWalls"
-	_tiles.name = "Tiles"
+	# queue_free is deferred — wait until they are actually gone
+	while parent.find_child("TopWalls", false, false) != null \
+		or parent.find_child("BottomWalls", false, false) != null \
+		or parent.find_child("Tiles", false, false) != null:
+			await get_tree().process_frame
 
-	parent.add_child(_tiles)
-	parent.add_child(_bottom_walls)
-	parent.add_child(_top_walls)
+	# Now safe to add — no name collisions possible
+	var top_walls = top_walls_scene.instantiate()
+	var bottom_walls = bottom_walls_scene.instantiate()
+	var tiles = tiles_scene.instantiate()
 
-	_top_walls.owner = owner
-	_bottom_walls.owner = owner
-	_tiles.owner = owner
+	parent.add_child(tiles)
+	parent.add_child(bottom_walls)
+	parent.add_child(top_walls)
 
-	_top_walls.generate()
+	top_walls.name = "TopWalls"
+	bottom_walls.name = "BottomWalls"
+	tiles.name = "Tiles"
 
-	_bottom_walls.top_wall_layer = _top_walls
-	await _bottom_walls.generate()
+	# Set owner so nodes are saved in the scene
+	top_walls.owner = owner
+	bottom_walls.owner = owner
+	tiles.owner = owner
 
-	_tiles.top_wall_layer = _top_walls
-	await _tiles.generate_floor()
+	# Mark as unique names so they're accessible via % in the scene tree
+	top_walls.set_unique_name_in_owner(true)
+	bottom_walls.set_unique_name_in_owner(true)
+	tiles.set_unique_name_in_owner(true)
+
+	top_walls.generate()
+	bottom_walls.top_wall_layer = top_walls
+	await bottom_walls.generate()
+	tiles.top_wall_layer = top_walls
+	await tiles.generate_floor()
 
 	print("LevelGenerator: Done.")

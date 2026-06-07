@@ -31,7 +31,7 @@ func _setup_cursor():
 	Input.set_custom_mouse_cursor(
 		scaled_texture,
 		Input.CURSOR_ARROW,
-		TARGET_CURSOR_SIZE / 2
+		TARGET_CURSOR_SIZE / 2.0
 	)
 
 

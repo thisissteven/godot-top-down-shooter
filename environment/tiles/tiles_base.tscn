@@ -20,3 +20,4 @@ sources/0 = SubResource("TileSetAtlasSource_o4e6o")
 [node name="Tiles" type="TileMapLayer" unique_id=1801516032]
 tile_set = SubResource("TileSet_toqmw")
 script = ExtResource("2_o4e6o")
+main_floor_chance = 0.5

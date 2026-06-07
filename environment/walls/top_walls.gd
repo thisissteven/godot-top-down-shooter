@@ -7,22 +7,17 @@ extends TileMapLayer
 @export var map_height := 48
 
 @export_group("Rooms")
-@export var min_room_size := 6
+@export var min_room_size := 2
 @export var max_room_size := 6
-@export var min_split_size := 10
+@export var min_split_size := 11
 @export var padding := 1
-@export var corridor_width := 1
 
 @export_group("Border")
 @export var border_thickness := 6
 
-@export_group("Gap Filling")
-@export var max_gap_width := 6
-@export var max_gap_height := 6
-
 @export_group("Door Carving Size")
-@export var horizontal_door_size := 2  # number of tiles
-@export var vertical_door_size := 2     # number of tiles
+@export var horizontal_door_size := 1
+@export var vertical_door_size := 2
 
 @export_group("Terrain")
 @export var terrain_set := 0
@@ -32,6 +27,7 @@ extends TileMapLayer
 @export var seed_value := 0
 
 var grid=[]
+var door_gaps: Array = []
 
 var rng := RandomNumberGenerator.new()
 var initialized := false
@@ -68,6 +64,7 @@ func generate():
 	clear()
 
 	_init_grid()
+	door_gaps = []
 
 	var root=BSPNode.new(
 		Rect2i(
@@ -136,7 +133,7 @@ func _compute_regions():
 	}
 	
 	
-func _collect_wall_edges(region_map, region_count):
+func _collect_wall_edges(region_map):
 	var edges = {}  # key: "a_b" → list of wall cells
 
 	for y in range(map_height):
@@ -199,10 +196,10 @@ func _connect_regions():
 	for i in range(region_count):
 		parent.append(i)
 
-	var changed := true
+	var is_changed := true
 
-	while changed:
-		changed = false
+	while is_changed:
+		is_changed = false
 
 		var best = null
 		var best_score = INF
@@ -261,8 +258,6 @@ func _connect_regions():
 				Vector2i(0, 1),
 				Vector2i(0, -1)
 			]
-
-			var carved := false
 
 			for d in dirs:
 
@@ -340,9 +335,15 @@ func _connect_regions():
 				if valid:
 					for c in cells:
 						grid[c.y][c.x] = true
+						
+					# Record the door gap for DoorPlacer
+					door_gaps.append({
+						"cells": cells.duplicate(),
+						"type": "horizontal" if d.x != 0 else "vertical"
+					})
 
 					_union(best.a, best.b)
-					changed = true
+					is_changed = true
 					break
 						
 										
@@ -563,12 +564,12 @@ func _fill_gaps():
 	# true  = wall
 	# false = floor
 
-	var changed := true
+	var is_changed := true
 	var safety_passes := 0
 	var max_passes := 3  # prevents over-erosion
 
-	while changed and safety_passes < max_passes:
-		changed = false
+	while is_changed and safety_passes < max_passes:
+		is_changed = false
 		safety_passes += 1
 
 		var to_remove: Array[Vector2i] = []
@@ -608,7 +609,7 @@ func _fill_gaps():
 		# apply removals AFTER scan (important!)
 		for cell in to_remove:
 			grid[cell.y][cell.x] = false
-			changed = true
+			is_changed = true
 func _draw():
 	if grid.is_empty():
 		return

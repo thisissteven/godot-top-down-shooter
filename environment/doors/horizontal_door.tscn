@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bga17h6hjvs0"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cegan"]
+load_path = "res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa636178cd36d.ctex"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gusx3"]
+size = Vector2(16, 19)
+
+[node name="HorizontalDoor" type="StaticBody2D" unique_id=2096676965]
+y_sort_enabled = true
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1483452890]
+position = Vector2(0, 7)
+texture = SubResource("CompressedTexture2D_cegan")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]
+position = Vector2(0, 9.5)
+shape = SubResource("RectangleShape2D_gusx3")

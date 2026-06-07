@@ -1,7 +1,12 @@
 [gd_scene format=3 uid="uid://cv45s283crols"]
 
 [ext_resource type="Texture2D" uid="uid://dn2rg58c12idk" path="res://assets/bottom_wall.png" id="1_h6vsl"]
+[ext_resource type="Texture2D" uid="uid://un571snhlf2a" path="res://assets/bottom_wall_2.png" id="2_1uxye"]
 [ext_resource type="Script" uid="uid://d2ah21xn3ahrj" path="res://environment/walls/bottom_walls.gd" id="2_ma11c"]
+[ext_resource type="Texture2D" uid="uid://7xwb2lxcfkuo" path="res://assets/bottom_wall_3.png" id="3_uudby"]
+[ext_resource type="Texture2D" uid="uid://cj3ojebi2kqgt" path="res://assets/bottom_wall_4.png" id="4_3ntmw"]
+[ext_resource type="Texture2D" uid="uid://bi38gc34uxahf" path="res://assets/bottom_wall_5.png" id="5_bw6o5"]
+[ext_resource type="Texture2D" uid="uid://d0f8ehy5qra3n" path="res://assets/bottom_wall_6.png" id="6_2fop8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ma11c"]
 texture = ExtResource("1_h6vsl")
@@ -14,6 +19,41 @@ texture = ExtResource("1_h6vsl")
 3:0/0 = 0
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l45va"]
+texture = ExtResource("2_1uxye")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1f47f"]
+texture = ExtResource("3_uudby")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_13w00"]
+texture = ExtResource("4_3ntmw")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fekrh"]
+texture = ExtResource("5_bw6o5")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f2yul"]
+texture = ExtResource("6_2fop8")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_6y3qg"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
@@ -21,6 +61,11 @@ terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_ma11c")
+sources/1 = SubResource("TileSetAtlasSource_l45va")
+sources/2 = SubResource("TileSetAtlasSource_1f47f")
+sources/3 = SubResource("TileSetAtlasSource_13w00")
+sources/4 = SubResource("TileSetAtlasSource_fekrh")
+sources/5 = SubResource("TileSetAtlasSource_f2yul")
 
 [node name="BottomWalls" type="TileMapLayer" unique_id=2000947890]
 tile_set = SubResource("TileSet_6y3qg")

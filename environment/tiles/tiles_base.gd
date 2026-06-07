@@ -2,7 +2,7 @@
 class_name TilesBase
 extends TileMapLayer
 
-@export var top_wall_layer: TileMapLayer
+@export var top_wall_layer: TopWalls
 
 @export var source_id := 0
 

@@ -4,6 +4,8 @@
 
 [node name="PlayerCamera" type="Camera2D" unique_id=1890953946]
 zoom = Vector2(2, 2)
+process_callback = 0
+limit_enabled = false
 position_smoothing_enabled = true
 position_smoothing_speed = 16.0
 script = ExtResource("1_xvnxv")

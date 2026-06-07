@@ -1,8 +1,8 @@
 extends Node2D
 
-const top_walls_scene := preload('res://walls/top_walls.tscn')
-const bottom_walls_scene := preload('res://walls/bottom_walls.tscn')
-const tiles_scene := preload('res://tiles/tiles_base.tscn')
+const top_walls_scene := preload('uid://dp2wjhnq3o5ui')
+const bottom_walls_scene := preload('uid://cv45s283crols')
+const tiles_scene := preload('uid://frmrxjt8ngmj')
 
 var _top_walls: Node = null
 var _bottom_walls: Node = null

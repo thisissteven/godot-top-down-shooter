@@ -11,5 +11,5 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	position += direction * speed * delta
 	
-func _on_body_entered(body: Node) -> void:
+func _on_body_entered(_body: Node) -> void:
 	queue_free()
