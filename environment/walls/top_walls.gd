@@ -3,8 +3,8 @@ class_name TopWalls
 extends TileMapLayer
 
 @export_group("Map")
-@export var map_width := 96
-@export var map_height := 48
+@export var map_width := 128
+@export var map_height := 64
 
 @export_group("Rooms")
 @export var min_room_size := 2

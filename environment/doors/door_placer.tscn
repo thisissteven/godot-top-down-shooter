@@ -8,4 +8,4 @@
 script = ExtResource("1_neg2a")
 horizontal_door_scene = ExtResource("2_djgxw")
 vertical_door_scene = ExtResource("3_ypq5t")
-horizontal_door_offset = Vector2(0, 7)
+horizontal_door_offset = Vector2(0, 8)

@@ -377,3 +377,4 @@ sources/0 = SubResource("TileSetAtlasSource_vqaso")
 z_index = 1
 tile_set = SubResource("TileSet_uuaxm")
 script = ExtResource("2_fwmgq")
+min_split_size = 11

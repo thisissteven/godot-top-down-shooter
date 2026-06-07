@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://brinbydsva6b2"]
 
-[ext_resource type="Texture2D" uid="uid://c350lfp72s0c8" path="res://assets/door_vertical.png" id="1_710md"]
+[ext_resource type="Texture2D" uid="uid://c350lfp72s0c8" path="res://assets/door/door_vertical.png" id="1_710md"]
 [ext_resource type="Script" uid="uid://cw6ixlh21strl" path="res://environment/doors/vertical_door.gd" id="1_fj12m"]
+[ext_resource type="Texture2D" uid="uid://cx7wmr6uwgpv" path="res://assets/door/door_floor_vertical.png" id="2_lnbyf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gusx3"]
 size = Vector2(10, 37)
@@ -105,6 +106,9 @@ _data = {
 y_sort_enabled = true
 collision_mask = 0
 script = ExtResource("1_fj12m")
+
+[node name="DoorFloor" type="Sprite2D" parent="." unique_id=893228610]
+texture = ExtResource("2_lnbyf")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1483452890]
 texture = ExtResource("1_710md")

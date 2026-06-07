@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1fc8672ydiqa"
-path="res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa636178cd36d.ctex"
+uid="uid://buxv7owex6hvu"
+path="res://.godot/imported/door_floor_horizontal.png-807f70f07fa55dd85d768ba7da1f9d35.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/door_horizontal.png"
-dest_files=["res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa636178cd36d.ctex"]
+source_file="res://assets/door/door_floor_horizontal.png"
+dest_files=["res://.godot/imported/door_floor_horizontal.png-807f70f07fa55dd85d768ba7da1f9d35.ctex"]
 
 [params]
 

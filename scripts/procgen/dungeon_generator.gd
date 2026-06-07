@@ -24,7 +24,7 @@ func _generate() -> void:
 		return
 
 	# Remove previous instances
-	for node_name in ["TopWalls", "BottomWalls", "Tiles", "DoorPlacer"]:
+	for node_name in ["TopWalls", "BottomWalls", "Tiles", "DoorPlacer", "Doors"]:
 		var existing = parent.find_child(node_name, false, false)
 		if is_instance_valid(existing):
 			existing.queue_free()
@@ -33,7 +33,8 @@ func _generate() -> void:
 	while parent.find_child("TopWalls", false, false) != null \
 		or parent.find_child("BottomWalls", false, false) != null \
 		or parent.find_child("Tiles", false, false) != null \
-		or parent.find_child("DoorPlacer", false, false) != null:
+		or parent.find_child("DoorPlacer", false, false) != null \
+		or parent.find_child("Doors", false, false) != null:
 			await get_tree().process_frame
 
 	# Now safe to add — no name collisions possible

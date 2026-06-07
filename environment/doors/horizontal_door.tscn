@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bga17h6hjvs0"]
 
 [ext_resource type="Script" uid="uid://ca1eptai2n11v" path="res://environment/doors/horizontal_door.gd" id="1_66o6y"]
+[ext_resource type="Texture2D" uid="uid://buxv7owex6hvu" path="res://assets/door/door_floor_horizontal.png" id="2_o3jxg"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cegan"]
 load_path = "res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa636178cd36d.ctex"
@@ -107,6 +108,9 @@ _data = {
 y_sort_enabled = true
 collision_mask = 0
 script = ExtResource("1_66o6y")
+
+[node name="DoorFloor" type="Sprite2D" parent="." unique_id=979410504]
+texture = ExtResource("2_o3jxg")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1483452890]
 texture = SubResource("CompressedTexture2D_cegan")

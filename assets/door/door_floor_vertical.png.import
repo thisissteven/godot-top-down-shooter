@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkw4lr61iuwss"
-path="res://.godot/imported/bottom_wall_7.png-74c942763864f3ee20c9a0f697bfa8fe.ctex"
+uid="uid://cx7wmr6uwgpv"
+path="res://.godot/imported/door_floor_vertical.png-da1ed960794d76c24212f6928431c680.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/bottom_wall_7.png"
-dest_files=["res://.godot/imported/bottom_wall_7.png-74c942763864f3ee20c9a0f697bfa8fe.ctex"]
+source_file="res://assets/door/door_floor_vertical.png"
+dest_files=["res://.godot/imported/door_floor_vertical.png-da1ed960794d76c24212f6928431c680.ctex"]
 
 [params]
 
