@@ -1,14 +1,110 @@
 [gd_scene format=3 uid="uid://brinbydsva6b2"]
 
 [ext_resource type="Texture2D" uid="uid://c350lfp72s0c8" path="res://assets/door_vertical.png" id="1_710md"]
+[ext_resource type="Script" uid="uid://cw6ixlh21strl" path="res://environment/doors/vertical_door.gd" id="1_fj12m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gusx3"]
 size = Vector2(10, 37)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_710md"]
+size = Vector2(72, 37.5)
+
+[sub_resource type="Animation" id="Animation_fj12m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 2.5)]
+}
+
+[sub_resource type="Animation" id="Animation_xejuo"]
+resource_name = "open"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 32), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 40.5), Vector2(0, 2.5)]
+}
+
+[sub_resource type="Animation" id="Animation_lnbyf"]
+resource_name = "close"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 32)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 2.5), Vector2(0, 40.5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ux1lc"]
+_data = {
+&"RESET": SubResource("Animation_fj12m"),
+&"close": SubResource("Animation_xejuo"),
+&"open": SubResource("Animation_lnbyf")
+}
+
 [node name="VerticalDoor" type="StaticBody2D" unique_id=2096676965]
-z_index = 1
 y_sort_enabled = true
 collision_mask = 0
+script = ExtResource("1_fj12m")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1483452890]
 texture = ExtResource("1_710md")
@@ -16,3 +112,13 @@ texture = ExtResource("1_710md")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]
 position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_gusx3")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1153636873]
+position = Vector2(0, 2.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=802261004]
+position = Vector2(0, 0.25)
+shape = SubResource("RectangleShape2D_710md")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=302177120]
+libraries/ = SubResource("AnimationLibrary_ux1lc")

@@ -7,7 +7,7 @@ extends CharacterBody2D
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var shooting_timer: Timer = $ShootingTimer
 
-const max_speed := 128
+const max_speed := 132
 const acceleration := 24
 const friction := 32
 

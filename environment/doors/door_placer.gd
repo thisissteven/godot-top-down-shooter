@@ -5,6 +5,9 @@ extends Node
 @export var horizontal_door_scene: PackedScene
 @export var vertical_door_scene: PackedScene
 
+@export var horizontal_door_offset: Vector2 = Vector2(0, 0)
+@export var vertical_door_offset: Vector2 = Vector2(0, 0)
+
 @export var run: bool = false:
 	set(value):
 		if value and Engine.is_editor_hint():
@@ -62,6 +65,7 @@ func _place_door(container: Node2D, door_cells: Array, tile_size: Vector2i, vert
 	var last: Vector2i = door_cells[-1]
 	var mid_cell = Vector2(first + last) / 2.0
 	door.position = (mid_cell + Vector2(0.5, 0.5)) * Vector2(tile_size)
+	door.position += vertical_door_offset if vertical else horizontal_door_offset
 
 	door.name = "Door_" + ("V" if vertical else "H") + "_" + str(first.x) + "_" + str(first.y)
 
