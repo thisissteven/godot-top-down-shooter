@@ -73,7 +73,7 @@ sources/0 = SubResource("TileSetAtlasSource_4tmtl")
 sources/1 = SubResource("TileSetAtlasSource_ldxca")
 
 [node name="Windows" type="TileMapLayer" unique_id=10185030]
-light_mask = 0
+light_mask = 4
 y_sort_enabled = true
 tile_set = SubResource("TileSet_07n45")
 script = ExtResource("1_fvbj8")

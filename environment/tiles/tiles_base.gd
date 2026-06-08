@@ -53,7 +53,7 @@ func generate():
 			var tile = _pick_floor_tile()
 			set_cell(cell, source_id, tile)
 
-	notify_runtime_tile_data_update()
+	update_internals()
 	print("Floor generation complete")
 
 func _generate_sinkholes(rect: Rect2i) -> Dictionary:
