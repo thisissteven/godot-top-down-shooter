@@ -139,7 +139,7 @@ _data = {
 }
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_lnbyf"]
-polygon = PackedVector2Array(-5, -16, 5, -16, 5, 16, -5, 16)
+polygon = PackedVector2Array(-5, 0, 5, 0, 5, 32, -5, 32)
 
 [node name="VerticalDoor" type="StaticBody2D" unique_id=2096676965]
 y_sort_enabled = true
@@ -153,10 +153,12 @@ texture = ExtResource("2_lnbyf")
 texture = ExtResource("1_710md")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]
+visible = false
 position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_gusx3")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1153636873]
+visible = false
 position = Vector2(0, 2.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=802261004]

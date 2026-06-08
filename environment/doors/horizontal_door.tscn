@@ -141,7 +141,7 @@ _data = {
 }
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o3jxg"]
-polygon = PackedVector2Array(8, -12, 8, 13, -8, 13, -8, -12)
+polygon = PackedVector2Array(8, 10, 8, 12, -8, 12, -8, 10)
 
 [node name="HorizontalDoor" type="StaticBody2D" unique_id=2096676965]
 y_sort_enabled = true
