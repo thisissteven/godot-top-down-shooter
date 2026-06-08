@@ -171,4 +171,4 @@ libraries/ = SubResource("AnimationLibrary_ux1lc")
 [node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=463476068]
 position = Vector2(0, 32)
 occluder = SubResource("OccluderPolygon2D_lnbyf")
-occluder_light_mask = 2
+occluder_light_mask = 3

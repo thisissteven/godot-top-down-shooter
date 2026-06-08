@@ -104,14 +104,12 @@ shape = SubResource("RectangleShape2D_rkbax")
 
 [node name="ShineLight" type="PointLight2D" parent="." unique_id=1633033309]
 color = Color(0.9254902, 0.7176471, 0.7294118, 0.56078434)
-energy = 3.26
 shadow_enabled = true
 shadow_filter = 1
 shadow_item_cull_mask = 0
 texture = SubResource("GradientTexture2D_g1dw6")
 
 [node name="ShadowLight" type="PointLight2D" parent="." unique_id=1818758785]
-visible = false
 color = Color(0.9254902, 0.7176471, 0.7294118, 0.56078434)
 energy = 0.5
 range_item_cull_mask = 2

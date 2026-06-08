@@ -7,6 +7,7 @@
 size = Vector2(6, 6)
 
 [node name="Projectile" type="Area2D" unique_id=1366432044]
+z_index = 1
 collision_layer = 2
 script = ExtResource("1_jw2q8")
 
