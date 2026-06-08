@@ -138,30 +138,43 @@ func generate():
 ## itself passes the open-radius check (all tiles within `min_open_radius`
 ## Manhattan steps that we care about are floor).
 func _is_open_enough(cells: Array) -> bool:
+
+	# Candidate cells must currently be empty
 	for c in cells:
-		if c.x < 0 or c.x >= map_width or c.y < 0 or c.y >= map_height:
+		if c.x < 0 or c.x >= map_width:
 			return false
-		# The candidate cell must currently be floor (false = floor)
-		if grid[c.y][c.x] == true:
+		if c.y < 0 or c.y >= map_height:
 			return false
 
-	# For each proposed wall cell, verify the surrounding area is open.
-	# We check a square region of side (2*min_open_radius+1) around it.
+		# true = empty
+		if grid[c.y][c.x] != true:
+			return false
+
+
+	# Surrounding area should also be open
 	for c in cells:
 		for dy in range(-min_open_radius, min_open_radius + 1):
 			for dx in range(-min_open_radius, min_open_radius + 1):
-				# Skip the cell itself and the other cells we will place
-				var nc = Vector2i(c.x + dx, c.y + dy)
+
+				if abs(dx) + abs(dy) > min_open_radius:
+					continue
+
+				var nc := Vector2i(c.x + dx, c.y + dy)
+
 				if cells.has(nc):
 					continue
-				if nc.x < 0 or nc.x >= map_width or nc.y < 0 or nc.y >= map_height:
+
+				if nc.x < 0 or nc.x >= map_width:
 					return false
-				# Neighbour must be floor, not a wall
-				if grid[nc.y][nc.x] == true:
+				if nc.y < 0 or nc.y >= map_height:
+					return false
+
+				# Neighbour must also be empty
+				if grid[nc.y][nc.x] != true:
 					return false
 
 	return true
-
+	
 
 ## Place `count` standalone single-tile walls in open areas.
 func _place_standalone_walls(count: int) -> void:
@@ -176,7 +189,7 @@ func _place_standalone_walls(count: int) -> void:
 
 		var cell := [Vector2i(x, y)]
 		if _is_open_enough(cell):
-			grid[y][x] = true
+			grid[y][x] = false
 			placed += 1
 
 
@@ -224,7 +237,7 @@ func _place_l_walls() -> void:
 
 		if _is_open_enough(cells):
 			for c in cells:
-				grid[c.y][c.x] = true
+				grid[c.y][c.x] = false
 			return
 
 
@@ -291,7 +304,7 @@ func _place_irregular_walls() -> void:
 
 		if _is_open_enough(cells):
 			for c in cells:
-				grid[c.y][c.x] = true
+				grid[c.y][c.x] = false
 			return
 
 

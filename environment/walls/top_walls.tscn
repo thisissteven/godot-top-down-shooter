@@ -485,3 +485,4 @@ light_mask = 2
 z_index = 1
 tile_set = SubResource("TileSet_uuaxm")
 script = ExtResource("2_fwmgq")
+carve_wall_percentage = 25
