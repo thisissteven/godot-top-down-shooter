@@ -18,9 +18,7 @@ texture = ExtResource("1_wh5br")
 sources/0 = SubResource("TileSetAtlasSource_o4e6o")
 
 [node name="Tiles" type="TileMapLayer" unique_id=1801516032]
+light_mask = 3
 tile_set = SubResource("TileSet_toqmw")
 script = ExtResource("2_o4e6o")
 main_floor_chance = 0.9
-sinkhole_areas = null
-sinkhole_min_tiles = null
-sinkhole_max_tiles = null

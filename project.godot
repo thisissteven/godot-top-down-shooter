@@ -21,8 +21,8 @@ Global="*uid://cenb2ktfwwsuv"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=360
+window/size/viewport_width=768
+window/size/viewport_height=432
 window/size/mode=3
 window/size/window_width_override=1920
 window/size/window_height_override=1080
@@ -62,6 +62,7 @@ shoot={
 
 [layer_names]
 
+2d_render/layer_2="Shadow"
 2d_physics/layer_1="world"
 2d_physics/layer_2="projectile"
 

@@ -64,11 +64,29 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rkbax"]
 size = Vector2(5, 3)
 
+[sub_resource type="Gradient" id="Gradient_rkbax"]
+offsets = PackedFloat32Array(0.0073891627, 0.67241377, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g1dw6"]
+gradient = SubResource("Gradient_rkbax")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rkbax"]
+gradient = SubResource("Gradient_rkbax")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [node name="Player" type="CharacterBody2D" unique_id=1628959909 groups=["player"]]
 script = ExtResource("1_oul6g")
+fire_rate = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978571484]
-position = Vector2(0, -5)
+position = Vector2(0, -8)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_rkbax")
 hframes = 5
 vframes = 2
@@ -81,3 +99,19 @@ libraries/ = SubResource("AnimationLibrary_g6k8r")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=236618319]
 position = Vector2(0.5, -1.5)
 shape = SubResource("RectangleShape2D_rkbax")
+
+[node name="ShineLight" type="PointLight2D" parent="." unique_id=1633033309]
+color = Color(0.9254902, 0.7176471, 0.7294118, 0.56078434)
+shadow_enabled = true
+shadow_filter = 1
+shadow_item_cull_mask = 0
+texture = SubResource("GradientTexture2D_g1dw6")
+
+[node name="ShadowLight" type="PointLight2D" parent="." unique_id=1818758785]
+color = Color(0.9254902, 0.7176471, 0.7294118, 0.56078434)
+energy = 0.5
+range_item_cull_mask = 2
+shadow_enabled = true
+shadow_filter = 1
+shadow_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_rkbax")
