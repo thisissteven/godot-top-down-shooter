@@ -67,7 +67,10 @@ flashlight={
 
 [layer_names]
 
+2d_render/layer_1="Environment"
 2d_render/layer_2="Shadow"
+2d_render/layer_3="Window"
+2d_render/layer_4="Player"
 2d_physics/layer_1="world"
 2d_physics/layer_2="projectile"
 

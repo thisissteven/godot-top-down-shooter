@@ -3,17 +3,17 @@ class_name TopWalls
 extends TileMapLayer
 
 @export_group("Map")
-@export var map_width := 128
-@export var map_height := 64
+@export var map_width := 64
+@export var map_height := 32
 
 @export_group("Rooms")
 @export var min_room_size := 2
-@export var max_room_size := 6
-@export var min_split_size := 11
+@export var max_room_size := 3
+@export var min_split_size := 6
 @export var padding := 1
 
 @export_group("Border")
-@export var border_thickness := 6
+@export var border_thickness := 1
 
 @export_group("Door Carving Size")
 @export var horizontal_door_size := 1
@@ -25,6 +25,47 @@ extends TileMapLayer
 
 @export_group("Seed")
 @export var seed_value := 0
+
+# ─────────────────────────────────────────────
+#  DECORATIVE WALL PLACEMENT
+# ─────────────────────────────────────────────
+@export_group("Decorative Walls")
+
+## How many decoration attempts to make per generation pass.
+## Higher values fill rooms more densely.
+@export var decoration_attempts := 40
+
+## Minimum open-floor radius required around a candidate cell before
+## a decoration is allowed to be placed there (Manhattan distance).
+## Increase to require larger open spaces.
+@export var min_open_radius := 3
+
+# -- Standalone walls --
+@export_subgroup("Standalone Walls")
+## Allow placement of isolated single-tile wall blocks.
+@export var enable_standalone_walls := true
+## How many standalone walls to try placing per generation.
+@export var standalone_count := 8
+
+# -- L-Shaped walls --
+@export_subgroup("L-Shaped Walls")
+## Allow placement of 2-tile-wide L-shaped wall clusters.
+@export var enable_l_walls := true
+## Minimum total tiles in an L-shaped wall (2–6).
+@export var l_min_tiles := 3
+## Maximum total tiles in an L-shaped wall (2–6).
+@export var l_max_tiles := 5
+
+# -- Irregular walls --
+@export_subgroup("Irregular Walls")
+## Allow placement of irregular (organic blob) wall clusters.
+@export var enable_irregular_walls := true
+## Minimum total tiles in an irregular wall cluster (3–6).
+@export var irregular_min_tiles := 3
+## Maximum total tiles in an irregular wall cluster (3–6).
+@export var irregular_max_tiles := 6
+
+# ─────────────────────────────────────────────
 
 var grid=[]
 var door_gaps: Array = []
@@ -83,7 +124,195 @@ func generate():
 	_fill_gaps()
 	_connect_regions()
 
+	# ── Decorative walls go AFTER all connectivity work ──
+	_place_decorative_walls()
+
 	_draw()
+
+
+# ═══════════════════════════════════════════════════════════════
+#  DECORATIVE WALL PLACEMENT
+# ═══════════════════════════════════════════════════════════════
+
+## Returns true if every cell in `cells` is a floor tile AND the cell
+## itself passes the open-radius check (all tiles within `min_open_radius`
+## Manhattan steps that we care about are floor).
+func _is_open_enough(cells: Array) -> bool:
+	for c in cells:
+		if c.x < 0 or c.x >= map_width or c.y < 0 or c.y >= map_height:
+			return false
+		# The candidate cell must currently be floor (false = floor)
+		if grid[c.y][c.x] == true:
+			return false
+
+	# For each proposed wall cell, verify the surrounding area is open.
+	# We check a square region of side (2*min_open_radius+1) around it.
+	for c in cells:
+		for dy in range(-min_open_radius, min_open_radius + 1):
+			for dx in range(-min_open_radius, min_open_radius + 1):
+				# Skip the cell itself and the other cells we will place
+				var nc = Vector2i(c.x + dx, c.y + dy)
+				if cells.has(nc):
+					continue
+				if nc.x < 0 or nc.x >= map_width or nc.y < 0 or nc.y >= map_height:
+					return false
+				# Neighbour must be floor, not a wall
+				if grid[nc.y][nc.x] == true:
+					return false
+
+	return true
+
+
+## Place `count` standalone single-tile walls in open areas.
+func _place_standalone_walls(count: int) -> void:
+	var attempts := count * 6  # extra attempts to find valid spots
+	var placed := 0
+
+	while placed < count and attempts > 0:
+		attempts -= 1
+
+		var x := rng.randi_range(border_thickness, map_width  - border_thickness - 1)
+		var y := rng.randi_range(border_thickness, map_height - border_thickness - 1)
+
+		var cell := [Vector2i(x, y)]
+		if _is_open_enough(cell):
+			grid[y][x] = true
+			placed += 1
+
+
+## Build and try to place an L-shaped cluster.
+## An L is two arms of length a_len and b_len meeting at a corner,
+## optionally rotated in any of 4 orientations.
+func _place_l_walls() -> void:
+	var tile_count := rng.randi_range(
+		clampi(l_min_tiles, 2, 6),
+		clampi(l_max_tiles, 2, 6)
+	)
+
+	# Split the tile budget between the two arms (each arm ≥ 1)
+	var arm_a := rng.randi_range(1, tile_count - 1)
+	var arm_b := tile_count - arm_a
+
+	# Four L orientations:  right+down, right+up, left+down, left+up
+	var orientations := [
+		[Vector2i(1, 0), Vector2i(0, 1)],
+		[Vector2i(1, 0), Vector2i(0, -1)],
+		[Vector2i(-1, 0), Vector2i(0, 1)],
+		[Vector2i(-1, 0), Vector2i(0, -1)],
+	]
+
+	var ori : Array = orientations[rng.randi_range(0, 3)]
+	var dir_a: Vector2i = ori[0]
+	var dir_b: Vector2i = ori[1]
+
+	var attempts := decoration_attempts * 3
+
+	while attempts > 0:
+		attempts -= 1
+
+		var ox := rng.randi_range(border_thickness, map_width  - border_thickness - 1)
+		var oy := rng.randi_range(border_thickness, map_height - border_thickness - 1)
+		var origin := Vector2i(ox, oy)
+
+		var cells: Array = [origin]
+
+		for i in range(1, arm_a):
+			cells.append(origin + dir_a * i)
+
+		for j in range(1, arm_b):
+			cells.append(origin + dir_b * j)
+
+		if _is_open_enough(cells):
+			for c in cells:
+				grid[c.y][c.x] = true
+			return
+
+
+## Build and try to place an irregular (blob) wall cluster using a
+## random walk / flood-fill expansion from a seed cell.
+func _place_irregular_walls() -> void:
+	var tile_count := rng.randi_range(
+		clampi(irregular_min_tiles, 3, 6),
+		clampi(irregular_max_tiles, 3, 6)
+	)
+
+	var four_dirs := [
+		Vector2i(1, 0), Vector2i(-1, 0),
+		Vector2i(0, 1), Vector2i(0, -1)
+	]
+
+	var attempts := decoration_attempts * 4
+
+	while attempts > 0:
+		attempts -= 1
+
+		var ox := rng.randi_range(border_thickness, map_width  - border_thickness - 1)
+		var oy := rng.randi_range(border_thickness, map_height - border_thickness - 1)
+
+		var cells: Array = [Vector2i(ox, oy)]
+		var frontier: Array = [Vector2i(ox, oy)]
+
+		var growth_attempts := tile_count * 8
+
+		while cells.size() < tile_count and not frontier.is_empty() and growth_attempts > 0:
+			growth_attempts -= 1
+
+			# Pick a random frontier cell and try to grow from it
+			var fi := rng.randi_range(0, frontier.size() - 1)
+			var f: Vector2i = frontier[fi]
+
+			# Shuffle directions for organic shape
+			var dirs := four_dirs.duplicate()
+			for i in range(3, 0, -1):
+				var j := rng.randi_range(0, i)
+				var tmp = dirs[i]
+				dirs[i] = dirs[j]
+				dirs[j] = tmp
+
+			var grew := false
+			for d in dirs:
+				var nc : Variant = f + d
+				if cells.has(nc):
+					continue
+				if nc.x < border_thickness or nc.x >= map_width - border_thickness:
+					continue
+				if nc.y < border_thickness or nc.y >= map_height - border_thickness:
+					continue
+				cells.append(nc)
+				frontier.append(nc)
+				grew = true
+				break
+
+			if not grew:
+				frontier.remove_at(fi)
+
+		if cells.size() < tile_count:
+			continue
+
+		if _is_open_enough(cells):
+			for c in cells:
+				grid[c.y][c.x] = true
+			return
+
+
+## Master entry point — called once after connectivity is resolved.
+func _place_decorative_walls() -> void:
+
+	if enable_standalone_walls:
+		_place_standalone_walls(standalone_count)
+
+	if enable_l_walls:
+		for _i in range(decoration_attempts):
+			_place_l_walls()
+
+	if enable_irregular_walls:
+		for _i in range(decoration_attempts):
+			_place_irregular_walls()
+
+
+# ═══════════════════════════════════════════════════════════════
+#  (All original methods below — unchanged)
+# ═══════════════════════════════════════════════════════════════
 
 func _compute_regions():
 	var region_map = []
@@ -610,6 +839,7 @@ func _fill_gaps():
 		for cell in to_remove:
 			grid[cell.y][cell.x] = false
 			is_changed = true
+
 func _draw():
 	if grid.is_empty():
 		return
