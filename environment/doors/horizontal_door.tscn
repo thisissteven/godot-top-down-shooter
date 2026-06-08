@@ -169,4 +169,4 @@ libraries/ = SubResource("AnimationLibrary_sogik")
 [node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=719614892]
 position = Vector2(-16, 0)
 occluder = SubResource("OccluderPolygon2D_o3jxg")
-occluder_light_mask = 3
+occluder_light_mask = 2

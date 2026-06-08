@@ -262,10 +262,12 @@ func _paint_horizontal_window(cells: Array) -> void:
 		# Remove top wall
 		top_wall_layer.grid[cell.y][cell.x] = true
 		top_wall_layer.erase_cell(cell)
+		_spawn_occluder(cell, top_wall_layer)
 
 		# Remove bottom wall
 		# bottom_walls places at top_cell + DOWN*h (h=1 default)
 		bottom_wall_layer.erase_cell(cell + Vector2i(0, 1))
+		
 
 		var top_atlas: Vector2i
 		var bot_atlas: Vector2i
@@ -322,3 +324,20 @@ func _paint_vertical_window(cells: Array) -> void:
 			atlas = v_mid_tile
 
 		set_cell(cell, vertical_source_id, atlas)
+		
+			
+func _spawn_occluder(cell: Vector2i, layer: TileMapLayer) -> void:
+	var occ := LightOccluder2D.new()
+	var poly := OccluderPolygon2D.new()
+
+	var tile_size := layer.tile_set.tile_size
+	poly.polygon = PackedVector2Array([
+		Vector2(0, 0),
+		Vector2(tile_size.x, 0),
+		Vector2(tile_size.x, tile_size.y),
+		Vector2(0, tile_size.y)
+	])
+
+	occ.occluder = poly
+	occ.position = layer.map_to_local(cell)
+	layer.add_child(occ)

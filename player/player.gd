@@ -17,6 +17,38 @@ func _ready() -> void:
 	shooting_timer.one_shot = true
 	shooting_timer.timeout.connect(func(): can_shoot = true)
 	
+var flashlight_tween: Tween
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("flashlight"):
+		var turning_on = not $ShineLight.enabled
+		
+		# Stop any existing tween
+		if flashlight_tween:
+			flashlight_tween.kill()
+		
+		if turning_on:
+			$ShineLight.enabled = true
+			$ShadowLight.enabled = true
+			
+			$ShineLight.energy = 0.0
+			$ShadowLight.energy = 0.0
+			
+			flashlight_tween = create_tween()
+			flashlight_tween.tween_property(
+				$ShineLight, "energy", 1.0, 0.2
+			)
+			flashlight_tween.parallel().tween_property(
+				$ShadowLight, "energy", 1.0, 0.2
+			)
+		else:
+			# Instant off
+			$ShineLight.enabled = false
+			$ShadowLight.enabled = false
+			$ShineLight.energy = 1.0
+			$ShadowLight.energy = 1.0
+			
+			
 func _physics_process(delta: float) -> void:
 	var input = Vector2(
 		Input.get_action_strength("right") - Input.get_action_strength("left"),
