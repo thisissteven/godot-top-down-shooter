@@ -262,7 +262,7 @@ func _paint_horizontal_window(cells: Array) -> void:
 		# Remove top wall
 		top_wall_layer.grid[cell.y][cell.x] = true
 		top_wall_layer.erase_cell(cell)
-		_spawn_occluder(cell, top_wall_layer)
+		#_spawn_occluder(cell, top_wall_layer)
 
 		# Remove bottom wall
 		# bottom_walls places at top_cell + DOWN*h (h=1 default)
