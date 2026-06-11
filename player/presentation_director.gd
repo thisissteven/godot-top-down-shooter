@@ -15,7 +15,7 @@ func _physics_process(_delta):
 
     presentation.dir = facing.current_dir
     presentation.flip_h = facing.flip_h
-
+    
     presentation.armed = equipment.is_armed()
 
     presentation.aiming = (

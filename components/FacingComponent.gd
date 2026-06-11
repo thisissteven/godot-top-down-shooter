@@ -48,7 +48,8 @@ func update(mouse_world_pos: Vector2, player_pos: Vector2,
         new_flip = _flip_for(new_dir)
         # Only suppress south when mouse-aimed — keyboard south is always valid
         if _is_armed and new_dir == Dir.S:
-            new_dir = Dir.SW if new_flip else Dir.SE
+            new_flip = aim_direction.x < 0.0
+            new_dir = Dir.SE
     else:
         if move_input.length_squared() > 0.01:
             new_dir = _vec_to_dir(move_input)

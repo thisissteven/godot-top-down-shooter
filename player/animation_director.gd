@@ -6,13 +6,10 @@ extends Node
 
 var _current_anim := ""
 
-
-
 func _ready() -> void:
     process_physics_priority = 10
     
 func _physics_process(_delta):
-
     body_sprite.flip_h = presentation.flip_h
 
     if presentation.animation_name == _current_anim:

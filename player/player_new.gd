@@ -23,13 +23,14 @@ func _ready() -> void:
     shooting_timer.one_shot = true
     shooting_timer.timeout.connect(func(): can_shoot = true)
     input_component.flashlight_pressed.connect(_on_flashlight_pressed)
-    equipment.equip(EquipmentComponent.WeaponType.PISTOL)
     equipment.weapon_changed.connect(
         func(type):
             facing.set_armed(
                 type != EquipmentComponent.WeaponType.NONE
             )
     )
+    equipment.equip(EquipmentComponent.WeaponType.PISTOL)
+    
 
 func _physics_process(delta: float) -> void:
     facing.update(

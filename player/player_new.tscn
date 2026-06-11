@@ -459,8 +459,7 @@ texture = ExtResource("11_rip8p")
 light_mask = 8
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_saovg")
-animation = &"gun_idle_n"
-frame_progress = 0.6111009
+animation = &"gun_walk_se"
 
 [node name="ArmPivot" type="Node2D" parent="Sprite" unique_id=541809031]
 position = Vector2(0, -5)
