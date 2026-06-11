@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GunData" format=3 uid="uid://pc784e1jcv8v"]
+
+[ext_resource type="PackedScene" uid="uid://cyyc46hiet423" path="res://environment/projectiles/Projectile.tscn" id="1_835ld"]
+[ext_resource type="Script" uid="uid://tixprvorny3q" path="res://resources/guns/GunData.gd" id="2_1yik6"]
+
+[resource]
+script = ExtResource("2_1yik6")
+fire_rate = 10.0
+spread_degrees = 0.0
+magazine_size = 999
+projectile_scene = ExtResource("1_835ld")
+metadata/_custom_type_script = "uid://tixprvorny3q"

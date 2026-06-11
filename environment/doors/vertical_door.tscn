@@ -141,7 +141,7 @@ _data = {
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_lnbyf"]
 polygon = PackedVector2Array(-5, 0, 5, 0, 5, 51, -5, 51)
 
-[node name="VerticalDoor" type="StaticBody2D" unique_id=2096676965]
+[node name="VerticalDoor" type="StaticBody2D" unique_id=2096676965 groups=["wall"]]
 y_sort_enabled = true
 collision_mask = 0
 script = ExtResource("1_fj12m")

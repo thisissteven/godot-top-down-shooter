@@ -14,88 +14,62 @@ extends CharacterBody2D
 @onready var sprite: Node2D                   = $Sprite
 @onready var arm_pivot: Node2D                = $Sprite/ArmPivot
 @onready var arm_controller: ArmController    = $ArmController
+@onready var gun: GunComponent = $Sprite/ArmPivot/RecoilNode/GunPivot/Pistol
 
 var can_shoot := true
 var flashlight_tween: Tween
 var is_shooting := false
 
 func _ready() -> void:
-    shooting_timer.one_shot = true
-    shooting_timer.timeout.connect(func(): can_shoot = true)
-    input_component.flashlight_pressed.connect(_on_flashlight_pressed)
-    equipment.weapon_changed.connect(
-        func(type):
-            facing.set_armed(
-                type != EquipmentComponent.WeaponType.NONE
-            )
-    )
-    equipment.equip(EquipmentComponent.WeaponType.PISTOL)
-    
+	shooting_timer.one_shot = true
+	shooting_timer.timeout.connect(func(): can_shoot = true)
+	input_component.flashlight_pressed.connect(_on_flashlight_pressed)
+	equipment.weapon_changed.connect(
+		func(type):
+			facing.set_armed(
+				type != EquipmentComponent.WeaponType.NONE
+			)
+	)
+	equipment.equip(EquipmentComponent.WeaponType.PISTOL)
+	gun.fired.connect(
+	func(_pos, direction):
+		arm_controller.trigger_recoil(direction)
+)
+	
 
 func _physics_process(delta: float) -> void:
-    facing.update(
-        input_component.mouse_world_pos,
-        global_position,
-        input_component.move_input,
-        delta
-    )
+	facing.update(
+		input_component.mouse_world_pos,
+		global_position,
+		input_component.move_input,
+		delta,
+		gun.get_node("Marker2D").global_position
+	)
 
-    loco.move(input_component.move_input)
-    loco.apply_movement(self)
-    
-    if Input.is_action_pressed("shoot") and can_shoot:
-        _shoot()
-
-func _shoot() -> void:
-    if not projectile_scene:
-        return
-    can_shoot = false
-    
-    var direction := (input_component.mouse_world_pos - global_position).normalized()
-    
-    var projectile = projectile_scene.instantiate()
-    
-    # Spawn from barrel tip instead of player center
-    var barrel_offset := 12.0  # distance from arm_pivot along aim direction
-    projectile.global_position = arm_pivot.global_position + direction * barrel_offset
-    projectile.direction = direction
-    projectile.rotation = direction.angle()
-    
-    # Z-index: behind player when aiming upward, in front when aiming downward
-    var is_aiming_up := direction.y < 0
-    projectile.z_index = -1 if is_aiming_up else 1
-    
-    facing.activate_cursor_mode()
-
-    facing.update(
-        input_component.mouse_world_pos,
-        global_position,
-        input_component.move_input,
-        0.0
-    )
-
-    arm_controller.trigger_recoil(direction)
-    
-    get_tree().current_scene.add_child(projectile)
-    shooting_timer.start(1.0 / fire_rate)
+	loco.move(input_component.move_input)
+	loco.apply_movement(self)
+	
+	if Input.is_action_pressed("shoot") and can_shoot:
+		facing.activate_cursor_mode()
+		gun.try_fire(facing.aim_direction, true)
 
 func _on_flashlight_pressed() -> void:
-    var turning_on: bool = not shine_light.enabled
+	var turning_on: bool = not shine_light.enabled
 
-    if flashlight_tween:
-        flashlight_tween.kill()
+	if flashlight_tween:
+		flashlight_tween.kill()
 
-    if turning_on:
-        shine_light.enabled  = true
-        shadow_light.enabled = true
-        shine_light.energy   = 0.0
-        shadow_light.energy  = 0.0
+	if turning_on:
+		shine_light.enabled  = true
+		shadow_light.enabled = true
+		shine_light.energy   = 0.0
+		shadow_light.energy  = 0.0
 
-        flashlight_tween = create_tween()
-        flashlight_tween.tween_property(shine_light,  "energy", 1.0, 0.2)
-        flashlight_tween.parallel().tween_property(shadow_light, "energy", 1.0, 0.2)
-    else:
-        shine_light.enabled  = false
-        shadow_light.enabled = false
-        shine_light.energy   = 1.0
-        shadow_light.energy  = 1.0
+		flashlight_tween = create_tween()
+		flashlight_tween.tween_property(shine_light,  "energy", 1.0, 0.2)
+		flashlight_tween.parallel().tween_property(shadow_light, "energy", 1.0, 0.2)
+	else:
+		shine_light.enabled  = false
+		shadow_light.enabled = false
+		shine_light.energy   = 1.0
+		shadow_light.energy  = 1.0

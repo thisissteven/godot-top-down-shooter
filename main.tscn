@@ -812,3 +812,7 @@ tile_map_data = PackedByteArray("AAA3ABYAAQAAAAAAAAA3ABcAAQAAAAEAAAA3ABgAAQAAAAE
 tile_set = SubResource("TileSet_07n45")
 top_wall_layer = NodePath("../TopWalls")
 bottom_wall_layer = NodePath("../BottomWalls")
+
+[editable path="PlayerNew"]
+[editable path="PlayerNew/Sprite/ArmPivot/RecoilNode/GunPivot/Pistol"]
+[editable path="PlayerCamera"]
