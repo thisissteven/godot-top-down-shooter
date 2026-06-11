@@ -37,16 +37,13 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("shoot") and can_shoot:
 		_shoot()
 
-func _on_shoot_pressed() -> void:
-	if can_shoot:
-		_shoot()
-
-
 func _shoot() -> void:
 	if not projectile_scene:
 		return
 	can_shoot = false
 
+	anim_director.trigger_recoil()
+	
 	var direction := (input_component.mouse_world_pos - global_position).normalized()
 	var projectile = projectile_scene.instantiate()
 	

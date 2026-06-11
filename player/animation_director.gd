@@ -4,8 +4,9 @@ extends Node
 # Sprite references — assign in inspector or @onready
 @onready var sprite_root: Node2D           = $"../Sprite"
 @onready var body_sprite: AnimatedSprite2D = $"../Sprite/BodySprite"
-@onready var arm_sprite:  Sprite2D         = $"../Sprite/ArmPivot/ArmSprite"
 @onready var arm_pivot:   Node2D           = $"../Sprite/ArmPivot"
+@onready var arm_sprite:      Sprite2D     = $"../Sprite/ArmPivot/ArmSprite"
+@onready var arm_sprite_back: Sprite2D     = $"../Sprite/ArmPivot/ArmSpriteBack"
 
 # Component references
 @onready var facing:    FacingComponent    = $"../FacingComponent"
@@ -16,6 +17,21 @@ extends Node
 @export var walk_bob_degrees: float = 1.5
 @export var walk_bob_speed: float = 10.0
 @export var walk_bob_amplitude: float = 3.0
+
+@export var recoil_distance: float = 6.0
+@export var recoil_recovery_speed: float = 18.0
+
+var _recoil_offset: float = 0.0
+var _arm_pivot_base_x: float = 0.0
+
+var _anim_locked: bool = false
+
+func lock_anim(duration: float) -> void:
+    _anim_locked = true
+    await get_tree().create_timer(duration).timeout
+    _anim_locked = false
+
+@export var arm_pivot_offset_x: float = 1.0 
 
 var _bob_time: float = 0.0
 
@@ -50,7 +66,15 @@ func _process(delta: float) -> void:
     _update_arm_visibility(delta)
     _update_arm_rotation()
     _update_arm_z_index()
+    _update_recoil(delta)
 
+func _update_recoil(delta: float) -> void:
+    _recoil_offset = lerp(_recoil_offset, 0.0, delta * recoil_recovery_speed)
+    arm_pivot.position.x = _arm_pivot_base_x - _recoil_offset * signf(_arm_pivot_base_x)
+
+func trigger_recoil(duration: float = 0.15) -> void:
+    _recoil_offset = recoil_distance
+    lock_anim(duration)
 
 func _update_walk_bob(delta: float) -> void:
     if _get_loco_state() == &"walk":
@@ -69,8 +93,11 @@ func _update_walk_bob(delta: float) -> void:
 
 func _on_direction_changed(_dir: FacingComponent.Dir, flip: bool) -> void:
     body_sprite.flip_h = flip
-    arm_pivot.scale.x = -1.0 if flip else 1.0
-    arm_pivot.position.x = -abs(arm_pivot.position.x) if flip else abs(arm_pivot.position.x)
+    arm_sprite.flip_v = flip
+    arm_sprite_back.flip_v = flip
+    _arm_pivot_base_x = -arm_pivot_offset_x if flip else arm_pivot_offset_x
+    _recoil_offset = 0.0  # cancel any in-progress recoil on turn
+    arm_pivot.position.x = _arm_pivot_base_x
     _play_current_animation()
     
     
@@ -83,7 +110,10 @@ func _get_loco_state() -> StringName:
 
 func _on_weapon_changed(_weapon) -> void:
     facing.set_armed(equipment.is_armed())
-    arm_sprite.texture = equipment.get_arm_texture()
+    var textures := equipment.get_arm_textures()
+    arm_sprite.texture      = textures["front"]
+    arm_sprite_back.texture = textures["back"]
+    arm_sprite_back.visible = textures["back"] != null
     _play_current_animation()
 
 func _safe_play(anim_name: String) -> void:
@@ -94,6 +124,9 @@ func _safe_play(anim_name: String) -> void:
         
 # In AnimationDirector._play_current_animation():
 func _play_current_animation() -> void:
+    if _anim_locked:
+        return
+        
     var dir    := facing.current_dir
     var state  := _get_loco_state()
     var armed  := equipment.is_armed()
@@ -106,25 +139,25 @@ func _play_current_animation() -> void:
                 _safe_play("gun_idle_" + suffix)
             else:
                 _safe_play("idle_" + suffix)
-                arm_sprite.visible = false
+                arm_pivot.visible = false
 
         &"walk":
             if armed and cursor_active:
                 _safe_play("gun_walk_" + suffix)
             else:
                 _safe_play("walk_" + suffix)   # with-arms walk on timeout
-                arm_sprite.visible = false
+                arm_pivot.visible = false
 
         &"jump":
             _safe_play("jump_" + suffix)
             body_sprite.stop()
-            arm_sprite.visible = false
+            arm_pivot.visible = false
             
 # ── Arm visibility (cursor-inactivity logic) ────────────────────────────────
 
 func _update_arm_visibility(delta: float) -> void:
     if not equipment.is_armed():
-        arm_sprite.visible = false
+        arm_pivot.visible = false
         return
 
     # FacingComponent exposes cursor_active — read it directly
@@ -132,13 +165,13 @@ func _update_arm_visibility(delta: float) -> void:
 
     if cursor_active:
         _arm_visible_timer = arm_hide_timeout
-        arm_sprite.visible = true
+        arm_pivot.visible = true
         _cursor_was_active = true
     else:
         if _cursor_was_active:
             _arm_visible_timer -= delta
             if _arm_visible_timer <= 0.0:
-                arm_sprite.visible = false
+                arm_pivot.visible = false
                 _cursor_was_active = false
                 # Revert body to idle-with-arms
                 _play_current_animation()
@@ -151,13 +184,8 @@ func _update_arm_rotation() -> void:
     var cursor_world := get_viewport().get_camera_2d().get_global_mouse_position() \
         if get_viewport().get_camera_2d() else get_viewport().get_mouse_position()
     var to_cursor := cursor_world - arm_pivot.global_position
-    var angle := to_cursor.angle()
     
-    # When scale.x is -1, rotation needs to be negated to compensate for the flip
-    if arm_pivot.scale.x < 0.0:
-        angle = -angle
-    
-    arm_pivot.rotation = angle
+    arm_pivot.rotation = to_cursor.angle()
 
 # ── Arm z-index (in front when facing south hemisphere, behind for north) ───
 

@@ -1,13 +1,13 @@
 class_name EquipmentComponent
 extends Node
 
-enum WeaponType { NONE, PISTOL, AMMO, PLASMA }
+enum WeaponType { NONE, PISTOL, PLASMA }  # collapse AMMO+PLASMA into one
 
 signal weapon_changed(type: WeaponType)
 
-@export var arm_texture_pistol: Texture2D
-@export var arm_texture_ammo:   Texture2D
-@export var arm_texture_plasma: Texture2D
+@export var arm_texture_pistol:       Texture2D  # single front hand
+@export var arm_texture_plasma_front: Texture2D  # plasma front hand
+@export var arm_texture_plasma_back:  Texture2D  # plasma back hand
 
 var current_weapon: WeaponType = WeaponType.NONE
 
@@ -23,9 +23,10 @@ func unequip() -> void:
 func is_armed() -> bool:
 	return current_weapon != WeaponType.NONE
 
-func get_arm_texture() -> Texture2D:
+func get_arm_textures() -> Dictionary:
 	match current_weapon:
-		WeaponType.PISTOL: return arm_texture_pistol
-		WeaponType.AMMO:   return arm_texture_ammo
-		WeaponType.PLASMA: return arm_texture_plasma
-	return null
+		WeaponType.PISTOL:
+			return { "front": arm_texture_pistol, "back": null }
+		WeaponType.PLASMA:
+			return { "front": arm_texture_plasma_front, "back": arm_texture_plasma_back }
+	return { "front": null, "back": null }

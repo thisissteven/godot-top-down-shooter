@@ -21,8 +21,8 @@ Global="*uid://cenb2ktfwwsuv"
 
 [display]
 
-window/size/viewport_width=768
-window/size/viewport_height=432
+window/size/viewport_width=960
+window/size/viewport_height=540
 window/size/mode=3
 window/size/window_width_override=1920
 window/size/window_height_override=1080
