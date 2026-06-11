@@ -37,15 +37,16 @@ func activate_cursor_mode():
 
 # Called by InputComponent each frame
 func update(mouse_world_pos: Vector2, player_pos: Vector2,
-			move_input: Vector2, _delta: float, muzzle_world_pos: Vector2 = Vector2.ZERO) -> void:
-	var aim_origin := muzzle_world_pos if muzzle_world_pos != Vector2.ZERO else player_pos
+			move_input: Vector2, _delta: float) -> void:
 	var new_dir: Dir
 	var new_flip: bool
+
 	if _cursor_active:
-		aim_direction = (mouse_world_pos - aim_origin).normalized()
-		var angle := (mouse_world_pos - aim_origin).angle()
+		aim_direction = (mouse_world_pos - player_pos).normalized()
+		var angle := (mouse_world_pos - player_pos).angle()
 		new_dir = _angle_to_dir(angle)
 		new_flip = _flip_for(new_dir)
+		# Only suppress south when mouse-aimed — keyboard south is always valid
 		if _is_armed and new_dir == Dir.S:
 			new_flip = aim_direction.x < 0.0
 			new_dir = Dir.SE
@@ -56,11 +57,13 @@ func update(mouse_world_pos: Vector2, player_pos: Vector2,
 		else:
 			new_dir = current_dir
 			new_flip = flip_h
+		# No suppression here — keyboard south = walk_s is valid
+
 	if new_dir != current_dir or new_flip != flip_h:
 		current_dir = new_dir
 		flip_h = new_flip
 		
-			
+				
 func set_armed(armed: bool) -> void:
 	_is_armed = armed
 
