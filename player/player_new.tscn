@@ -4,8 +4,10 @@
 [ext_resource type="Script" uid="uid://4mpsgxxhj4q3" path="res://player/player_new.gd" id="1_i2ll0"]
 [ext_resource type="PackedScene" uid="uid://cag1vuplight4" path="res://environment/projectiles/projectile.tscn" id="2_5fw1j"]
 [ext_resource type="Script" uid="uid://83t7i5cd27n0" path="res://player/input_component.gd" id="2_hiwwx"]
+[ext_resource type="Script" uid="uid://33v7l3gwrds7" path="res://player/presentation_component.gd" id="3_2quyp"]
 [ext_resource type="Script" uid="uid://dr744yyn4gseu" path="res://player/arm_controller.gd" id="4_4t8i3"]
 [ext_resource type="Script" uid="uid://cj0f1mlb5xjhc" path="res://components/EquipmentComponent.gd" id="4_saovg"]
+[ext_resource type="Script" uid="uid://clqbhjs3yux34" path="res://player/presentation_director.gd" id="4_vbvci"]
 [ext_resource type="Script" uid="uid://c6kfyq0ylgpx3" path="res://player/walk_bob_component.gd" id="5_g6tnf"]
 [ext_resource type="Texture2D" uid="uid://cecm1rhpjedj" path="res://player/assets/Hand/SpacemanHand1.png" id="5_jvl72"]
 [ext_resource type="Script" uid="uid://bil3te1xawdf7" path="res://components/LocomotionComponent.gd" id="5_y4jld"]
@@ -415,6 +417,12 @@ size = Vector2(12, 7)
 [node name="PlayerNew" type="CharacterBody2D" unique_id=170901621 groups=["player"]]
 script = ExtResource("1_i2ll0")
 projectile_scene = ExtResource("2_5fw1j")
+
+[node name="PresentationComponent" type="Node" parent="." unique_id=2025615901]
+script = ExtResource("3_2quyp")
+
+[node name="PresentationDirector" type="Node" parent="." unique_id=1774681177]
+script = ExtResource("4_vbvci")
 
 [node name="AnimationDirector" type="Node" parent="." unique_id=771308005]
 script = ExtResource("1_0pexr")

@@ -2,67 +2,27 @@ class_name AnimationDirector
 extends Node
 
 @onready var body_sprite: AnimatedSprite2D = $"../Sprite/BodySprite"
+@onready var presentation: PresentationComponent = $"../PresentationComponent"
 
-@onready var facing: FacingComponent = $"../FacingComponent"
-@onready var equipment: EquipmentComponent = $"../EquipmentComponent"
-@onready var loco: LocomotionComponent = $"../LocomotionComponent"
+var _current_anim := ""
 
-enum BodyState {
-    IDLE,
-    WALK,
-    GUN_IDLE,
-    GUN_WALK
-}
 
-const DIR_SUFFIX := {
-    FacingComponent.Dir.N: "n",
-    FacingComponent.Dir.NE: "ne",
-    FacingComponent.Dir.NW: "ne",
-    FacingComponent.Dir.E: "se",
-    FacingComponent.Dir.SE: "se",
-    FacingComponent.Dir.S: "s",
-    FacingComponent.Dir.SW: "se",
-    FacingComponent.Dir.W: "se",
-}
 
-const ANIM_PREFIX : Dictionary[BodyState, String] = {
-    BodyState.IDLE: "idle_",
-    BodyState.WALK: "walk_",
-    BodyState.GUN_IDLE: "gun_idle_",
-    BodyState.GUN_WALK: "gun_walk_",
-}
-
-var current_anim := ""
-
-func _ready():
-    facing.direction_changed.connect(_on_direction_changed)
-
-func _process(_delta):
-    update_animation()
-
-func _on_direction_changed(_dir, flip):
-    body_sprite.flip_h = flip
+func _ready() -> void:
+    process_physics_priority = 10
     
-func update_animation():
-    var state := get_body_state()
+func _physics_process(_delta):
 
-    var anim : String = (
-        ANIM_PREFIX[state]
-        + DIR_SUFFIX[facing.current_dir]
-    )
+    body_sprite.flip_h = presentation.flip_h
 
-    if anim == current_anim:
+    if presentation.animation_name == _current_anim:
         return
 
-    current_anim = anim
+    _current_anim = presentation.animation_name
 
-    if body_sprite.sprite_frames.has_animation(anim):
-        body_sprite.play(anim)
-
-func get_body_state() -> BodyState:
-    var walking := loco.velocity.length() > 5
-
-    if equipment.is_armed() and facing.cursor_active():
-        return BodyState.GUN_WALK if walking else BodyState.GUN_IDLE
-
-    return BodyState.WALK if walking else BodyState.IDLE
+    if _current_anim.begins_with("jump_"):
+        body_sprite.play(_current_anim)
+        body_sprite.frame = 0
+        body_sprite.pause()
+    else:
+        body_sprite.play(_current_anim)

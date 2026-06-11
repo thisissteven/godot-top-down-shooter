@@ -7,6 +7,7 @@ extends Node
 
 @onready var facing: FacingComponent = $"../FacingComponent"
 @onready var equipment: EquipmentComponent = $"../EquipmentComponent"
+@onready var presentation: PresentationComponent = $"../PresentationComponent"
 
 @export var arm_hide_timeout := 1.0
 
@@ -19,44 +20,23 @@ var recoil_offset := Vector2.ZERO
 var base_position := Vector2.ZERO
 
 func _ready():
-    facing.direction_changed.connect(_on_direction_changed)
     equipment.weapon_changed.connect(_on_weapon_changed)
     base_position = arm_pivot.position
+    process_physics_priority = 20
 
-func _process(delta):
+func _physics_process(delta):
     update_visibility(delta)
     update_rotation()
     update_z()
 
-func update_visibility(delta):
-    if !equipment.is_armed():
-        arm_pivot.visible = false
-        return
-
-    if facing.cursor_active():
-        arm_pivot.visible = true
-        hide_timer = arm_hide_timeout
-    else:
-        hide_timer -= delta
-
-        if hide_timer <= 0:
-            arm_pivot.visible = false
+func update_visibility(_delta):
+    arm_pivot.visible = presentation.show_arms
 
 func update_rotation():
-    if !arm_pivot.visible:
+    if !presentation.show_arms:
         return
 
-    var camera := get_viewport().get_camera_2d()
-
-    var mouse_pos := (
-        camera.get_global_mouse_position()
-        if camera
-        else get_viewport().get_mouse_position()
-    )
-
-    var direction := (mouse_pos - arm_pivot.global_position).normalized()
-
-    arm_pivot.rotation = direction.angle()
+    arm_pivot.rotation = facing.aim_direction.angle()
 
     recoil_offset = recoil_offset.lerp(
         Vector2.ZERO,
@@ -69,18 +49,16 @@ func trigger_recoil(direction: Vector2):
     recoil_offset = -direction.normalized() * recoil_distance
         
 func update_z():
-    if facing.current_dir in [
-        FacingComponent.Dir.N,
-        FacingComponent.Dir.NE,
-        FacingComponent.Dir.NW
-    ]:
-        arm_pivot.z_index = -1
-    else:
-        arm_pivot.z_index = 1
+    match presentation.dir:
+        FacingComponent.Dir.N:
+            arm_pivot.z_index = -1
+        FacingComponent.Dir.NE:
+            arm_pivot.z_index = -1
+        FacingComponent.Dir.NW:
+            arm_pivot.z_index = -1
+        _:
+            arm_pivot.z_index = 1
 
-func _on_direction_changed(_dir, flip):
-    arm_sprite.flip_v = flip
-    arm_sprite_back.flip_v = flip
 
 func _on_weapon_changed(_weapon):
     var textures := equipment.get_arm_textures()
