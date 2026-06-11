@@ -24,6 +24,9 @@ func _process(delta: float) -> void:
 		_cursor_timer -= delta
 		if _cursor_timer <= 0.0:
 			_cursor_active = false
+			
+func cursor_active() -> bool:
+	return _cursor_active
 
 # Called by InputComponent each frame
 func update(mouse_world_pos: Vector2, player_pos: Vector2,

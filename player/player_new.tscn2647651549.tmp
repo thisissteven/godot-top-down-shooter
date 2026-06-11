@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://c6kfyq0ylgpx3" path="res://player/walk_bob_component.gd" id="5_g6tnf"]
 [ext_resource type="Texture2D" uid="uid://cecm1rhpjedj" path="res://player/assets/Hand/SpacemanHand1.png" id="5_jvl72"]
 [ext_resource type="Script" uid="uid://bil3te1xawdf7" path="res://components/LocomotionComponent.gd" id="5_y4jld"]
+[ext_resource type="Script" uid="uid://c7g2ojva6jjk1" path="res://player/recoil_component.gd" id="6_2quyp"]
 [ext_resource type="Texture2D" uid="uid://bp2m4wrnri3vo" path="res://player/assets/Hand/SpacemanHand2.png" id="6_5fw1j"]
 [ext_resource type="Script" uid="uid://cj11wwvgjgk6j" path="res://components/FacingComponent.gd" id="6_kj1om"]
 [ext_resource type="Texture2D" uid="uid://cjuu6ebows8g4" path="res://player/assets/Walk/SpaceManNorth.png" id="7_hquxl"]
@@ -425,6 +426,9 @@ script = ExtResource("4_4t8i3")
 [node name="WalkBobComponent" type="Node" parent="." unique_id=667971823]
 script = ExtResource("5_g6tnf")
 
+[node name="RecoilComponent" type="Node" parent="." unique_id=1171571341]
+script = ExtResource("6_2quyp")
+
 [node name="InputComponent" type="Node" parent="." unique_id=494123472]
 script = ExtResource("2_hiwwx")
 
@@ -459,11 +463,10 @@ position = Vector2(0, -5)
 
 [node name="ArmSprite" type="Sprite2D" parent="Sprite/ArmPivot" unique_id=692521167]
 light_mask = 8
-position = Vector2(1, 0)
 offset = Vector2(1, 0)
 
 [node name="ArmSpriteBack" type="Sprite2D" parent="Sprite/ArmPivot" unique_id=1963530409]
-position = Vector2(-2, 0)
+position = Vector2(-1, 0)
 
 [node name="ShineLight" type="PointLight2D" parent="." unique_id=570300288]
 position = Vector2(0, -5)

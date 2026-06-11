@@ -13,9 +13,11 @@ extends CharacterBody2D
 @onready var anim_director: AnimationDirector = $AnimationDirector
 @onready var sprite: Node2D                   = $Sprite
 @onready var arm_pivot: Node2D                = $Sprite/ArmPivot
+@onready var arm_controller: ArmController    = $ArmController
 
 var can_shoot := true
 var flashlight_tween: Tween
+var is_shooting := false
 
 func _ready() -> void:
 	shooting_timer.one_shot = true
@@ -41,10 +43,11 @@ func _shoot() -> void:
 	if not projectile_scene:
 		return
 	can_shoot = false
-
-	anim_director.trigger_recoil()
 	
 	var direction := (input_component.mouse_world_pos - global_position).normalized()
+	
+	arm_controller.trigger_recoil(direction)
+	
 	var projectile = projectile_scene.instantiate()
 	
 	# Spawn from barrel tip instead of player center
