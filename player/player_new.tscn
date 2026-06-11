@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://chbtylve1ol5c" path="res://player/assets/Walk/SpaceManRunDown.png" id="9_4q7ge"]
 [ext_resource type="Texture2D" uid="uid://clww8we6q5s6n" path="res://player/assets/Walk/SpacemanFrontWalk4.png" id="9_rm6ff"]
 [ext_resource type="Texture2D" uid="uid://cj3b30g3oygkn" path="res://player/assets/Walk/SpacemanSouthEastArms.png" id="10_l82tn"]
+[ext_resource type="Texture2D" uid="uid://dht0hb7mkhfs" path="res://assets/SmallShadow.png" id="11_rip8p"]
 [ext_resource type="Texture2D" uid="uid://ci8naunu158yy" path="res://player/assets/Jump/SpacemanNorthJumpArms.png" id="14_jvl72"]
 [ext_resource type="Texture2D" uid="uid://m3w8k0851d4r" path="res://player/assets/Jump/SpacemanNorthEastJumpArms.png" id="15_5fw1j"]
 [ext_resource type="Texture2D" uid="uid://n7f0n8a0o4he" path="res://player/assets/Jump/SpacemanSouthJumpArms.png" id="16_rip8p"]
@@ -186,7 +187,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_idle_n",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -194,7 +195,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_idle_ne",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -202,7 +203,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_idle_se",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -219,7 +220,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_walk_n",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -236,7 +237,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_walk_ne",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -253,7 +254,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"gun_walk_se",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -261,7 +262,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_n",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -269,7 +270,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_ne",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -277,7 +278,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_s",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -285,7 +286,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_se",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -293,7 +294,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"jump_n",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -301,7 +302,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"jump_ne",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -309,7 +310,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"jump_s",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -317,7 +318,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"jump_se",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -334,7 +335,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_n",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -351,7 +352,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_ne",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -368,7 +369,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_s",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -385,7 +386,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_se",
-"speed": 5.0
+"speed": 8.0
 }]
 
 [sub_resource type="Gradient" id="Gradient_rkbax"]
@@ -431,16 +432,23 @@ script = ExtResource("5_y4jld")
 [node name="FacingComponent" type="Node" parent="." unique_id=76264158]
 script = ExtResource("6_kj1om")
 
-[node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=1139440323]
+[node name="SmallShadow" type="Sprite2D" parent="." unique_id=98924386]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("11_rip8p")
+
+[node name="Sprite" type="Node2D" parent="." unique_id=1981923170]
+
+[node name="BodySprite" type="AnimatedSprite2D" parent="Sprite" unique_id=1139440323]
 light_mask = 8
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_saovg")
-animation = &"walk_se"
+animation = &"gun_idle_n"
+frame_progress = 0.6111009
 
-[node name="ArmPivot" type="Node2D" parent="." unique_id=541809031]
+[node name="ArmPivot" type="Node2D" parent="Sprite" unique_id=541809031]
 position = Vector2(-1, -5)
 
-[node name="ArmSprite" type="Sprite2D" parent="ArmPivot" unique_id=692521167]
+[node name="ArmSprite" type="Sprite2D" parent="Sprite/ArmPivot" unique_id=692521167]
 light_mask = 8
 
 [node name="ShineLight" type="PointLight2D" parent="." unique_id=570300288]

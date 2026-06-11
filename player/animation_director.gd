@@ -2,9 +2,10 @@ class_name AnimationDirector
 extends Node
 
 # Sprite references — assign in inspector or @onready
-@onready var body_sprite: AnimatedSprite2D = $"../BodySprite"
-@onready var arm_sprite:  Sprite2D         = $"../ArmPivot/ArmSprite"
-@onready var arm_pivot:   Node2D           = $"../ArmPivot"
+@onready var sprite_root: Node2D           = $"../Sprite"
+@onready var body_sprite: AnimatedSprite2D = $"../Sprite/BodySprite"
+@onready var arm_sprite:  Sprite2D         = $"../Sprite/ArmPivot/ArmSprite"
+@onready var arm_pivot:   Node2D           = $"../Sprite/ArmPivot"
 
 # Component references
 @onready var facing:    FacingComponent    = $"../FacingComponent"
@@ -14,6 +15,7 @@ extends Node
 
 @export var walk_bob_degrees: float = 1.5
 @export var walk_bob_speed: float = 10.0
+@export var walk_bob_amplitude: float = 3.0
 
 var _bob_time: float = 0.0
 
@@ -53,11 +55,14 @@ func _process(delta: float) -> void:
 func _update_walk_bob(delta: float) -> void:
     if _get_loco_state() == &"walk":
         _bob_time += delta * walk_bob_speed
-        body_sprite.rotation = sin(_bob_time) * deg_to_rad(walk_bob_degrees)
+        sprite_root.position.y = abs(sin(_bob_time)) * -walk_bob_amplitude
+        sprite_root.rotation = sin(_bob_time) * deg_to_rad(walk_bob_degrees)
     else:
-        # Smoothly reset rotation back to zero when not walking
-        body_sprite.rotation = lerp(body_sprite.rotation, 0.0, delta * 15.0)
-        _bob_time = 0.0
+        sprite_root.position.y = lerp(sprite_root.position.y, 0.0, delta * 15.0)
+        sprite_root.rotation = lerp(sprite_root.rotation, 0.0, delta * 15.0)
+        # remove the _bob_time = 0.0 line, or only reset once fully settled:
+        if abs(sprite_root.position.y) < 0.1:
+            _bob_time = 0.0
         
         
 # ── Direction / animation name resolution ──────────────────────────────────

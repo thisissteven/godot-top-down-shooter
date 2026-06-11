@@ -44,46 +44,46 @@ var _was_moving: bool = false
 ## Set the intended movement direction. Pass Vector2.ZERO to stop.
 ## Direction does NOT need to be normalised — get_vector() already handles that.
 func move(direction: Vector2) -> void:
-    _input_direction = direction
+	_input_direction = direction
 
 
 ## Apply physics and call move_and_slide on the body.
 ## body must be the CharacterBody2D (the entity root, i.e. get_parent()).
 func apply_movement(body: CharacterBody2D) -> void:
-    var delta := get_physics_process_delta_time()
+	var delta := get_physics_process_delta_time()
 
-    if instant_movement:
-        velocity = _input_direction * max_speed
-    else:
-        if _input_direction.length() > 0.01:
-            velocity = velocity.move_toward(_input_direction * max_speed, acceleration * delta)
-        else:
-            velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+	if instant_movement:
+		velocity = _input_direction * max_speed
+	else:
+		if _input_direction.length() > 0.01:
+			velocity = velocity.move_toward(_input_direction * max_speed, acceleration * delta)
+		else:
+			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 
-    # Add external forces (dash impulse, knockback).
-    var total_velocity := velocity + _extra_velocity
-    _extra_velocity = _extra_velocity.move_toward(Vector2.ZERO, friction * delta)
+	# Add external forces (dash impulse, knockback).
+	var total_velocity := velocity + _extra_velocity
+	_extra_velocity = _extra_velocity.move_toward(Vector2.ZERO, friction * delta)
 
-    body.velocity = total_velocity
-    body.move_and_slide()
+	body.velocity = total_velocity
+	body.move_and_slide()
 
-    # Sync back from CharacterBody2D in case of wall collisions.
-    velocity = body.velocity - _extra_velocity
+	# Sync back from CharacterBody2D in case of wall collisions.
+	velocity = body.velocity - _extra_velocity
 
-    # Emit stopped once when we come to rest.
-    var is_moving := body.velocity.length() > 5.0
-    if _was_moving and not is_moving:
-        stopped.emit()
-    _was_moving = is_moving
+	# Emit stopped once when we come to rest.
+	var is_moving := body.velocity.length() > 5.0
+	if _was_moving and not is_moving:
+		stopped.emit()
+	_was_moving = is_moving
 
 
 ## Other components call this to add a one-time velocity impulse
 ## (dash burst, knockback hit, explosion push).
 func request_velocity_add(impulse: Vector2) -> void:
-    _extra_velocity += impulse
+	_extra_velocity += impulse
 
 
 ## Hard override — used to teleport or snap velocity (e.g. wall slide lock).
 func set_velocity_override(new_velocity: Vector2) -> void:
-    velocity = new_velocity
-    _extra_velocity = Vector2.ZERO
+	velocity = new_velocity
+	_extra_velocity = Vector2.ZERO

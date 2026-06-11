@@ -11,6 +11,8 @@ extends CharacterBody2D
 @onready var shine_light                      = $ShineLight
 @onready var shadow_light                     = $ShadowLight
 @onready var anim_director: AnimationDirector = $AnimationDirector
+@onready var sprite: Node2D                   = $Sprite
+@onready var arm_pivot: Node2D                = $Sprite/ArmPivot
 
 var can_shoot := true
 var flashlight_tween: Tween
@@ -39,19 +41,26 @@ func _on_shoot_pressed() -> void:
 	if can_shoot:
 		_shoot()
 
+
 func _shoot() -> void:
 	if not projectile_scene:
 		return
-
 	can_shoot = false
 
 	var direction := (input_component.mouse_world_pos - global_position).normalized()
 	var projectile = projectile_scene.instantiate()
-	projectile.global_position = global_position + direction * 16
+	
+	# Spawn from barrel tip instead of player center
+	var barrel_offset := 12.0  # distance from arm_pivot along aim direction
+	projectile.global_position = arm_pivot.global_position + direction * barrel_offset
 	projectile.direction = direction
 	projectile.rotation = direction.angle()
+	
+	# Z-index: behind player when aiming upward, in front when aiming downward
+	var is_aiming_up := direction.y < 0
+	projectile.z_index = -1 if is_aiming_up else 1
+	
 	get_tree().current_scene.add_child(projectile)
-
 	shooting_timer.start(1.0 / fire_rate)
 
 func _on_flashlight_pressed() -> void:
