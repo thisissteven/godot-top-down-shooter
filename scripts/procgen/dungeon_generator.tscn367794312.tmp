@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cfr0xa1nmisqy"]
+
+[ext_resource type="Script" uid="uid://duuefkhghxa8t" path="res://scripts/procgen/dungeon_generator.gd" id="1_xd7b8"]
+[ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://environment/walls/top_walls.tscn" id="2_eoyx7"]
+[ext_resource type="PackedScene" uid="uid://cv45s283crols" path="res://environment/walls/bottom_walls.tscn" id="3_65jun"]
+[ext_resource type="PackedScene" uid="uid://frmrxjt8ngmj" path="res://environment/tiles/tiles_base.tscn" id="4_3qfp6"]
+[ext_resource type="PackedScene" uid="uid://ch3nj1k6kpomu" path="res://environment/doors/door_placer.tscn" id="5_ky1j1"]
+[ext_resource type="PackedScene" uid="uid://b3wptvtojweh5" path="res://environment/windows/windows.tscn" id="6_vnash"]
+
+[node name="DungeonGenerator" type="Node2D" unique_id=1378540935]
+script = ExtResource("1_xd7b8")
+
+[node name="Tiles" parent="." unique_id=1801516032 instance=ExtResource("4_3qfp6")]
+
+[node name="BottomWalls" parent="." unique_id=2000947890 instance=ExtResource("3_65jun")]
+
+[node name="Doors" parent="." unique_id=2120505476 instance=ExtResource("5_ky1j1")]
+
+[node name="TopWalls" parent="." unique_id=1921369934 instance=ExtResource("2_eoyx7")]
+
+[node name="Windows" parent="." unique_id=10185030 instance=ExtResource("6_vnash")]

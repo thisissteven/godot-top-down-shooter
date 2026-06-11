@@ -5,6 +5,7 @@ const TARGET_CURSOR_SIZE := Vector2i(32, 32)
 var fps_label: Label
 
 func _ready():
+	Engine.max_fps = DisplayServer.screen_get_refresh_rate()
 	_setup_cursor()
 	_setup_fps()
 
