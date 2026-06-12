@@ -418,6 +418,7 @@ size = Vector2(12, 7)
 [node name="PlayerNew" type="CharacterBody2D" unique_id=170901621 groups=["player"]]
 script = ExtResource("1_i2ll0")
 projectile_scene = ExtResource("2_5fw1j")
+fire_rate = null
 
 [node name="PresentationComponent" type="Node" parent="." unique_id=2025615901]
 script = ExtResource("3_2quyp")
@@ -463,26 +464,26 @@ sprite_frames = SubResource("SpriteFrames_saovg")
 animation = &"walk_se"
 
 [node name="ArmPivot" type="Node2D" parent="Sprite" unique_id=541809031]
-position = Vector2(0, -8)
+position = Vector2(0, -5)
 
 [node name="RecoilNode" type="Node2D" parent="Sprite/ArmPivot" unique_id=1651946027]
-position = Vector2(-1.5, 1)
 
 [node name="GunPivot" type="Node2D" parent="Sprite/ArmPivot/RecoilNode" unique_id=65738655]
-position = Vector2(0.5, 2)
+position = Vector2(-1, 1)
 
 [node name="Pistol" parent="Sprite/ArmPivot/RecoilNode/GunPivot" unique_id=681137290 instance=ExtResource("27_1xgsa")]
 position = Vector2(8, -3)
 
 [node name="ArmSpriteBack" type="Sprite2D" parent="Sprite/ArmPivot/RecoilNode" unique_id=1963530409]
 light_mask = 8
-position = Vector2(-1, 1.5)
+position = Vector2(-2, 0)
 texture = ExtResource("5_jvl72")
 
 [node name="ArmSprite" type="Sprite2D" parent="Sprite/ArmPivot/RecoilNode" unique_id=692521167]
 light_mask = 8
+position = Vector2(1, 0)
 texture = ExtResource("6_5fw1j")
-offset = Vector2(3.5, 1.5)
+offset = Vector2(1, 0)
 
 [node name="ShineLight" type="PointLight2D" parent="." unique_id=570300288]
 position = Vector2(0, -5)
