@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="GunData" format=3 uid="uid://dlvrh7wiconmu"]
 
-[ext_resource type="PackedScene" uid="uid://cyyc46hiet423" path="res://environment/projectiles/Projectile.tscn" id="1_h6y4q"]
+[ext_resource type="PackedScene" uid="uid://cyyc46hiet423" path="res://environment/projectiles/PlasmaProjectile.tscn" id="1_h6y4q"]
 [ext_resource type="Script" uid="uid://tixprvorny3q" path="res://resources/guns/GunData.gd" id="1_wf8f5"]
 
 [resource]
 script = ExtResource("1_wf8f5")
 gun_name = "PlasmaGun"
-fire_rate = 4.0
+weapon_type = 2
+fire_rate = 10.0
 spread_degrees = 0.0
 magazine_size = 999
 reserve_ammo = 999

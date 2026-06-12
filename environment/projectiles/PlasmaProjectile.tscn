@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cyyc46hiet423"]
+
+[ext_resource type="Script" uid="uid://dmrftq3oyt4td" path="res://environment/projectiles/Projectile.gd" id="1_yof1p"]
+[ext_resource type="Texture2D" uid="uid://yadj0w3o0d1i" path="res://assets/Proj8.png" id="2_ofqpg"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5kjb"]
+radius = 2.0
+height = 14.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5piss"]
+light_mode = 1
+
+[node name="PlasmaGunProjectile" type="Area2D" unique_id=1162779140]
+script = ExtResource("1_yof1p")
+speed = 250.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1912234941]
+position = Vector2(-2, 0)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_j5kjb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2084974054]
+material = SubResource("CanvasItemMaterial_5piss")
+scale = Vector2(0.0925, 0.016666662)
+texture = ExtResource("2_ofqpg")

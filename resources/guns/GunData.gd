@@ -9,6 +9,7 @@ extends Resource
 # ── Identity ──────────────────────────────────────────────────────────────────
 
 @export var gun_name: String = "Pistol"
+@export var weapon_type: EquipmentComponent.WeaponType = EquipmentComponent.WeaponType.NONE
 
 # ── Firing ────────────────────────────────────────────────────────────────────
 

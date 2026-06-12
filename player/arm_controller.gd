@@ -25,8 +25,8 @@ func _ready():
 	process_physics_priority = 20
 
 func get_flipped_base() -> Vector2:
-	var flip := facing.aim_direction.x < 0.0
-	var aiming_up := facing.aim_direction.y < 0.0
+	var flip := facing.aiming_left()
+	var aiming_up := facing.aiming_up()
 	var offset := (-2.5 if flip else 2.5) if aiming_up else 0.0
 	return Vector2(
 		(-base_position.x if flip else base_position.x) + offset,
@@ -49,7 +49,7 @@ func update_rotation():
 	if !presentation.show_arms:
 		return
 	var aim_angle := facing.aim_direction.angle()
-	var flip := facing.aim_direction.x < 0.0
+	var flip := facing.aiming_left()
 	recoil_node.rotation = aim_angle
 	# Flip Y (not X) to mirror correctly after rotation
 	recoil_node.scale.x = 1.0
@@ -86,7 +86,9 @@ func _on_weapon_changed(type: EquipmentComponent.WeaponType):
 	arm_sprite_back.texture = textures.back
 	
 	if type == EquipmentComponent.WeaponType.PLASMA:
-		arm_sprite.offset.x += 3
+		arm_sprite.offset.x = 6.5
+	else:
+		arm_sprite.offset.x = 3.5
 
 	arm_sprite_back.visible = (
 		textures.back != null

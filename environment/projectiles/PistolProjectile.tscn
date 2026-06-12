@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://cyyc46hiet423"]
+[gd_scene format=3 uid="uid://cnuwjllml0qjt"]
 
-[ext_resource type="Script" uid="uid://dmrftq3oyt4td" path="res://environment/projectiles/Projectile.gd" id="1_j5kjb"]
-[ext_resource type="Texture2D" uid="uid://yadj0w3o0d1i" path="res://assets/Proj8.png" id="2_5piss"]
+[ext_resource type="Script" uid="uid://dmrftq3oyt4td" path="res://environment/projectiles/Projectile.gd" id="1_mwrfl"]
+[ext_resource type="Texture2D" uid="uid://yadj0w3o0d1i" path="res://assets/Proj8.png" id="2_trm6p"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5kjb"]
 radius = 2.0
@@ -10,8 +10,8 @@ height = 14.0
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5piss"]
 light_mode = 1
 
-[node name="Projectile" type="Area2D" unique_id=1162779140]
-script = ExtResource("1_j5kjb")
+[node name="PistolProjectile" type="Area2D" unique_id=1162779140]
+script = ExtResource("1_mwrfl")
 speed = 250.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1912234941]
@@ -20,6 +20,7 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_j5kjb")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2084974054]
+modulate = Color(1, 1, 0, 1)
 material = SubResource("CanvasItemMaterial_5piss")
 scale = Vector2(0.0925, 0.016666662)
-texture = ExtResource("2_5piss")
+texture = ExtResource("2_trm6p")
