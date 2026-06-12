@@ -14,7 +14,8 @@ extends CharacterBody2D
 @onready var sprite: Node2D                   = $Sprite
 @onready var arm_pivot: Node2D                = $Sprite/ArmPivot
 @onready var arm_controller: ArmController    = $ArmController
-@onready var gun: GunComponent = $Sprite/ArmPivot/RecoilNode/GunPivot/Pistol
+@onready var gun: GunComponent = $Sprite/ArmPivot/RecoilNode/GunPivot/PlasmaGun
+
 	
 var can_shoot := true
 var flashlight_tween: Tween
@@ -29,7 +30,7 @@ func _ready() -> void:
 		facing.set_armed(type != EquipmentComponent.WeaponType.NONE)
 		#gun = get_node(equipment.get_gun_node_path())  # or however you resolve it
 	)
-	equipment.equip(EquipmentComponent.WeaponType.PISTOL)
+	equipment.equip(EquipmentComponent.WeaponType.PLASMA)
 	gun.fired.connect(
 	func(_pos, direction):
 		arm_controller.trigger_recoil(direction)

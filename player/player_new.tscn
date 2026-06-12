@@ -26,7 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://m3w8k0851d4r" path="res://player/assets/Jump/SpacemanNorthEastJumpArms.png" id="15_5fw1j"]
 [ext_resource type="Texture2D" uid="uid://n7f0n8a0o4he" path="res://player/assets/Jump/SpacemanSouthJumpArms.png" id="16_rip8p"]
 [ext_resource type="Texture2D" uid="uid://c2gp735mfcatw" path="res://player/assets/Jump/SpacemanSouthEastJumpArms.png" id="17_4t8i3"]
-[ext_resource type="PackedScene" uid="uid://cgyru4ffgaep1" path="res://resources/guns/Pistol.tscn" id="27_1xgsa"]
+[ext_resource type="PackedScene" uid="uid://b016sj32qawn7" path="res://resources/guns/PlasmaGun.tscn" id="27_1xgsa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g6tnf"]
 atlas = ExtResource("7_hquxl")
@@ -440,8 +440,8 @@ script = ExtResource("2_hiwwx")
 [node name="EquipmentComponent" type="Node" parent="." unique_id=792081817]
 script = ExtResource("4_saovg")
 arm_texture_pistol = ExtResource("7_rip8p")
-arm_texture_plasma_front = ExtResource("5_jvl72")
-arm_texture_plasma_back = ExtResource("6_5fw1j")
+arm_texture_plasma_front = ExtResource("6_5fw1j")
+arm_texture_plasma_back = ExtResource("5_jvl72")
 
 [node name="LocomotionComponent" type="Node" parent="." unique_id=22257264]
 script = ExtResource("5_y4jld")
@@ -471,12 +471,12 @@ position = Vector2(-1.5, 1)
 [node name="GunPivot" type="Node2D" parent="Sprite/ArmPivot/RecoilNode" unique_id=65738655]
 position = Vector2(0.5, 2)
 
-[node name="Pistol" parent="Sprite/ArmPivot/RecoilNode/GunPivot" unique_id=681137290 instance=ExtResource("27_1xgsa")]
-position = Vector2(8, -3)
+[node name="PlasmaGun" parent="Sprite/ArmPivot/RecoilNode/GunPivot" unique_id=1101268431 instance=ExtResource("27_1xgsa")]
+position = Vector2(5, -2)
 
 [node name="ArmSpriteBack" type="Sprite2D" parent="Sprite/ArmPivot/RecoilNode" unique_id=1963530409]
 light_mask = 8
-position = Vector2(-1, 1.5)
+position = Vector2(1, 2)
 texture = ExtResource("5_jvl72")
 
 [node name="ArmSprite" type="Sprite2D" parent="Sprite/ArmPivot/RecoilNode" unique_id=692521167]
@@ -507,5 +507,3 @@ texture = SubResource("GradientTexture2D_kg0wy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=789907039]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_y4jld")
-
-[editable path="Sprite/ArmPivot/RecoilNode/GunPivot/Pistol"]
