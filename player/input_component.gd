@@ -4,8 +4,6 @@ extends Node
 signal flashlight_pressed
 signal switch_weapon_pressed
 
-@export var equipment_component: EquipmentComponent
-
 # Read-only output — other components poll these
 var move_input: Vector2 = Vector2.ZERO
 var mouse_world_pos: Vector2 = Vector2.ZERO
@@ -33,4 +31,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		flashlight_pressed.emit()
 		
 	if event.is_action_pressed("switch_weapon"):
-		equipment_component.cycle_weapon()
+		switch_weapon_pressed.emit()

@@ -435,9 +435,8 @@ script = ExtResource("4_4t8i3")
 [node name="WalkBobComponent" type="Node" parent="." unique_id=667971823]
 script = ExtResource("5_g6tnf")
 
-[node name="InputComponent" type="Node" parent="." unique_id=494123472 node_paths=PackedStringArray("equipment_component")]
+[node name="InputComponent" type="Node" parent="." unique_id=494123472]
 script = ExtResource("2_hiwwx")
-equipment_component = NodePath("../EquipmentComponent")
 
 [node name="EquipmentComponent" type="Node" parent="." unique_id=792081817]
 script = ExtResource("4_saovg")

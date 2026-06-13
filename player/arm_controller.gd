@@ -19,6 +19,8 @@ extends Node
 @onready var base_position := recoil_node.position
 
 var hide_timer := 0.0
+var base_arm_sprite_x_north: float
+var base_arm_sprite_x_south: float
 
 func _ready():
 	equipment.weapon_changed.connect(_on_weapon_changed)
@@ -58,6 +60,10 @@ func update_rotation():
 	arm_sprite_back.flip_h = false
 	gun_pivot.scale = Vector2.ONE
 	
+	if facing.aiming_up():
+		arm_sprite.offset.x = base_arm_sprite_x_north
+	else:
+		arm_sprite.offset.x = base_arm_sprite_x_south
 	
 func trigger_recoil(_direction: Vector2):
 	var recoil_offset := -facing.aim_direction * recoil_distance
@@ -69,7 +75,7 @@ func update_z():
 		FacingComponent.Dir.NE,
 		FacingComponent.Dir.NW
 	]
-
+	
 	if facing_up:
 		arm_pivot.get_parent().move_child(arm_pivot, 0)
 	else:
@@ -86,9 +92,11 @@ func _on_weapon_changed(type: EquipmentComponent.WeaponType):
 	arm_sprite_back.texture = textures.back
 	
 	if type == EquipmentComponent.WeaponType.PLASMA:
-		arm_sprite.offset.x = 6.5
+		base_arm_sprite_x_north = 3.5
+		base_arm_sprite_x_south = 6.5
 	else:
-		arm_sprite.offset.x = 3.5
+		base_arm_sprite_x_north = 3.5
+		base_arm_sprite_x_south = 3.5
 
 	arm_sprite_back.visible = (
 		textures.back != null

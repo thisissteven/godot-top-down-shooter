@@ -7,7 +7,7 @@
 script = ExtResource("2_1yik6")
 weapon_type = 1
 fire_rate = 4.0
-spread_degrees = 0.0
+spread_degrees = 5.0
 magazine_size = 999
 projectile_scene = ExtResource("1_835ld")
 metadata/_custom_type_script = "uid://tixprvorny3q"

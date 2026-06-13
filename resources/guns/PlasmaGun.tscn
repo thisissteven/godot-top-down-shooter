@@ -4,9 +4,6 @@
 [ext_resource type="Resource" uid="uid://dlvrh7wiconmu" path="res://resources/guns/PlasmaGun.tres" id="2_g0kj1"]
 [ext_resource type="Texture2D" uid="uid://bwmh2ru3uwo5k" path="res://resources/guns/PlasmaGunUI.png" id="2_nk5bq"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g0kj1"]
-light_mode = 1
-
 [node name="PlasmaGun" type="Node2D" unique_id=1101268431 node_paths=PackedStringArray("muzzle_point")]
 script = ExtResource("1_622gt")
 gun_data = ExtResource("2_g0kj1")
@@ -14,7 +11,7 @@ muzzle_point = NodePath("Marker2D")
 metadata/_custom_type_script = "uid://cgc7aig6fcdri"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=489261151]
-material = SubResource("CanvasItemMaterial_g0kj1")
+light_mask = 8
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_nk5bq")
 
