@@ -25,20 +25,8 @@ func generate() -> void:
 		push_error("DoorPlacer: Assign both door scenes in the Inspector.")
 		return
 
-	for node_name in ["Doors"]:
-		var existing = find_child(node_name, false, false)
-		if is_instance_valid(existing):
-			existing.queue_free()
-
-	while find_child("Doors", false, false) != null:
-		await get_tree().process_frame
-
-	var doors_container = Node2D.new()
-	add_child(doors_container)
-	doors_container.y_sort_enabled = true
-	doors_container.name = "Doors"
-	doors_container.owner = owner
-	doors_container.set_unique_name_in_owner(true)
+	for child in get_children():
+		child.free()
 
 	# top_wall_layer IS the TileMapLayer — use it directly
 	var tilemap: TileMapLayer = top_wall_layer
@@ -46,7 +34,7 @@ func generate() -> void:
 
 	for gap in top_wall_layer.door_gaps:
 		var vertical = gap.type == "vertical"
-		_place_door(doors_container, gap.cells, tile_size, vertical)
+		_place_door(self, gap.cells, tile_size, vertical)
 
 	print("DoorPlacer: Done.")
 

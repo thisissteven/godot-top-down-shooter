@@ -48,7 +48,7 @@ func _ready() -> void:
 	_lifetime_remaining = lifetime
 	_pierce_remaining = pierce_count
 	rotation = _direction.angle()
-	z_index = 1
+	z_index = 2
 
 	# Connect area detection.
 	area_entered.connect(_on_area_entered)

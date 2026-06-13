@@ -28,11 +28,10 @@ var _interacting := false
 var _flicker_tween: Tween = null
 
 func _ready() -> void:
-	move.z_index = 98
-	state = State.values().pick_random()
+	state = [State.UNLOCKED, State.OPENED].pick_random()
 	_light_nodes = [door_lights, door_glow_down, door_glow_up]
-	_setup_glow(door_glow_down, 6, 8, 0.6)
-	_setup_glow(door_glow_up, 6, 8, 0.6)
+	_setup_glow(door_glow_down, 4, 8, 0.6)
+	_setup_glow(door_glow_up, 4, 8, 0.6)
 	animation_player.play("close")
 	animation_player.seek(animation_player.current_animation_length, true)
 	detection_area.body_entered.connect(_on_body_entered)

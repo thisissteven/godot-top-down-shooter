@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://ch3nj1k6kpomu"]
+
+[ext_resource type="Script" uid="uid://q1suxqi0fxkv" path="res://environment/doors/doors.gd" id="1_53xn0"]
+[ext_resource type="PackedScene" uid="uid://bga17h6hjvs0" path="res://environment/doors/horizontal_door.tscn" id="2_0pq5a"]
+[ext_resource type="PackedScene" uid="uid://brinbydsva6b2" path="res://environment/doors/vertical_door.tscn" id="3_y8rpi"]
+
+[node name="Doors" type="Node2D" unique_id=990062739]
+y_sort_enabled = true
+script = ExtResource("1_53xn0")
+horizontal_door_scene = ExtResource("2_0pq5a")
+vertical_door_scene = ExtResource("3_y8rpi")
+horizontal_door_offset = Vector2(0, 8)

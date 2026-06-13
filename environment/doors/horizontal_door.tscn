@@ -14,7 +14,7 @@ load_path = "res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa6361
 light_mode = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gusx3"]
-size = Vector2(16, 19)
+size = Vector2(16, 32)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o3jxg"]
 height = 92.0
@@ -112,7 +112,6 @@ _data = {
 }
 
 [node name="HorizontalDoor" type="StaticBody2D" unique_id=2096676965 groups=["wall"]]
-y_sort_enabled = true
 collision_mask = 0
 script = ExtResource("1_66o6y")
 state = 0
@@ -142,7 +141,6 @@ position = Vector2(3, 4.5)
 position = Vector2(3, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]
-visible = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_gusx3")
 

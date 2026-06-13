@@ -1,21 +1,20 @@
 @tool
 class_name WallLightPlacer
-extends Node
+extends Node2D
 
 @export var top_wall_layer: TopWalls
+@export var bottom_wall_layer: BottomWalls
 @export var wall_light_scene: PackedScene
 
 @export_group("Placement")
-## Total number of wall lights to place across the map
-@export var light_count := 6
 ## Minimum distance between two lights (in tiles, Chebyshev)
 @export var min_spacing := 8
-## Only place lights on vertical wall segments facing downward
-## (wall tile has open floor directly below — south-facing wall)
-@export var south_facing_only := true
+## Chance (0.0–1.0) that a qualifying strip gets a light at all
+@export_range(0.0, 1.0) var placement_chance := 0.7
+## Minimum strip length in tiles to be eligible
+@export var min_strip_length := 3
 
 @export_group("Offset")
-## Fine-tune light position relative to the tile center (in pixels)
 @export var light_offset: Vector2 = Vector2(0, 0)
 
 @export_group("Seed")
@@ -28,128 +27,200 @@ func _ready() -> void:
 
 
 func generate() -> void:
-	#if !initialized:
-		#await ready
-	
 	if not top_wall_layer:
-		push_error("WallLightPlacer: Assign top_wall_layer in the Inspector.")
+		push_error("WallLightPlacer: Assign top_wall_layer.")
+		return
+	if not bottom_wall_layer:
+		push_error("WallLightPlacer: Assign bottom_wall_layer.")
 		return
 	if not wall_light_scene:
-		push_error("WallLightPlacer: Assign wall_light_scene in the Inspector.")
+		push_error("WallLightPlacer: Assign wall_light_scene.")
 		return
 
-	var parent = get_parent()
-	if not parent:
-		push_error("WallLightPlacer: Must have a parent node.")
-		return
+	for child in get_children():
+		child.free()
 
-	# ── Clean up previous pass ──
-	for node_name in ["WallLights"]:
-		var existing = parent.find_child(node_name, false, false)
-		if is_instance_valid(existing):
-			existing.queue_free()
-	while parent.find_child("WallLights", false, false) != null:
-		await get_tree().process_frame
-
-	var container = Node2D.new()
-	container.name = "WallLights"
-	container.y_sort_enabled = true
-	parent.add_child(container)
-	container.owner = owner
-	container.set_unique_name_in_owner(true)
-
-	# ── Collect candidates ──
-	var candidates: Array = _collect_candidates()
-
-	if candidates.is_empty():
-		push_warning("WallLightPlacer: No valid wall candidates found.")
-		return
-
-	# ── Shuffle candidates ──
 	var rng := RandomNumberGenerator.new()
 	if seed_value == 0:
 		rng.randomize()
 	else:
 		rng.seed = seed_value
 
-	# Fisher-Yates shuffle
-	for i in range(candidates.size() - 1, 0, -1):
-		var j := rng.randi_range(0, i)
-		var tmp = candidates[i]
-		candidates[i] = candidates[j]
-		candidates[j] = tmp
-
-	# ── Place lights with spacing enforcement ──
-	var placed: Array = []
 	var tile_size: Vector2 = Vector2(top_wall_layer.tile_set.tile_size)
+	var placed_centers: Array = []
+	var placed_count := 0
 
-	for cell in candidates:
-		if placed.size() >= light_count:
-			break
+	# ── Horizontal lights on bottom wall strips (rotated 90°) ──
+	var h_strips := _collect_horizontal_strips()
+	_shuffle(h_strips, rng)
 
-		if not _is_far_enough(cell, placed):
+	for strip in h_strips:
+		if strip.size() < min_strip_length:
+			continue
+		if rng.randf() > placement_chance:
 			continue
 
+		var mid_cell: Vector2i = strip[strip.size() / 2]
+		if not _is_far_enough(mid_cell, placed_centers):
+			continue
+
+		# Center X of the strip
+		var strip_origin_x = strip[0].x * tile_size.x
+		var center_x = strip_origin_x + strip.size() * tile_size.x * 0.5
+
+		# Bottom wall sits one tile below the top wall tile
+		# so the top edge of the bottom wall tile = strip[0].y * tile_size.y + tile_size.y
+		# We want the light centered vertically on that bottom wall tile
+		var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
+
 		var light = wall_light_scene.instantiate()
-		# Center of the tile in world space
-		light.position = (Vector2(cell) + Vector2(0.5, 0.5)) * tile_size + light_offset
-		light.name = "WallLight_" + str(cell.x) + "_" + str(cell.y)
-		container.add_child(light)
+		# Rotated 90°: sprite is now 19 wide × 10 tall, centered on bottom wall tile center
+		light.rotation = PI * 0.5
+		light.position = Vector2(center_x, bottom_wall_center_y) + light_offset
+		light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
+		light.glow_direction = WallLight.GlowDirection.RIGHT
+		add_child(light)
 		light.owner = owner
 
-		placed.append(cell)
+		placed_centers.append(mid_cell)
+		placed_count += 1
 
-	print("WallLightPlacer: Placed %d lights." % placed.size())
+	# ── Vertical lights on top wall vertical strips (no rotation) ──
+	var v_strips := _collect_vertical_strips()
+	_shuffle(v_strips, rng)
+
+	for strip in v_strips:
+		if strip.size() < min_strip_length:
+			continue
+		if rng.randf() > placement_chance:
+			continue
+
+		var mid_cell: Vector2i = strip[strip.size() / 2]
+		if not _is_far_enough(mid_cell, placed_centers):
+			continue
+
+		# Center Y of the strip
+		var strip_origin_y = strip[0].y * tile_size.y
+		var center_y = strip_origin_y + strip.size() * tile_size.y * 0.5
+
+		# Randomly place on left or right side of the wall strip
+		var go_left: bool = rng.randi_range(0, 1) == 0
+		# The wall tile column X
+		var wall_tile_x = strip[0].x * tile_size.x
+		var center_x: float
+
+		var glow_direction
+		if go_left:
+			# Right edge of the tile to the left = wall_tile_x
+			# Half of sprite width (10px) = 5px, so center is 5px left of wall edge
+			# That puts 5px inside the wall, 5px outside to the left
+			center_x = wall_tile_x
+			glow_direction = WallLight.GlowDirection.LEFT
+		else:
+			# Left edge of tile = wall_tile_x + tile_size.x
+			# Center is 5px right of that edge
+			# That puts 5px inside the wall, 5px outside to the right
+			center_x = wall_tile_x + tile_size.x
+			glow_direction = WallLight.GlowDirection.RIGHT
+
+		var light = wall_light_scene.instantiate()
+		light.rotation = 0.0
+		light.position = Vector2(center_x, center_y) + light_offset
+		light.name = "WallLight_V_%d_%d" % [mid_cell.x, mid_cell.y]
+		light.glow_direction = glow_direction
+		add_child(light)
+		light.owner = owner
+
+		placed_centers.append(mid_cell)
+		placed_count += 1
+
+	print("WallLightPlacer: Placed %d lights." % placed_count)
 
 
-# ── Find all vertical wall tiles that face open floor ──
-func _collect_candidates() -> Array:
+# ── Collect horizontal south-facing top wall strips ───────────────────────────
+func _collect_horizontal_strips() -> Array:
 	var grid = top_wall_layer.grid
 	var w := top_wall_layer.map_width
 	var h := top_wall_layer.map_height
 	var border := top_wall_layer.border_thickness
-	var candidates: Array = []
+	var strips: Array = []
 
 	for y in range(border, h - border):
-		for x in range(border, w - border):
-
-			# Must be a wall tile
+		var x := border
+		while x < w - border:
 			if grid[y][x] != false:
+				x += 1
+				continue
+			# South-facing: floor directly below
+			if not (y < h - 1 and grid[y + 1][x] == true):
+				x += 1
 				continue
 
-			# Must have at least one horizontal wall neighbor
-			# (confirms it's part of a wall segment, not an isolated block)
-			var has_wall_neighbor := false
-			if x > 0 and grid[y][x - 1] == false:
-				has_wall_neighbor = true
-			if x < w - 1 and grid[y][x + 1] == false:
-				has_wall_neighbor = true
+			var run_start := x
+			while x < w - border and grid[y][x] == false:
+				if not (y < h - 1 and grid[y + 1][x] == true):
+					break
+				x += 1
 
-			if not has_wall_neighbor:
+			if x > run_start:
+				var cells: Array = []
+				for cx in range(run_start, x):
+					cells.append(Vector2i(cx, y))
+				strips.append(cells)
+
+	return strips
+
+
+# ── Collect vertical top wall strips (wall left AND right = open floor) ───────
+func _collect_vertical_strips() -> Array:
+	var grid = top_wall_layer.grid
+	var w := top_wall_layer.map_width
+	var h := top_wall_layer.map_height
+	var border := top_wall_layer.border_thickness
+	var strips: Array = []
+
+	for x in range(border, w - border):
+		var y := border
+		while y < h - border:
+			if grid[y][x] != false:
+				y += 1
+				continue
+			# Vertical strip: floor on left AND right
+			var floor_left  = (x > 0       and grid[y][x - 1] == true)
+			var floor_right = (x < w - 1   and grid[y][x + 1] == true)
+			if not floor_left or not floor_right:
+				y += 1
 				continue
 
-			if south_facing_only:
-				# Wall tile must have open floor directly below (south-facing)
-				var floor_below : bool = (y < h - 1 and grid[y + 1][x] == true)
-				if not floor_below:
-					continue
-			else:
-				# Accept any wall tile adjacent to floor (any direction)
-				var floor_above : bool = (y > 0       and grid[y - 1][x] == true)
-				var floor_below : bool = (y < h - 1   and grid[y + 1][x] == true)
-				if not floor_above and not floor_below:
-					continue
+			var run_start := y
+			while y < h - border and grid[y][x] == false:
+				var fl = (x > 0     and grid[y][x - 1] == true)
+				var fr = (x < w - 1 and grid[y][x + 1] == true)
+				if not fl or not fr:
+					break
+				y += 1
 
-			candidates.append(Vector2i(x, y))
+			if y > run_start:
+				var cells: Array = []
+				for cy in range(run_start, y):
+					cells.append(Vector2i(x, cy))
+				strips.append(cells)
 
-	return candidates
+	return strips
 
 
-# ── Chebyshev distance check against all already-placed lights ──
+# ── Fisher-Yates shuffle ──────────────────────────────────────────────────────
+func _shuffle(arr: Array, rng: RandomNumberGenerator) -> void:
+	for i in range(arr.size() - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var tmp = arr[i]
+		arr[i] = arr[j]
+		arr[j] = tmp
+
+
+# ── Chebyshev spacing check ───────────────────────────────────────────────────
 func _is_far_enough(cell: Vector2i, placed: Array) -> bool:
 	for p in placed:
-		var dx : int = abs(cell.x - p.x)
-		var dy : int = abs(cell.y - p.y)
-		if max(dx, dy) < min_spacing:
+		if max(abs(cell.x - p.x), abs(cell.y - p.y)) < min_spacing:
 			return false
 	return true

@@ -20,6 +20,7 @@ var flashlight_tween: Tween
 var is_shooting := false
 
 func _ready() -> void:
+	z_index = 10
 	shooting_timer.one_shot = true
 	shooting_timer.timeout.connect(func(): can_shoot = true)
 	
@@ -68,10 +69,10 @@ func _on_flashlight_pressed() -> void:
 		shadow_light.energy  = 0.0
 
 		flashlight_tween = create_tween()
-		flashlight_tween.tween_property(shine_light,  "energy", 1.0, 0.2)
-		flashlight_tween.parallel().tween_property(shadow_light, "energy", 1.0, 0.2)
+		flashlight_tween.tween_property(shine_light,  "energy", 0.4, 0.2)
+		flashlight_tween.parallel().tween_property(shadow_light, "energy", 0.4, 0.2)
 	else:
 		shine_light.enabled  = false
 		shadow_light.enabled = false
-		shine_light.energy   = 1.0
-		shadow_light.energy  = 1.0
+		shine_light.energy   = 0.4
+		shadow_light.energy  = 0.4

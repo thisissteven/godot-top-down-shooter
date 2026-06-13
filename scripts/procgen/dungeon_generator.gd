@@ -13,6 +13,7 @@ func _generate() -> void:
 	var tiles = $Tiles
 	var doors = $Doors
 	var windows = $Windows
+	var wall_lights = $WallLights
 
 	if not top_walls or not tiles:
 		push_error("LevelGenerator: child nodes not found!")
@@ -23,5 +24,6 @@ func _generate() -> void:
 	tiles.generate()
 	doors.generate()
 	windows.generate()
+	wall_lights.generate()
 
 	print("LevelGenerator: Done.")

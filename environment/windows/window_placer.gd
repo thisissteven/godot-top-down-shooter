@@ -133,9 +133,12 @@ func _collect_horizontal_strips(grid: Array, map_w: int, map_h: int) -> Array:
 			var run_start := x
 			while x < map_w and _is_h_strip_cell(grid, x, y, map_w, map_h):
 				x += 1
-			if x - run_start > min_strip_size:
+			# Shrink by 1 on each side
+			var trimmed_start := run_start + 1
+			var trimmed_end := x - 1
+			if trimmed_end - trimmed_start > min_strip_size:
 				var cells: Array[Vector2i] = []
-				for cx in range(run_start, x):
+				for cx in range(trimmed_start, trimmed_end):
 					cells.append(Vector2i(cx, y))
 				strips.append(cells)
 	return strips
@@ -152,9 +155,12 @@ func _collect_vertical_strips(grid: Array, map_w: int, map_h: int) -> Array:
 			var run_start := y
 			while y < map_h and _is_v_strip_cell(grid, x, y, map_w, map_h):
 				y += 1
-			if y - run_start > min_strip_size:
+			# Shrink by 1 on each side
+			var trimmed_start := run_start + 1
+			var trimmed_end := y - 1
+			if trimmed_end - trimmed_start > min_strip_size:
 				var cells: Array[Vector2i] = []
-				for cy in range(run_start, y):
+				for cy in range(trimmed_start, trimmed_end):
 					cells.append(Vector2i(x, cy))
 				strips.append(cells)
 	return strips

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dy8i7rpi8oc6r"]
+
+[ext_resource type="Script" uid="uid://t4u5rj8javpa" path="res://environment/lights/wall_lights.gd" id="1_ri1ag"]
+[ext_resource type="PackedScene" uid="uid://7bcxg2byxwx6" path="res://environment/lights/wall_light.tscn" id="2_m3k4c"]
+
+[node name="WallLights" type="Node2D" unique_id=1957837851]
+z_index = 1
+script = ExtResource("1_ri1ag")
+wall_light_scene = ExtResource("2_m3k4c")
+placement_chance = 0.85
