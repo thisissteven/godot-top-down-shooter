@@ -6,7 +6,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5kjb"]
 radius = 2.0
-height = 14.0
+height = 12.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5piss"]
 light_mode = 1
@@ -16,11 +16,12 @@ script = ExtResource("1_yof1p")
 speed = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1912234941]
-position = Vector2(-2, 0)
+position = Vector2(3, 0)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_j5kjb")
 
 [node name="Glow" type="Node2D" parent="." unique_id=1482137591]
+position = Vector2(6, 0)
 script = ExtResource("2_45anr")
 texture_size = 64
 falloff = 2.0
@@ -31,7 +32,8 @@ flicker_intensity = 0.2
 
 [node name="ProjectileSprite" type="Sprite2D" parent="Glow" unique_id=2084974054]
 material = SubResource("CanvasItemMaterial_5piss")
-scale = Vector2(0.0925, 0.016666662)
+position = Vector2(-2.1250005, -1.4901161e-08)
+scale = Vector2(0.07125, 0.013333335)
 texture = ExtResource("2_ofqpg")
 
 [node name="GlowSprite" type="Sprite2D" parent="Glow" unique_id=2076922815]

@@ -5,7 +5,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5kjb"]
 radius = 2.0
-height = 14.0
+height = 10.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5piss"]
 light_mode = 1
@@ -15,12 +15,13 @@ script = ExtResource("1_mwrfl")
 speed = 180.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1912234941]
-position = Vector2(-2, 0)
+position = Vector2(3, 0)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_j5kjb")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2084974054]
 modulate = Color(1, 1, 0, 1)
 material = SubResource("CanvasItemMaterial_5piss")
-scale = Vector2(0.0925, 0.016666662)
+position = Vector2(4, 0)
+scale = Vector2(0.065000005, 0.008333331)
 texture = ExtResource("2_trm6p")

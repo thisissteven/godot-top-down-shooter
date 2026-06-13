@@ -2,9 +2,16 @@
 
 [ext_resource type="Script" uid="uid://ca1eptai2n11v" path="res://environment/doors/horizontal_door.gd" id="1_66o6y"]
 [ext_resource type="Texture2D" uid="uid://buxv7owex6hvu" path="res://assets/door/door_floor_horizontal.png" id="2_o3jxg"]
+[ext_resource type="Texture2D" uid="uid://ba4kq2lfgqa30" path="res://environment/doors/BasicDoorLightHorizontal.png" id="3_sogik"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o3jxg"]
+polygon = PackedVector2Array(8, 10, 8, 13, -8, 13, -8, 10)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cegan"]
 load_path = "res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa636178cd36d.ctex"
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sogik"]
+light_mode = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gusx3"]
 size = Vector2(16, 19)
@@ -17,7 +24,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/path = NodePath("CollisionShape2D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -29,22 +36,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/path = NodePath("Move:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("LightOccluder2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -58,7 +53,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/path = NodePath("CollisionShape2D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -70,22 +65,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/path = NodePath("Move:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(-16, 0), Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("LightOccluder2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -99,7 +82,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/path = NodePath("CollisionShape2D:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -111,22 +94,10 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/path = NodePath("Move:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-16, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("LightOccluder2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
@@ -140,33 +111,46 @@ _data = {
 &"open": SubResource("Animation_o3jxg")
 }
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o3jxg"]
-polygon = PackedVector2Array(8, 10, 8, 12, -8, 12, -8, 10)
-
 [node name="HorizontalDoor" type="StaticBody2D" unique_id=2096676965 groups=["wall"]]
 y_sort_enabled = true
 collision_mask = 0
 script = ExtResource("1_66o6y")
+state = 0
 
 [node name="DoorFloor" type="Sprite2D" parent="." unique_id=979410504]
 texture = ExtResource("2_o3jxg")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1483452890]
+[node name="Move" type="Node2D" parent="." unique_id=780810715]
+position = Vector2(-16, 0)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Move" unique_id=719614892]
+position = Vector2(0, -1.5)
+occluder = SubResource("OccluderPolygon2D_o3jxg")
+occluder_light_mask = 2
+
+[node name="DoorSprite" type="Sprite2D" parent="Move" unique_id=1483452890]
 texture = SubResource("CompressedTexture2D_cegan")
 
+[node name="DoorLights" type="Sprite2D" parent="Move" unique_id=784834198]
+material = SubResource("CanvasItemMaterial_sogik")
+texture = ExtResource("3_sogik")
+
+[node name="DoorGlowDown" type="Sprite2D" parent="Move" unique_id=498914942]
+position = Vector2(3, 4.5)
+
+[node name="DoorGlowUp" type="Sprite2D" parent="Move" unique_id=132437854]
+position = Vector2(3, -12)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]
+visible = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_gusx3")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=863609821]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1120338185]
 shape = SubResource("CapsuleShape2D_o3jxg")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1681870131]
 libraries/ = SubResource("AnimationLibrary_sogik")
-
-[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=719614892]
-position = Vector2(-16, 0)
-occluder = SubResource("OccluderPolygon2D_o3jxg")
-occluder_light_mask = 2
