@@ -28,8 +28,8 @@ func _ready() -> void:
 
 
 func generate() -> void:
-	if !initialized:
-		await ready
+	#if !initialized:
+		#await ready
 	
 	if not top_wall_layer:
 		push_error("WallLightPlacer: Assign top_wall_layer in the Inspector.")

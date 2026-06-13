@@ -30,8 +30,8 @@ func _ready():
 	initialized = true
 
 func generate():
-	if !initialized:
-		await ready
+	#if !initialized:
+		#await ready
 	if top_wall_layer == null:
 		push_error("Top wall layer missing")
 		return

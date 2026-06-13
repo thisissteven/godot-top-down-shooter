@@ -49,8 +49,8 @@ func _ready() -> void:
 
 
 func generate() -> void:
-	if not initialized:
-		await ready
+	#if not initialized:
+		#await ready
 
 	if not top_wall_layer:
 		push_error("WindowPlacer: Assign top_wall_layer in the Inspector.")

@@ -99,8 +99,8 @@ class BSPNode:
 		
 
 func generate():
-	if !initialized:
-		await ready
+	#if !initialized:
+		#await ready
 
 	clear()
 

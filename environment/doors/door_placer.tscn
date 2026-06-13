@@ -4,7 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://bga17h6hjvs0" path="res://environment/doors/horizontal_door.tscn" id="2_djgxw"]
 [ext_resource type="PackedScene" uid="uid://brinbydsva6b2" path="res://environment/doors/vertical_door.tscn" id="3_ypq5t"]
 
-[node name="DoorPlacer" type="Node" unique_id=2046093895]
+[node name="Doors" type="Node2D" unique_id=990062739]
+y_sort_enabled = true
 script = ExtResource("1_neg2a")
 horizontal_door_scene = ExtResource("2_djgxw")
 vertical_door_scene = ExtResource("3_ypq5t")

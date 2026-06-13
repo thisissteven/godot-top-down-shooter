@@ -25,8 +25,8 @@ func _get_available_source_ids() -> Array[int]:
 	return ids
 
 func generate():
-	if !initialized:
-		await ready
+	#if !initialized:
+		#await ready
 		
 	clear()
 	if top_wall_layer == null:

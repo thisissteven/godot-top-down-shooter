@@ -1,6 +1,6 @@
 @tool
 class_name DoorPlacer
-extends Node
+extends Node2D
 
 @export var top_wall_layer: TopWalls
 @export var horizontal_door_scene: PackedScene
@@ -15,8 +15,8 @@ func _ready() -> void:
 	initialized = true
 
 func generate() -> void:
-	if !initialized:
-		await ready
+	#if !initialized:
+		#await ready
 		
 	if not top_wall_layer:
 		push_error("DoorPlacer: Assign top_wall_layer in the Inspector.")
@@ -25,21 +25,16 @@ func generate() -> void:
 		push_error("DoorPlacer: Assign both door scenes in the Inspector.")
 		return
 
-	var parent = get_parent()
-	if not parent:
-		push_error("DoorPlacer: Must have a parent node.")
-		return
-
 	for node_name in ["Doors"]:
-		var existing = parent.find_child(node_name, false, false)
+		var existing = find_child(node_name, false, false)
 		if is_instance_valid(existing):
 			existing.queue_free()
 
-	while parent.find_child("Doors", false, false) != null:
+	while find_child("Doors", false, false) != null:
 		await get_tree().process_frame
 
 	var doors_container = Node2D.new()
-	parent.add_child(doors_container)
+	add_child(doors_container)
 	doors_container.y_sort_enabled = true
 	doors_container.name = "Doors"
 	doors_container.owner = owner
