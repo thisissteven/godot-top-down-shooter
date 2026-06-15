@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://7bcxg2byxwx6"]
 
-[ext_resource type="Texture2D" uid="uid://cdmskblr314yw" path="res://assets/StationLightGlow2.png" id="1_8fw2a"]
-[ext_resource type="Script" uid="uid://dh837whhh8ld5" path="res://environment/lights/wall_light.gd" id="1_w44ve"]
+[ext_resource type="Script" uid="uid://dh837whhh8ld5" path="res://environment/lights/wall_light.gd" id="1_gvpkp"]
+[ext_resource type="Texture2D" uid="uid://cdmskblr314yw" path="res://assets/StationLightGlow2.png" id="2_7sakt"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0odxb"]
 light_mode = 1
 
 [node name="WallLight" type="Node2D" unique_id=1977846784]
-script = ExtResource("1_w44ve")
+script = ExtResource("1_gvpkp")
 
 [node name="Light" type="Sprite2D" parent="." unique_id=1486303145]
 material = SubResource("CanvasItemMaterial_0odxb")
-texture = ExtResource("1_8fw2a")
+texture = ExtResource("2_7sakt")
 
 [node name="Glow" type="Sprite2D" parent="." unique_id=569378067]
 texture_filter = 2

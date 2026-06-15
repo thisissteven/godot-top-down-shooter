@@ -23,11 +23,11 @@ shape = SubResource("CapsuleShape2D_j5kjb")
 [node name="Glow" type="Node2D" parent="." unique_id=1482137591]
 position = Vector2(6, 0)
 script = ExtResource("2_45anr")
-texture_size = 64
+glow_radius_h = 64.0
+glow_radius_v = 48.0
 falloff = 2.0
 animation = 3
-animation_speed = 0.5
-dimmer_start = 0.2
+dimmer_start = 0.3
 flicker_intensity = 0.2
 
 [node name="ProjectileSprite" type="Sprite2D" parent="Glow" unique_id=2084974054]

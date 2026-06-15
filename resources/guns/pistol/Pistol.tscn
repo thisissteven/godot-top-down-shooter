@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cgyru4ffgaep1"]
 
 [ext_resource type="Script" uid="uid://cgc7aig6fcdri" path="res://components/GunComponent.gd" id="1_1eq04"]
-[ext_resource type="Resource" uid="uid://pc784e1jcv8v" path="res://resources/guns/Pistol.tres" id="2_k8yw0"]
+[ext_resource type="Resource" uid="uid://pc784e1jcv8v" path="res://resources/guns/pistol/Pistol.tres" id="2_k8yw0"]
 [ext_resource type="Texture2D" uid="uid://d2elqhr48j7bq" path="res://resources/guns/RevolverUI.png" id="3_k8yw0"]
 
 [node name="Pistol" type="Node2D" unique_id=681137290 node_paths=PackedStringArray("muzzle_point")]

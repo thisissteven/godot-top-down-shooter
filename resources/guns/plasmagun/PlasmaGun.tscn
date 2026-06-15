@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b016sj32qawn7"]
 
 [ext_resource type="Script" uid="uid://cgc7aig6fcdri" path="res://components/GunComponent.gd" id="1_622gt"]
-[ext_resource type="Resource" uid="uid://dlvrh7wiconmu" path="res://resources/guns/PlasmaGun.tres" id="2_g0kj1"]
-[ext_resource type="Texture2D" uid="uid://bwmh2ru3uwo5k" path="res://resources/guns/PlasmaGunUI.png" id="2_nk5bq"]
+[ext_resource type="Resource" uid="uid://dlvrh7wiconmu" path="res://resources/guns/plasmagun/PlasmaGun.tres" id="2_g0kj1"]
+[ext_resource type="Texture2D" uid="uid://bwmh2ru3uwo5k" path="res://resources/guns/plasmagun/PlasmaGunUI.png" id="2_nk5bq"]
 
 [node name="PlasmaGun" type="Node2D" unique_id=1101268431 node_paths=PackedStringArray("muzzle_point")]
 script = ExtResource("1_622gt")

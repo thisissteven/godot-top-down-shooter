@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwmh2ru3uwo5k"
-path="res://.godot/imported/PlasmaGunUI.png-5f4b7d9a0fa31fb55d00d670677a2b60.ctex"
+uid="uid://ervlxqw21477"
+path="res://.godot/imported/CoilRifleCharge.png-537b508bd4acb7ef2dbff6a71ae89c5c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/guns/PlasmaGunUI.png"
-dest_files=["res://.godot/imported/PlasmaGunUI.png-5f4b7d9a0fa31fb55d00d670677a2b60.ctex"]
+source_file="res://environment/projectiles/CoilRifleCharge.png"
+dest_files=["res://.godot/imported/CoilRifleCharge.png-537b508bd4acb7ef2dbff6a71ae89c5c.ctex"]
 
 [params]
 

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cujhw0uvjqywd"]
+
+[ext_resource type="Script" uid="uid://dmrftq3oyt4td" path="res://environment/projectiles/Projectile.gd" id="1_aefjg"]
+[ext_resource type="Texture2D" uid="uid://ervlxqw21477" path="res://environment/projectiles/CoilRifleCharge.png" id="1_ipyu6"]
+[ext_resource type="Script" uid="uid://cl2dtjvwl38es" path="res://resources/guns/glow.gd" id="2_monea"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aefjg"]
+radius = 1.4285715
+height = 12.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_monea"]
+light_mode = 1
+
+[node name="MachineGunProjectile" type="Area2D" unique_id=340385422]
+script = ExtResource("1_aefjg")
+speed = 500.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=75355511]
+position = Vector2(2.9999998, 3.552707e-15)
+rotation = 1.5707964
+scale = Vector2(0.7, 0.7)
+shape = SubResource("CapsuleShape2D_aefjg")
+
+[node name="Glow" type="Node2D" parent="." unique_id=702030302]
+position = Vector2(-1, 0)
+script = ExtResource("2_monea")
+use_sprite_color = true
+glow_radius_h = 32.0
+glow_radius_v = 12.0
+falloff = 3.0
+glow_alpha = 0.3
+animation = 3
+
+[node name="ProjectileSprite" type="Sprite2D" parent="Glow" unique_id=1469543032]
+material = SubResource("CanvasItemMaterial_monea")
+position = Vector2(3.9999998, -0.3499999)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("1_ipyu6")
+
+[node name="GlowSprite" type="Sprite2D" parent="Glow" unique_id=1228545736]
+position = Vector2(4, 0)

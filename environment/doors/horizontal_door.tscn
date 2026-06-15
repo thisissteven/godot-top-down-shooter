@@ -2,13 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ca1eptai2n11v" path="res://environment/doors/horizontal_door.gd" id="1_66o6y"]
 [ext_resource type="Texture2D" uid="uid://buxv7owex6hvu" path="res://assets/door/door_floor_horizontal.png" id="2_o3jxg"]
+[ext_resource type="Texture2D" uid="uid://d1fc8672ydiqa" path="res://assets/door/door_horizontal.png" id="3_3efpe"]
 [ext_resource type="Texture2D" uid="uid://ba4kq2lfgqa30" path="res://environment/doors/BasicDoorLightHorizontal.png" id="3_sogik"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o3jxg"]
 polygon = PackedVector2Array(8, 10, 8, 13, -8, 13, -8, 10)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_cegan"]
-load_path = "res://.godot/imported/door_horizontal.png-754a9cf65af8e6ed9c6fa636178cd36d.ctex"
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sogik"]
 light_mode = 1
@@ -128,7 +126,7 @@ occluder = SubResource("OccluderPolygon2D_o3jxg")
 occluder_light_mask = 2
 
 [node name="DoorSprite" type="Sprite2D" parent="Move" unique_id=1483452890]
-texture = SubResource("CompressedTexture2D_cegan")
+texture = ExtResource("3_3efpe")
 
 [node name="DoorLights" type="Sprite2D" parent="Move" unique_id=784834198]
 material = SubResource("CanvasItemMaterial_sogik")

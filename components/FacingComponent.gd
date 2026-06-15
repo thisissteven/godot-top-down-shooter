@@ -56,9 +56,6 @@ func update(mouse_world_pos: Vector2, player_pos: Vector2,
 		if _is_armed and new_dir == Dir.S:
 			new_flip = aiming_left()
 			new_dir = Dir.SE
-		if _is_armed and aiming_up():
-			new_flip = aiming_left()
-			new_dir = Dir.NW if new_flip else Dir.NE
 	else:
 		if move_input.length_squared() > 0.01:
 			new_dir = _vec_to_dir(move_input)

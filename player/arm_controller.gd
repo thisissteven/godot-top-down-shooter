@@ -28,7 +28,7 @@ func _ready():
 
 func get_flipped_base() -> Vector2:
 	var flip := facing.aiming_left()
-	var aiming_up := facing.aiming_up()
+	var aiming_up := facing.current_dir == facing.Dir.N or facing.current_dir == facing.Dir.NE or facing.current_dir == facing.Dir.NW
 	var offset := (-2.5 if flip else 2.5) if aiming_up else 0.0
 	return Vector2(
 		(-base_position.x if flip else base_position.x) + offset,
@@ -61,7 +61,13 @@ func update_rotation():
 	gun_pivot.scale = Vector2.ONE
 	
 	if facing.aiming_up():
-		arm_sprite.offset.x = base_arm_sprite_x_north
+		var current_dir = facing.current_dir
+		if current_dir == facing.Dir.E:
+			arm_sprite.offset.x = base_arm_sprite_x_south
+		elif current_dir == facing.Dir.W:
+			arm_sprite.offset.x = base_arm_sprite_x_south
+		else:
+			arm_sprite.offset.x = base_arm_sprite_x_north
 	else:
 		arm_sprite.offset.x = base_arm_sprite_x_south
 	
@@ -83,7 +89,6 @@ func update_z():
 			arm_pivot,
 			arm_pivot.get_parent().get_child_count() - 1
 		)
-
 
 func _on_weapon_changed(type: EquipmentComponent.WeaponType):
 	var textures := equipment.get_arm_textures()

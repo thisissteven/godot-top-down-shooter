@@ -4,7 +4,8 @@ extends Node2D
 
 @export var top_wall_layer: TopWalls
 @export var bottom_wall_layer: BottomWalls
-@export var wall_light_scene: PackedScene
+@export var wall_light_scene: PackedScene          # vertical wall light
+@export var horizontal_wall_light_scene: PackedScene  # horizontal wall light
 
 @export_group("Placement")
 ## Minimum distance between two lights (in tiles, Chebyshev)
@@ -36,6 +37,9 @@ func generate() -> void:
 	if not wall_light_scene:
 		push_error("WallLightPlacer: Assign wall_light_scene.")
 		return
+	if not horizontal_wall_light_scene:
+		push_error("WallLightPlacer: Assign horizontal_wall_light_scene.")
+		return
 
 	for child in get_children():
 		child.free()
@@ -50,7 +54,7 @@ func generate() -> void:
 	var placed_centers: Array = []
 	var placed_count := 0
 
-	# ── Horizontal lights on bottom wall strips (rotated 90°) ──
+	# ── Horizontal lights on bottom wall strips (south-facing, glow DOWN) ──
 	var h_strips := _collect_horizontal_strips()
 	_shuffle(h_strips, rng)
 
@@ -61,31 +65,61 @@ func generate() -> void:
 			continue
 
 		var mid_cell: Vector2i = strip[strip.size() / 2]
+
+		if _is_near_door_gap(mid_cell):
+			continue
 		if not _is_far_enough(mid_cell, placed_centers):
 			continue
 
-		# Center X of the strip
 		var strip_origin_x = strip[0].x * tile_size.x
 		var center_x = strip_origin_x + strip.size() * tile_size.x * 0.5
-
-		# Bottom wall sits one tile below the top wall tile
-		# so the top edge of the bottom wall tile = strip[0].y * tile_size.y + tile_size.y
-		# We want the light centered vertically on that bottom wall tile
 		var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
 
-		var light = wall_light_scene.instantiate()
-		# Rotated 90°: sprite is now 19 wide × 10 tall, centered on bottom wall tile center
-		light.rotation = PI * 0.5
+		var light = horizontal_wall_light_scene.instantiate()
+		light.rotation = 0.0
 		light.position = Vector2(center_x, bottom_wall_center_y) + light_offset
 		light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
-		light.glow_direction = WallLight.GlowDirection.RIGHT
+		light.glow_direction = WallLight.GlowDirection.DOWN
 		add_child(light)
 		light.owner = owner
 
 		placed_centers.append(mid_cell)
 		placed_count += 1
 
-	# ── Vertical lights on top wall vertical strips (no rotation) ──
+	# ── Horizontal lights on top-facing top wall strips (glow UP) ──
+	var t_strips := _collect_top_facing_strips()
+	_shuffle(t_strips, rng)
+
+	for strip in t_strips:
+		if strip.size() < min_strip_length:
+			continue
+		if rng.randf() > placement_chance:
+			continue
+
+		var mid_cell: Vector2i = strip[strip.size() / 2]
+
+		if _is_near_door_gap(mid_cell):
+			continue
+		if not _is_far_enough(mid_cell, placed_centers):
+			continue
+
+		var strip_origin_x = strip[0].x * tile_size.x
+		var center_x = strip_origin_x + strip.size() * tile_size.x * 0.5
+		# Top edge of the wall tile
+		var top_wall_top_y = strip[0].y * tile_size.y
+
+		var light = horizontal_wall_light_scene.instantiate()
+		light.rotation = 0.0
+		light.position = Vector2(center_x, top_wall_top_y) + light_offset
+		light.name = "WallLight_T_%d_%d" % [mid_cell.x, mid_cell.y]
+		light.glow_direction = WallLight.GlowDirection.UP
+		add_child(light)
+		light.owner = owner
+
+		placed_centers.append(mid_cell)
+		placed_count += 1
+
+	# ── Vertical lights on top wall vertical strips (glow LEFT or RIGHT) ──
 	var v_strips := _collect_vertical_strips()
 	_shuffle(v_strips, rng)
 
@@ -99,27 +133,18 @@ func generate() -> void:
 		if not _is_far_enough(mid_cell, placed_centers):
 			continue
 
-		# Center Y of the strip
 		var strip_origin_y = strip[0].y * tile_size.y
 		var center_y = strip_origin_y + strip.size() * tile_size.y * 0.5
 
-		# Randomly place on left or right side of the wall strip
 		var go_left: bool = rng.randi_range(0, 1) == 0
-		# The wall tile column X
 		var wall_tile_x = strip[0].x * tile_size.x
 		var center_x: float
-
 		var glow_direction
+
 		if go_left:
-			# Right edge of the tile to the left = wall_tile_x
-			# Half of sprite width (10px) = 5px, so center is 5px left of wall edge
-			# That puts 5px inside the wall, 5px outside to the left
 			center_x = wall_tile_x
 			glow_direction = WallLight.GlowDirection.LEFT
 		else:
-			# Left edge of tile = wall_tile_x + tile_size.x
-			# Center is 5px right of that edge
-			# That puts 5px inside the wall, 5px outside to the right
 			center_x = wall_tile_x + tile_size.x
 			glow_direction = WallLight.GlowDirection.RIGHT
 
@@ -137,7 +162,7 @@ func generate() -> void:
 	print("WallLightPlacer: Placed %d lights." % placed_count)
 
 
-# ── Collect horizontal south-facing top wall strips ───────────────────────────
+# ── Collect horizontal south-facing top wall strips (floor below) ─────────────
 func _collect_horizontal_strips() -> Array:
 	var grid = top_wall_layer.grid
 	var w := top_wall_layer.map_width
@@ -171,7 +196,41 @@ func _collect_horizontal_strips() -> Array:
 	return strips
 
 
-# ── Collect vertical top wall strips (wall left AND right = open floor) ───────
+# ── Collect horizontal top-facing top wall strips (floor above) ───────────────
+func _collect_top_facing_strips() -> Array:
+	var grid = top_wall_layer.grid
+	var w := top_wall_layer.map_width
+	var h := top_wall_layer.map_height
+	var border := top_wall_layer.border_thickness
+	var strips: Array = []
+
+	for y in range(border, h - border):
+		var x := border
+		while x < w - border:
+			if grid[y][x] != false:
+				x += 1
+				continue
+			# North-facing: floor directly above
+			if not (y > 0 and grid[y - 1][x] == true):
+				x += 1
+				continue
+
+			var run_start := x
+			while x < w - border and grid[y][x] == false:
+				if not (y > 0 and grid[y - 1][x] == true):
+					break
+				x += 1
+
+			if x > run_start:
+				var cells: Array = []
+				for cx in range(run_start, x):
+					cells.append(Vector2i(cx, y))
+				strips.append(cells)
+
+	return strips
+
+
+# ── Collect vertical top wall strips (floor left AND right) ───────────────────
 func _collect_vertical_strips() -> Array:
 	var grid = top_wall_layer.grid
 	var w := top_wall_layer.map_width
@@ -207,6 +266,15 @@ func _collect_vertical_strips() -> Array:
 				strips.append(cells)
 
 	return strips
+
+
+# ── Door gap proximity check (Chebyshev radius 2) ────────────────────────────
+func _is_near_door_gap(cell: Vector2i) -> bool:
+	for gap in top_wall_layer.door_gaps:
+		for gap_cell in gap["cells"]:
+			if max(abs(cell.x - gap_cell.x), abs(cell.y - gap_cell.y)) <= 2:
+				return true
+	return false
 
 
 # ── Fisher-Yates shuffle ──────────────────────────────────────────────────────

@@ -28,7 +28,7 @@ func _ready() -> void:
 	input_component.switch_weapon_pressed.connect(equipment.cycle_weapon)
 	
 	equipment.weapon_changed.connect(_on_weapon_changed)
-	equipment.equip_by_index(1)
+	equipment.equip_by_index(0)
 
 func _on_weapon_changed(type: EquipmentComponent.WeaponType) -> void:
 	facing.set_armed(type != EquipmentComponent.WeaponType.NONE)

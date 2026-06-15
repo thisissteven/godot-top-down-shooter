@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://xux4yg8lxkpd"]
+
+[ext_resource type="Script" uid="uid://cgc7aig6fcdri" path="res://components/GunComponent.gd" id="1_n2vpq"]
+[ext_resource type="Resource" uid="uid://6dnbwvuk7b03" path="res://resources/guns/machinegun/MachineGun.tres" id="2_h4aqd"]
+[ext_resource type="Texture2D" uid="uid://ct22cjcr0libr" path="res://resources/guns/machinegun/MachineGun.png" id="3_n2vpq"]
+
+[node name="MachineGun" type="Node2D" unique_id=351940196 node_paths=PackedStringArray("muzzle_point")]
+script = ExtResource("1_n2vpq")
+gun_data = ExtResource("2_h4aqd")
+muzzle_point = NodePath("Marker2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2125382936]
+light_mask = 8
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("3_n2vpq")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=2079387330]
+position = Vector2(8, -1)
