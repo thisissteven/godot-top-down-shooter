@@ -102,10 +102,37 @@ func _fire_shot(direction: Vector2) -> void:
 
 	var spawn_pos := _get_muzzle_position()
 
-	for i in gun_data.pellets_per_shot:
-		_spawn_projectile(spawn_pos, _apply_spread(direction))
+	match gun_data.fire_mode:
+		GunData.FireMode.SINGLE:
+			_spawn_projectile(spawn_pos, direction)
+
+		GunData.FireMode.SHOTGUN:
+			var count := gun_data.pellets_per_shot
+
+			if count == 1:
+				_spawn_projectile(spawn_pos, _apply_spread(direction))
+			else:
+				var half_arc := deg_to_rad(gun_data.multi_projectile_arc_degrees) * 0.5
+
+				for i in range(count):
+					var t := float(i) / float(count - 1)
+
+					var angle = lerp(
+						-half_arc,
+						half_arc,
+						t
+					)
+
+					var pellet_dir := direction.rotated(angle)
+					pellet_dir = _apply_spread(pellet_dir)
+
+					_spawn_projectile(spawn_pos, pellet_dir)
+
+		GunData.FireMode.BURST:
+			_fire_burst(spawn_pos, direction)
 
 	current_magazine -= 1
+
 	_play_fire_sound()
 	_spawn_muzzle_flash(spawn_pos)
 	fired.emit(spawn_pos, direction)
@@ -114,7 +141,18 @@ func _fire_shot(direction: Vector2) -> void:
 	if current_magazine <= 0 and auto_reload:
 		_start_reload()
 
+func _fire_burst(spawn_pos: Vector2, direction: Vector2) -> void:
+	for i in gun_data.pellets_per_shot:
+		_spawn_projectile(
+			spawn_pos,
+			_apply_spread(direction)
+		)
 
+		if i < gun_data.pellets_per_shot - 1:
+			await get_tree().create_timer(
+				gun_data.burst_interval
+			).timeout
+			
 func _apply_spread(direction: Vector2) -> Vector2:
 	if gun_data.spread_degrees == 0.0:
 		return direction

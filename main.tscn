@@ -14,7 +14,7 @@ y_sort_enabled = true
 script = ExtResource("1_dg77c")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=251499732]
-color = Color(0.23608196, 0.3193326, 0.27613539, 1)
+color = Color(0.12818003, 0.21563673, 0.48227197, 1)
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1405763568]
 z_index = -1

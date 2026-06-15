@@ -131,7 +131,13 @@ void fragment() {
 	// World-space position in tile units — patterns span tile boundaries
 	// VERTEX is in local canvas space (pixels). Dividing by tile_size
 	// puts us in tile-coordinate space so noise scales correctly.
-	vec2 world_uv = world_pos / tile_size;
+	//vec2 world_uv = world_pos / tile_size;
+	
+	// use this to change whole tiles to be clean/dirty
+	vec2 world_uv = floor(world_pos / tile_size);
+	
+	// use this for pixelated effects
+	//world_uv = floor(world_uv * 4.0) / 4.0;
 
 	float darken = 0.0; // accumulates darkening from all effects
 
@@ -143,7 +149,12 @@ void fragment() {
 		float dirt = n1 * n2; // multiply = only dark where BOTH layers agree
 
 		// Threshold: only pixels below the cutoff show visible dirt
-		float mask = smoothstep(dirt_threshold, dirt_threshold - 0.15, dirt);
+		// use this for blurry dirt
+		//float mask = smoothstep(dirt_threshold, dirt_threshold - 0.15, dirt);
+		
+		// use this for crisp looking dirt
+		float mask = step(dirt_threshold, dirt);
+		
 		darken += mask * dirt_strength;
 	}
 

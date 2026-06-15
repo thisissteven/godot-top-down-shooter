@@ -16,9 +16,25 @@ extends Resource
 ## Shots per second. 2.0 = one shot every 0.5 s.
 @export_range(0.1, 30.0, 0.1) var fire_rate: float = 2.0
 
+enum FireMode {
+	SINGLE,
+	SHOTGUN,
+	BURST
+}
+
+@export var fire_mode: FireMode = FireMode.SINGLE
+
+# Only used by BURST
+@export_range(0.01, 1.0, 0.01)
+var burst_interval: float = 0.05
+
 ## Half-angle of the random spread cone (degrees).
 ## 0 = perfectly accurate.
 @export_range(0.0, 45.0, 0.5) var spread_degrees: float = 3.0
+
+## Used for shotgun-like guns
+@export_range(0.0, 180.0, 0.5)
+var multi_projectile_arc_degrees: float = 20.0
 
 ## How many projectiles fire in parallel per shot (e.g. shotgun = 8).
 @export_range(1, 20) var pellets_per_shot: int = 1

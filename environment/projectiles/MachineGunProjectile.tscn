@@ -29,7 +29,7 @@ glow_radius_h = 32.0
 glow_radius_v = 12.0
 falloff = 3.0
 glow_alpha = 0.3
-animation = 3
+animation = 2
 
 [node name="ProjectileSprite" type="Sprite2D" parent="Glow" unique_id=1469543032]
 material = SubResource("CanvasItemMaterial_monea")
