@@ -109,9 +109,6 @@ func generate() -> void:
 
 	_spawn_chunks()
 	
-	var true_root = get_tree().edited_scene_root if Engine.is_editor_hint() else (owner if owner else self)
-	_set_owner_recursive(self, true_root)
-
 	print(
 		"Generated ",
 		chunks.size(),
@@ -629,19 +626,6 @@ func _clear_old_generation() -> void:
 			# CRITICAL FIX: Use free() instantly in tool mode to bypass the queue layout bug
 			child.free()
 			
-func _set_owner_recursive(target_node: Node, scene_root: Node) -> void:
-	# 1. CRITICAL: Skip any Window or Dialog nodes to prevent the popup parent crash
-	if target_node is Window:
-		return
-		
-	# 2. Only own the node if it's inside the tree and isn't the root or generator itself
-	if target_node.is_inside_tree() and target_node != scene_root and target_node != self:
-		target_node.owner = scene_root
-		
-	# 3. Recursively apply to children
-	for child in target_node.get_children():
-		_set_owner_recursive(child, scene_root)
-
 func _spawn_chunks() -> void:
 	if level_generator_scene == null:
 		push_error(
