@@ -102,7 +102,9 @@ func _ready() -> void:
 	glow_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	
 	core_sprite.material = mat
-	core_sprite.z_index  = 98
+	
+	if not glow_direction == GlowDirection.DOWN:
+		core_sprite.z_index  = 98
 
 	_notifier = VisibleOnScreenNotifier2D.new()
 	add_child(_notifier)

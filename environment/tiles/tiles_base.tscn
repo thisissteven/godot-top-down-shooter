@@ -1,7 +1,20 @@
 [gd_scene format=3 uid="uid://frmrxjt8ngmj"]
 
+[ext_resource type="Shader" uid="uid://cc54h8riolwbr" path="res://environment/tiles/baked_tiles.gdshader" id="1_bjhby"]
 [ext_resource type="Texture2D" uid="uid://bnb6vxgdtlqdp" path="res://assets/station_tile.png" id="1_wh5br"]
 [ext_resource type="Script" uid="uid://18d0qf1gcaq7" path="res://environment/tiles/tiles_base.gd" id="2_o4e6o"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_i6isy"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xd6vv"]
+noise = SubResource("FastNoiseLite_i6isy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qct5k"]
+shader = ExtResource("1_bjhby")
+shader_parameter/baked_noise_tex = SubResource("NoiseTexture2D_xd6vv")
+shader_parameter/tile_size = 16.0
+shader_parameter/effect_strength = 0.6
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o4e6o"]
 texture = ExtResource("1_wh5br")
@@ -19,6 +32,7 @@ sources/0 = SubResource("TileSetAtlasSource_o4e6o")
 
 [node name="Tiles" type="TileMapLayer" unique_id=1801516032]
 light_mask = 3
+material = SubResource("ShaderMaterial_qct5k")
 tile_set = SubResource("TileSet_toqmw")
 script = ExtResource("2_o4e6o")
 main_floor_chance = 0.9

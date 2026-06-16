@@ -872,3 +872,28 @@ func _draw():
 		terrain_set,
 		terrain
 	)
+
+
+func is_wall(cell: Vector2i) -> bool:
+	if cell.x < 0 or cell.x >= map_width:
+		return false
+
+	if cell.y < 0 or cell.y >= map_height:
+		return false
+
+	return !grid[cell.y][cell.x]
+
+
+func carve_at(cell: Vector2i) -> void:
+	if cell.x < 0 or cell.x >= map_width:
+		return
+
+	if cell.y < 0 or cell.y >= map_height:
+		return
+
+	grid[cell.y][cell.x] = true
+
+
+func redraw() -> void:
+	clear()
+	_draw()

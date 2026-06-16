@@ -82,7 +82,7 @@ func _swap_to(index: int) -> void:
 		instance.position = Vector2(8, -3)
 		
 	_gun_pivot_node.add_child(instance)
-	instance.owner = owner   
+	instance.owner = owner
 	
 	_set_weapon(type)
 

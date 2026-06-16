@@ -11,7 +11,7 @@ extends Node
 var t := 0.0
 
 func _process(delta):
-	var moving = presentation.moving or presentation.running
+	var moving = presentation.moving
 	var jumping = presentation.jumping
 
 	if moving:
