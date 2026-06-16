@@ -32,6 +32,7 @@ func _ready():
 func generate():
 	#if !initialized:
 		#await ready
+	material.set_shader_parameter("world_seed", randf() * 0.5)
 	if top_wall_layer == null:
 		push_error("Top wall layer missing")
 		return

@@ -3,6 +3,7 @@ extends Node
 
 @onready var body_sprite: AnimatedSprite2D = $"../Sprite/BodySprite"
 @onready var presentation: PresentationComponent = $"../PresentationComponent"
+@onready var loco: LocomotionComponent = $"../LocomotionComponent"
 
 var _current_anim := ""
 
@@ -11,6 +12,7 @@ func _ready() -> void:
 	
 func _physics_process(_delta):
 	body_sprite.flip_h = presentation.flip_h
+	body_sprite.speed_scale = loco.run_speed_multiplier if presentation.running else 1.0
 
 	if presentation.animation_name == _current_anim:
 		return

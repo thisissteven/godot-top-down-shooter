@@ -2,7 +2,7 @@ class_name WalkBobComponent
 extends Node
 
 @onready var sprite_root: Node2D = $"../Sprite"
-@onready var loco: LocomotionComponent = $"../LocomotionComponent"
+@onready var presentation: PresentationComponent = $"../PresentationComponent"
 
 @export var bob_speed := 10.0
 @export var bob_height := 3.0
@@ -11,7 +11,8 @@ extends Node
 var t := 0.0
 
 func _process(delta):
-	var moving := loco.velocity.length() > 5
+	var moving = presentation.moving or presentation.running
+	var jumping = presentation.jumping
 
 	if moving:
 		t += delta * bob_speed
@@ -19,7 +20,10 @@ func _process(delta):
 		sprite_root.position.y = -abs(sin(t)) * bob_height
 
 		sprite_root.rotation = sin(t) * deg_to_rad(bob_rotation)
-
+	
+	elif jumping:
+		sprite_root.position.y = -bob_height
+		
 	else:
 		sprite_root.position.y = lerp(sprite_root.position.y, 0.0, delta * 15)
 

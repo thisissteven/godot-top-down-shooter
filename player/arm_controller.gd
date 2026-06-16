@@ -19,8 +19,8 @@ extends Node
 @onready var base_position := recoil_node.position
 
 var hide_timer := 0.0
-var base_arm_sprite_x_north: float
-var base_arm_sprite_x_south: float
+var base_arm_sprite_north: Vector2
+var base_arm_sprite_south: Vector2
 
 func _ready():
 	equipment.weapon_changed.connect(_on_weapon_changed)
@@ -63,13 +63,13 @@ func update_rotation():
 	if facing.aiming_up():
 		var current_dir = facing.current_dir
 		if current_dir == facing.Dir.E:
-			arm_sprite.offset.x = base_arm_sprite_x_south
+			arm_sprite.offset = base_arm_sprite_south
 		elif current_dir == facing.Dir.W:
-			arm_sprite.offset.x = base_arm_sprite_x_south
+			arm_sprite.offset = base_arm_sprite_south
 		else:
-			arm_sprite.offset.x = base_arm_sprite_x_north
+			arm_sprite.offset = base_arm_sprite_north
 	else:
-		arm_sprite.offset.x = base_arm_sprite_x_south
+		arm_sprite.offset = base_arm_sprite_south
 	
 func trigger_recoil(_direction: Vector2):
 	var recoil_offset := -facing.aim_direction * recoil_distance
@@ -97,11 +97,11 @@ func _on_weapon_changed(type: EquipmentComponent.WeaponType):
 	arm_sprite_back.texture = textures.back
 	
 	if type == EquipmentComponent.WeaponType.PLASMA:
-		base_arm_sprite_x_north = 3.5
-		base_arm_sprite_x_south = 6.5
+		base_arm_sprite_north = Vector2(5.0, 2.0)
+		base_arm_sprite_south = Vector2(6.5, 1.5)
 	else:
-		base_arm_sprite_x_north = 3.5
-		base_arm_sprite_x_south = 3.5
+		base_arm_sprite_north = Vector2(3.5, 1.5)
+		base_arm_sprite_south = Vector2(3.5, 1.5)
 
 	arm_sprite_back.visible = (
 		textures.back != null

@@ -42,11 +42,12 @@ func _trigger_recoil(_pos: Vector2, direction: Vector2):
 func _physics_process(delta: float) -> void:
 	facing.update(
 		input_component.mouse_world_pos,
-		arm_pivot.global_position,
+		arm_pivot.get_child(0).global_position,
 		input_component.move_input,
 		delta,
 	)
 
+	loco.set_running(input_component.is_running)
 	loco.move(input_component.move_input)
 	loco.apply_movement(self)
 	

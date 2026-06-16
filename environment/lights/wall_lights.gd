@@ -15,9 +15,6 @@ extends Node2D
 ## Minimum strip length in tiles to be eligible
 @export var min_strip_length := 3
 
-@export_group("Offset")
-@export var light_offset: Vector2 = Vector2(0, 0)
-
 @export_group("Seed")
 @export var seed_value := 0
 
@@ -73,15 +70,28 @@ func generate() -> void:
 
 		var strip_origin_x = strip[0].x * tile_size.x
 		var center_x = strip_origin_x + strip.size() * tile_size.x * 0.5
-		var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
+		
+		var picked = [1, 2].pick_random()
+		if picked == 1:
+			var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
 
-		var light = horizontal_wall_light_scene.instantiate()
-		light.rotation = 0.0
-		light.position = Vector2(center_x, bottom_wall_center_y) + light_offset
-		light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
-		light.glow_direction = WallLight.GlowDirection.DOWN
-		add_child(light)
-		light.owner = owner
+			var light = wall_light_scene.instantiate()
+			light.rotation = 0.0
+			light.position = Vector2(center_x, bottom_wall_center_y) + Vector2(0, 7)
+			light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
+			light.glow_direction = WallLight.GlowDirection.DOWN
+			add_child(light)
+			light.owner = owner
+		else:
+			var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
+
+			var light = horizontal_wall_light_scene.instantiate()
+			light.rotation = 0.0
+			light.position = Vector2(center_x, bottom_wall_center_y)
+			light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
+			light.glow_direction = WallLight.GlowDirection.DOWN
+			add_child(light)
+			light.owner = owner
 
 		placed_centers.append(mid_cell)
 		placed_count += 1
@@ -110,7 +120,7 @@ func generate() -> void:
 
 		var light = horizontal_wall_light_scene.instantiate()
 		light.rotation = 0.0
-		light.position = Vector2(center_x, top_wall_top_y) + light_offset
+		light.position = Vector2(center_x, top_wall_top_y)
 		light.name = "WallLight_T_%d_%d" % [mid_cell.x, mid_cell.y]
 		light.glow_direction = WallLight.GlowDirection.UP
 		add_child(light)
@@ -150,7 +160,7 @@ func generate() -> void:
 
 		var light = wall_light_scene.instantiate()
 		light.rotation = 0.0
-		light.position = Vector2(center_x, center_y) + light_offset
+		light.position = Vector2(center_x, center_y)
 		light.name = "WallLight_V_%d_%d" % [mid_cell.x, mid_cell.y]
 		light.glow_direction = glow_direction
 		add_child(light)

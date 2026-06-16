@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_1yik6")
 weapon_type = 1
-spread_degrees = 5.0
+spread_degrees = 0.0
 pellets_per_shot = 3
 magazine_size = 999
 projectile_scene = ExtResource("1_835ld")

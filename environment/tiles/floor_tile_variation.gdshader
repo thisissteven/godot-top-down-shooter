@@ -4,6 +4,8 @@ shader_type canvas_item;
 //  Global
 // ─────────────────────────────────────────────
 
+uniform float world_seed = 0.0;
+
 /// Size of one tile in pixels. Keep this at 16 for default tile size.
 uniform float tile_size : hint_range(8.0, 64.0) = 16.0;
 
@@ -144,8 +146,10 @@ void fragment() {
 	// ── Dirt / Grime ──────────────────────────────────────────────────────────
 	if (enable_dirt) {
 		// Two layers of fbm at different offsets give uneven blotchy patches
-		float n1 = fbm(world_uv * dirt_scale);
-		float n2 = fbm(world_uv * dirt_scale * 1.7 + vec2(42.3, 17.9));
+		float n1 = fbm(world_uv * dirt_scale + vec2(world_seed));
+		float n2 = fbm(world_uv * dirt_scale * 1.7
+		    + vec2(42.3, 17.9)
+		    + vec2(world_seed * 2.37));
 		float dirt = n1 * n2; // multiply = only dark where BOTH layers agree
 
 		// Threshold: only pixels below the cutoff show visible dirt
@@ -161,7 +165,10 @@ void fragment() {
 	// ── Cracks ────────────────────────────────────────────────────────────────
 	if (enable_cracks) {
 		// Worley noise edges = natural crack network
-		float w = worley(world_uv * crack_scale);
+		float w = worley(
+		    world_uv * crack_scale
+		    + vec2(world_seed * 5.17)
+		);
 
 		// Narrow the Worley distance into a thin dark line
 		// pow sharpens the falloff: higher crack_sharpness = thinner lines

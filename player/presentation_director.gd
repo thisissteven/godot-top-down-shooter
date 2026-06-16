@@ -22,14 +22,14 @@ func _physics_process(_delta):
 		presentation.armed
 		and facing.cursor_active()
 	)
-
-	var moving := input.move_input.length_squared() > 0.01
-
-	#var jumping = not player.is_on_floor()
-
-	#if jumping:
-		#presentation.motion = PresentationComponent.Motion.JUMP
-	if moving:
+	
+	presentation.jumping = input.is_jumping
+	presentation.running = input.is_running and not input.is_jumping
+	presentation.moving = input.move_input.length_squared() > 0.01 and not input.is_jumping
+	
+	if presentation.jumping:
+		presentation.motion = PresentationComponent.Motion.JUMP
+	elif presentation.moving:
 		presentation.motion = PresentationComponent.Motion.WALK
 	else:
 		presentation.motion = PresentationComponent.Motion.IDLE

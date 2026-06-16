@@ -23,7 +23,7 @@ signal stopped()
 @export var max_speed: float    = 88.0
 @export var acceleration: float = 800.0   ## px/s² — how fast we reach max_speed
 @export var friction: float     = 600.0   ## px/s² — how fast we slow to zero
-
+@export var run_speed_multiplier: float = 1.5
 # ─────────────────────────────────────────────────────────────────────────────
 # State
 # ─────────────────────────────────────────────────────────────────────────────
@@ -36,6 +36,11 @@ var velocity: Vector2 = Vector2.ZERO
 var _input_direction: Vector2 = Vector2.ZERO
 var _extra_velocity: Vector2  = Vector2.ZERO   # knockback, dash, etc.
 var _was_moving: bool = false
+
+var _is_running := false
+
+func set_running(value: bool) -> void:
+	_is_running = value
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Public API — called by entity root each physics frame
@@ -51,12 +56,17 @@ func move(direction: Vector2) -> void:
 ## body must be the CharacterBody2D (the entity root, i.e. get_parent()).
 func apply_movement(body: CharacterBody2D) -> void:
 	var delta := get_physics_process_delta_time()
+	
+	var current_max_speed := max_speed
 
+	if _is_running:
+		current_max_speed *= run_speed_multiplier
+	
 	if instant_movement:
-		velocity = _input_direction * max_speed
+		velocity = _input_direction * current_max_speed
 	else:
 		if _input_direction.length() > 0.01:
-			velocity = velocity.move_toward(_input_direction * max_speed, acceleration * delta)
+			velocity = velocity.move_toward(_input_direction * current_max_speed, acceleration * delta)
 		else:
 			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 

@@ -91,7 +91,5 @@ func _clear_gun_pivot() -> void:
 		child.queue_free()
 
 func _set_weapon(type: WeaponType) -> void:
-	if type == current_weapon:
-		return
 	current_weapon = type
 	weapon_changed.emit(type)

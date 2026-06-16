@@ -449,7 +449,6 @@ arm_texture_plasma_back = ExtResource("5_jvl72")
 
 [node name="LocomotionComponent" type="Node" parent="." unique_id=22257264]
 script = ExtResource("5_y4jld")
-max_speed = 80.0
 
 [node name="FacingComponent" type="Node" parent="." unique_id=76264158]
 script = ExtResource("6_kj1om")
@@ -492,6 +491,7 @@ color = Color(0.59607846, 1, 1, 1)
 energy = 0.4
 range_item_cull_mask = 13
 shadow_enabled = true
+shadow_filter = 1
 shadow_item_cull_mask = 6
 texture = SubResource("GradientTexture2D_i2ll0")
 
