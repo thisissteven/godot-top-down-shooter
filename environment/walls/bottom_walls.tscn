@@ -99,12 +99,8 @@ texture = ExtResource("6_2fop8")
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_6y3qg"]
-uv_clipping = true
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
-terrain_set_0/mode = 0
-terrain_set_0/terrain_0/name = "Terrain 0"
-terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_ma11c")
 sources/1 = SubResource("TileSetAtlasSource_l45va")
 sources/2 = SubResource("TileSetAtlasSource_1f47f")
@@ -112,7 +108,7 @@ sources/3 = SubResource("TileSetAtlasSource_13w00")
 sources/4 = SubResource("TileSetAtlasSource_fekrh")
 sources/5 = SubResource("TileSetAtlasSource_f2yul")
 
-[node name="BottomWalls" type="TileMapLayer" unique_id=2000947890]
+[node name="BottomWalls" type="TileMapLayer" unique_id=2000947890 groups=["wall"]]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_6y3qg")
 script = ExtResource("2_ma11c")

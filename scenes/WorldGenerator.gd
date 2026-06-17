@@ -18,3 +18,4 @@ func generate() -> void:
 	$Doors.generate()
 	$Windows.generate()
 	$WallLights.generate()
+	$OuterBottomWalls.generate()

@@ -52,31 +52,77 @@ func generate():
 
     var exterior_cells = get_exterior_cells(rect, grid)
 
-    for y in range(grid_height):
+    for y in range(grid_height + 1):
         for x in range(grid_width):
             var cell = Vector2i(x + offset.x, y + offset.y)
-            var cell_above = Vector2i(x, y - 1)
-            
-            # 1. Determine if this is a standard interior/wall cell
-            # (Your existing exterior logic)
+
             var is_in_structure = not exterior_cells.has(cell)
-            
-            # 2. Determine if the cell above is a wall (grid is false)
-            # We must ensure y > 0 so we don't access index -1
+
             var is_below_wall = false
             if y > 0 and not grid[y - 1][x]:
                 is_below_wall = true
-            
-            # 3. Final placement condition
+
             if is_in_structure or is_below_wall:
                 if cell in sinkhole_cells:
                     continue
-                
+
+                # ─────────────────────────────────────
+                # ONLY APPLY RULE ON LAST ROW
+                # ─────────────────────────────────────
+                if y == grid_height:
+                    var above_cell = Vector2i(x + offset.x, (y - 1) + offset.y)
+                    if top_wall_layer.get_cell_source_id(above_cell) == -1:
+                        continue
+
                 set_cell(cell, source_id, _pick_floor_tile())
 
     update_internals()
     print("Floor generation complete")
 
+func _compute_reachable_air(grid: Array) -> Dictionary:
+    var h = grid.size()
+    var w = grid[0].size()
+
+    var visited := {}
+    var stack := []
+
+    # Start from all boundary empty cells
+    for x in range(w):
+        if not grid[0][x]:
+            stack.append(Vector2i(x, 0))
+        if not grid[h - 1][x]:
+            stack.append(Vector2i(x, h - 1))
+
+    for y in range(h):
+        if not grid[y][0]:
+            stack.append(Vector2i(0, y))
+        if not grid[y][w - 1]:
+            stack.append(Vector2i(w - 1, y))
+
+    var dirs = [
+        Vector2i(1, 0),
+        Vector2i(-1, 0),
+        Vector2i(0, 1),
+        Vector2i(0, -1)
+    ]
+
+    while stack.size() > 0:
+        var p = stack.pop_back()
+        if visited.has(p):
+            continue
+        if grid[p.y][p.x]: # wall blocks flood fill
+            continue
+
+        visited[p] = true
+
+        for d in dirs:
+            var n = p + d
+            if n.x >= 0 and n.y >= 0 and n.x < w and n.y < h:
+                if not visited.has(n):
+                    stack.append(n)
+
+    return visited
+    
 func get_exterior_cells(rect: Rect2i, grid: Array) -> Dictionary:
     var exterior := {}
     var queue: Array[Vector2i] = []

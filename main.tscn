@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bwgkq244d6617" path="res://main.gd" id="1_dg77c"]
 [ext_resource type="Texture2D" uid="uid://dok0ira5l1wuj" path="res://assets/saturn-majestic-rings-4k-wallpaper.png" id="3_0odxb"]
 [ext_resource type="PackedScene" uid="uid://nvxcwymml15n" path="res://player/player_new.tscn" id="3_ryguw"]
-[ext_resource type="PackedScene" uid="uid://duh6cfrtcel7i" path="res://scenes/world_generator.tscn" id="5_0n3wm"]
 [ext_resource type="PackedScene" uid="uid://dobus0g45ebl8" path="res://player/camera/player_camera.tscn" id="6_7mycd"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ycdy4"]
@@ -34,7 +33,5 @@ position = Vector2(94, 116)
 [node name="PlayerCamera" parent="." unique_id=1890953946 node_paths=PackedStringArray("target") instance=ExtResource("6_7mycd")]
 position = Vector2(320, 180)
 target = NodePath("../PlayerNew")
-
-[node name="WorldGenerator" parent="." unique_id=388972948 instance=ExtResource("5_0n3wm")]
 
 [editable path="PlayerCamera"]
