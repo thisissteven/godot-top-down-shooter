@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://cfr0xa1nmisqy"]
 
-[ext_resource type="Script" uid="uid://dunovle837xi7" path="res://scenes/WorldGeneratorBase.gd" id="1_r8wkq"]
-[ext_resource type="PackedScene" uid="uid://dsi86x8ha6i1x" path="res://scripts/procgen/room_generator_2.tscn" id="2_74orn"]
+[ext_resource type="Script" uid="uid://duuefkhghxa8t" path="res://scripts/procgen/room_generator.gd" id="1_w4ctu"]
+[ext_resource type="PackedScene" uid="uid://dp2wjhnq3o5ui" path="res://environment/walls/top_walls.tscn" id="2_r8wkq"]
 
 [node name="WorldGenerator" type="Node2D" unique_id=388972948]
 y_sort_enabled = true
-script = ExtResource("1_r8wkq")
-level_generator_scene = ExtResource("2_74orn")
-min_chunks = 5
-max_chunks = 5
+script = ExtResource("1_w4ctu")
+
+[node name="TopWalls" parent="." unique_id=1921369934 instance=ExtResource("2_r8wkq")]

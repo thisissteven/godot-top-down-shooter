@@ -36,6 +36,5 @@ position = Vector2(320, 180)
 target = NodePath("../PlayerNew")
 
 [node name="WorldGenerator" parent="." unique_id=388972948 instance=ExtResource("5_0n3wm")]
-min_chunks = 12
 
 [editable path="PlayerCamera"]

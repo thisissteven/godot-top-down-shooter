@@ -6,15 +6,15 @@ extends WorldGeneratorBase
 @export var run := false:
 	set(value):
 		if value and Engine.is_editor_hint():
-			local_generate()
+			generate()
 		run = false
 
 
-func local_generate() -> void:
+func generate() -> void:
 	super.generate()
 	
 	$Tiles.generate()
 	$BottomWalls.generate()
 	$Doors.generate()
-	$WallLights.generate()
 	$Windows.generate()
+	$WallLights.generate()

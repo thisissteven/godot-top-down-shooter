@@ -6,17 +6,18 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5kjb"]
 radius = 2.0
-height = 12.0
+height = 46.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5piss"]
 light_mode = 1
 
 [node name="PlasmaGunProjectile" type="Area2D" unique_id=1162779140]
 script = ExtResource("1_yof1p")
-speed = 200.0
+speed = 300.0
+lifetime = 1.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1912234941]
-position = Vector2(3, 0)
+position = Vector2(20, 0)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_j5kjb")
 
@@ -24,16 +25,13 @@ shape = SubResource("CapsuleShape2D_j5kjb")
 position = Vector2(6, 0)
 script = ExtResource("2_45anr")
 glow_radius_h = 64.0
-glow_radius_v = 48.0
+glow_radius_v = 12.0
 falloff = 2.0
-animation = 3
-dimmer_start = 0.3
-flicker_intensity = 0.2
 
 [node name="ProjectileSprite" type="Sprite2D" parent="Glow" unique_id=2084974054]
 material = SubResource("CanvasItemMaterial_5piss")
-position = Vector2(-2.1250005, -1.4901161e-08)
-scale = Vector2(0.07125, 0.013333335)
+position = Vector2(20, 1.7763568e-15)
+scale = Vector2(0.32625, 0.013333335)
 texture = ExtResource("2_ofqpg")
 
 [node name="GlowSprite" type="Sprite2D" parent="Glow" unique_id=2076922815]
