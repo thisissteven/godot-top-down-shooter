@@ -108,7 +108,7 @@ sources/3 = SubResource("TileSetAtlasSource_13w00")
 sources/4 = SubResource("TileSetAtlasSource_fekrh")
 sources/5 = SubResource("TileSetAtlasSource_f2yul")
 
-[node name="BottomWalls" type="TileMapLayer" unique_id=2000947890 groups=["wall"]]
+[node name="BottomWalls" type="TileMapLayer" unique_id=2000947890]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_6y3qg")
 script = ExtResource("2_ma11c")

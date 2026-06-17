@@ -19,3 +19,4 @@ func generate() -> void:
 	$Windows.generate()
 	$OuterBottomWalls.generate()
 	$StationUnderside.generate()
+	$WallLights.generate()

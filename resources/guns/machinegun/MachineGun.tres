@@ -7,9 +7,8 @@
 script = ExtResource("1_caq81")
 gun_name = "Machine Gun"
 weapon_type = 2
-fire_mode = 1
+fire_rate = 10.0
 spread_degrees = 0.0
-pellets_per_shot = 3
 magazine_size = 999
 reserve_ammo = 9999
 projectile_scene = ExtResource("1_6eccv")

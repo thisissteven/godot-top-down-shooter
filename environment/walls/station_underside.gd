@@ -62,7 +62,15 @@ func _piece_from_neighbors(cell: Vector2i) -> Vector2i:
 
 	return middle_tile
 
+func _get_outer_wall_atlas(cell: Vector2i) -> Vector2i:
+	if outer_bottom_walls == null:
+		return Vector2i(-1, -1)
 
+	if outer_bottom_walls.get_cell_source_id(cell) == -1:
+		return Vector2i(-1, -1)
+
+	return outer_bottom_walls.get_cell_atlas_coords(cell)
+	
 func generate():
 	clear()
 
@@ -104,10 +112,32 @@ func generate():
 
 	for cell in support_cells.keys():
 
-		var underside_tile := _piece_from_neighbors(cell)
+		var has_left := _is_support_cell(cell + Vector2i.LEFT)
+		var has_right := _is_support_cell(cell + Vector2i.RIGHT)
+
+		var atlas := middle_tile
+
+		if !has_left and !has_right:
+			atlas = single_tile
+
+		elif !has_left:
+			var wall_atlas := _get_outer_wall_atlas(cell)
+
+			if wall_atlas != Vector2i(-1, -1):
+				atlas = wall_atlas
+			else:
+				atlas = left_tile
+
+		elif !has_right:
+			var wall_atlas := _get_outer_wall_atlas(cell)
+
+			if wall_atlas != Vector2i(-1, -1):
+				atlas = wall_atlas
+			else:
+				atlas = right_tile
 
 		set_cell(
 			cell + Vector2i.DOWN,
 			source_id,
-			underside_tile
+			atlas
 		)
