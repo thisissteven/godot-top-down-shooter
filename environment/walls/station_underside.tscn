@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://cu8l62yk32sj0"]
+
+[ext_resource type="Texture2D" uid="uid://1sxw760tn1q3" path="res://assets/outer_wall/StationUnderside2.png" id="1_f3jj5"]
+[ext_resource type="Texture2D" uid="uid://sj4y3ger7rt1" path="res://assets/outer_wall/StationUnderside.png" id="2_avfjx"]
+[ext_resource type="Texture2D" uid="uid://b3qmn3avmu70i" path="res://assets/outer_wall/StationUndersideDamaged.png" id="3_bjbo1"]
+[ext_resource type="Script" uid="uid://b18gwumi2qqho" path="res://environment/walls/station_underside.gd" id="4_dlrjy"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_02vfg"]
+texture = ExtResource("1_f3jj5")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nytue"]
+texture = ExtResource("2_avfjx")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_484w5"]
+texture = ExtResource("3_bjbo1")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_oy07s"]
+sources/0 = SubResource("TileSetAtlasSource_02vfg")
+sources/1 = SubResource("TileSetAtlasSource_nytue")
+sources/2 = SubResource("TileSetAtlasSource_484w5")
+
+[node name="StationUnderside" type="TileMapLayer" unique_id=581386311]
+tile_set = SubResource("TileSet_oy07s")
+script = ExtResource("4_dlrjy")

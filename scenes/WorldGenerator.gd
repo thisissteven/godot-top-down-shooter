@@ -17,5 +17,5 @@ func generate() -> void:
 	$BottomWalls.generate()
 	$Doors.generate()
 	$Windows.generate()
-	$WallLights.generate()
 	$OuterBottomWalls.generate()
+	$StationUnderside.generate()

@@ -13,7 +13,7 @@ extends TileMapLayer
 ## Strip must be strictly longer than this to be a candidate
 @export var min_strip_size := 3
 ## Window tiles are at least this many cells wide/tall
-@export var min_window_size := 3
+@export var min_window_size := 2
 ## Window tiles are at most this many cells wide/tall
 @export var max_window_size := 5
 

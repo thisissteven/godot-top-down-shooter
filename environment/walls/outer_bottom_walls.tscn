@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bgwcy6co1cq6h"]
 
-[ext_resource type="Texture2D" uid="uid://ccpr47rjkfyel" path="res://assets/ExteriorBottomWalls.png" id="1_1eg7e"]
+[ext_resource type="Texture2D" uid="uid://ccpr47rjkfyel" path="res://assets/outer_wall/ExteriorBottomWalls.png" id="1_1eg7e"]
 [ext_resource type="Script" uid="uid://dvn5akr6xr8wi" path="res://environment/walls/outer_bottom_walls.gd" id="2_018s0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o16lq"]

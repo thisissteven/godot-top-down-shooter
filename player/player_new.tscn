@@ -449,7 +449,6 @@ arm_texture_plasma_back = ExtResource("5_jvl72")
 
 [node name="LocomotionComponent" type="Node" parent="." unique_id=22257264]
 script = ExtResource("5_y4jld")
-max_speed = 80.0
 
 [node name="FacingComponent" type="Node" parent="." unique_id=76264158]
 script = ExtResource("6_kj1om")
