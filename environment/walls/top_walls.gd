@@ -67,21 +67,16 @@ extends TileMapLayer
 
 # ─────────────────────────────────────────────
 
-var grid=[]
+var grid = []
 var door_gaps: Array = []
 
 var rng := RandomNumberGenerator.new()
-var initialized := false
-
 
 func _ready():
 	if seed_value == 0:
 		rng.randomize()
 	else:
 		rng.seed = seed_value
-
-	initialized = true
-
 
 class BSPNode:
 
@@ -99,9 +94,6 @@ class BSPNode:
 		
 
 func generate():
-	#if !initialized:
-		#await ready
-
 	clear()
 
 	_init_grid()
@@ -892,8 +884,3 @@ func carve_at(cell: Vector2i) -> void:
 		return
 
 	grid[cell.y][cell.x] = true
-
-
-func redraw() -> void:
-	clear()
-	_draw()

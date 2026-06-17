@@ -19,35 +19,19 @@ func set_chunk_size(width: int, height: int) -> void:
 
 func generate() -> void:
 	var top_walls = $TopWalls
-	var bottom_walls = $BottomWalls
-	var tiles = $Tiles
-	var doors = $Doors
-	var windows = $Windows
-	var wall_lights = $WallLights
 
-	if not top_walls or not tiles:
+	if not top_walls:
 		push_error("RoomGenerator: child nodes not found!")
 		return
 
 	top_walls.generate()
-	bottom_walls.generate()
-	tiles.generate()
-	doors.generate()
-	windows.generate()
-	wall_lights.generate()
-	
 
 func generate_top_only() -> void:
 	$TopWalls.generate()
 
 
 func generate_remaining() -> void:
-	$BottomWalls.generate()
-	$Tiles.generate()
-	$Doors.generate()
-	$Windows.generate()
-	$WallLights.generate()
-
+	pass
 
 func get_top_walls():
 	return $TopWalls

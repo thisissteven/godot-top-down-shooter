@@ -36,3 +36,4 @@ material = SubResource("ShaderMaterial_qct5k")
 tile_set = SubResource("TileSet_toqmw")
 script = ExtResource("2_o4e6o")
 main_floor_chance = 0.9
+sinkhole_areas = 0
