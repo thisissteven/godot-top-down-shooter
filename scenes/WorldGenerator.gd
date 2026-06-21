@@ -20,3 +20,10 @@ func generate() -> void:
 	$OuterBottomWalls.generate()
 	$StationUnderside.generate()
 	$WallLights.generate()
+	
+	$BottomWalls.modulate = Color("ababab")
+	$OuterBottomWalls.modulate = Color("ababab")
+	$StationUnderside.modulate = Color("ababab")
+	$Windows.modulate = Color("ababab")
+	$Tiles.modulate = Color("bcbcbc")
+	$TopWalls.modulate = Color("666666")

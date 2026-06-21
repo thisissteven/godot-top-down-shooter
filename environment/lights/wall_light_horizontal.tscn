@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" uid="uid://dh837whhh8ld5" path="res://environment/lights/wall_light.gd" id="1_wnh3k"]
 [ext_resource type="Texture2D" uid="uid://bhpi0yf2oqteu" path="res://environment/lights/StationLightGlow.png" id="2_wnh3k"]
+[ext_resource type="PackedScene" uid="uid://bbfji7rf4tlgx" path="res://environment/lights/wall_light_source.tscn" id="3_6jjrf"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0odxb"]
 light_mode = 1
 
 [node name="WallLight" type="Node2D" unique_id=1977846784]
 script = ExtResource("1_wnh3k")
+light_color = Color(1, 1, 1, 1)
 
 [node name="Light" type="Sprite2D" parent="." unique_id=1486303145]
 material = SubResource("CanvasItemMaterial_0odxb")
 texture = ExtResource("2_wnh3k")
 
-[node name="Glow" type="Sprite2D" parent="." unique_id=569378067]
-texture_filter = 2
-material = SubResource("CanvasItemMaterial_0odxb")
+[node name="WallLightSource" parent="." unique_id=1943813006 instance=ExtResource("3_6jjrf")]

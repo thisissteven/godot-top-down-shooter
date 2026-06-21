@@ -4,36 +4,20 @@
 [ext_resource type="Texture2D" uid="uid://d0oragoql1ux6" path="res://environment/windows/window_horizontal.png" id="1_vob4a"]
 [ext_resource type="Texture2D" uid="uid://5af8rpma8okn" path="res://environment/windows/window_vertical.png" id="2_1nhm6"]
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_rjsq1"]
-polygon = PackedVector2Array(-8, -8, 8, -8, 8, 0, -1, 0, -1, 1, -2, 1, -2, 2, -3, 2, -3, 3, -4, 3, -4, 4, -5, 4, -5, 5, -6, 5, -6, 6, -7, 6, -7, 7, -8, 7, -8, 8)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tnmpg"]
-polygon = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_eul36"]
-polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 0, -8, 0)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ubfqo"]
-polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tmtl"]
 resource_name = "WindowsHorizontal"
 texture = ExtResource("1_vob4a")
 0:0/0 = 0
 0:0/0/z_index = 99
-0:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_rjsq1")
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
 1:0/0/z_index = 99
-1:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_tnmpg")
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:0/0 = 0
 2:0/0/z_index = 99
-2:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_eul36")
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0 = 0
 3:0/0/z_index = 99
-3:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_ubfqo")
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:1/0 = 0
 0:1/0/z_index = 2
@@ -48,40 +32,27 @@ texture = ExtResource("1_vob4a")
 3:1/0/z_index = 2
 3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_3lchv"]
-polygon = PackedVector2Array(-8, -8, 8, -8, 8, -7, 7, -7, 7, -6, 6, -6, 6, -5, 5, -5, 5, -4, 4, -4, -4, -4, -5, -4, -5, -5, -6, -5, -6, -6, -7, -6, -7, -7, -8, -7)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_yp5j6"]
-polygon = PackedVector2Array(-4, 5, 4, 5, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, -8, 8, -7, 8, -7, 7, -6, 7, -6, 6, -5, 6, -5, 5)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cgm8g"]
-polygon = PackedVector2Array(-8, 24, 8, 24, 8, 8, -8, 8)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ldxca"]
 resource_name = "WindowsVertical"
 texture = ExtResource("2_1nhm6")
 0:0/0 = 0
 0:0/0/z_index = 99
-0:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_3lchv")
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8, -8, 8)
 0:1/0 = 0
 0:1/0/z_index = 99
 0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8, -8, 8)
 0:2/0 = 0
 0:2/0/z_index = 99
-0:2/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_yp5j6")
-0:2/0/occlusion_layer_0/polygon_1/polygon = SubResource("OccluderPolygon2D_cgm8g")
 0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 16, -8, 16)
 
 [sub_resource type="TileSet" id="TileSet_07n45"]
-occlusion_layer_0/light_mask = 4
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_4tmtl")
 sources/1 = SubResource("TileSetAtlasSource_ldxca")
 
 [node name="Windows" type="TileMapLayer" unique_id=10185030 groups=["wall"]]
-light_mask = 4
+light_mask = 5
 y_sort_enabled = true
 tile_set = SubResource("TileSet_07n45")
 script = ExtResource("1_fvbj8")

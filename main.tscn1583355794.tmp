@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://nvxcwymml15n" path="res://player/player_new.tscn" id="3_ryguw"]
 [ext_resource type="PackedScene" uid="uid://duh6cfrtcel7i" path="res://scenes/world_generator.tscn" id="5_0n3wm"]
 [ext_resource type="PackedScene" uid="uid://dobus0g45ebl8" path="res://player/camera/player_camera.tscn" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://cmgdtof2e6fq7" path="res://lighting_sub_viewport.tscn" id="6_272bh"]
+[ext_resource type="PackedScene" uid="uid://xy2g3p6p60aw" path="res://day_light_color.tscn" id="7_5vw27"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ycdy4"]
 light_mode = 1
@@ -14,7 +16,7 @@ y_sort_enabled = true
 script = ExtResource("1_dg77c")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=251499732]
-color = Color(0.28235295, 0.28235295, 0.28235295, 1)
+color = Color(0.16350216, 0.16350219, 0.16350213, 1)
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1405763568]
 z_index = -1
@@ -29,7 +31,7 @@ scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_0odxb")
 
 [node name="PlayerNew" parent="." unique_id=170901621 instance=ExtResource("3_ryguw")]
-position = Vector2(162, 395)
+position = Vector2(351, 458)
 
 [node name="PlayerCamera" parent="." unique_id=1890953946 node_paths=PackedStringArray("target") instance=ExtResource("6_7mycd")]
 position = Vector2(320, 180)
@@ -37,4 +39,19 @@ target = NodePath("../PlayerNew")
 
 [node name="WorldGenerator" parent="." unique_id=388972948 instance=ExtResource("5_0n3wm")]
 
+[node name="LightingSubViewport" parent="." unique_id=371512361 instance=ExtResource("6_272bh")]
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="." unique_id=1040412361]
+copy_mode = 2
+
+[node name="DayLightColor" parent="BackBufferCopy" unique_id=1453540203 node_paths=PackedStringArray("following_camera", "lighting_sub_viewport") instance=ExtResource("7_5vw27")]
+texture_repeat = 1
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 960, 540)
+following_camera = NodePath("../../PlayerCamera")
+lighting_sub_viewport = NodePath("../../LightingSubViewport")
+
 [editable path="PlayerCamera"]
+[editable path="WorldGenerator"]
+[editable path="LightingSubViewport"]

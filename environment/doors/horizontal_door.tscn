@@ -129,13 +129,16 @@ occluder_light_mask = 2
 texture = ExtResource("3_3efpe")
 
 [node name="DoorLights" type="Sprite2D" parent="Move" unique_id=784834198]
+light_mask = 0
 material = SubResource("CanvasItemMaterial_sogik")
 texture = ExtResource("3_sogik")
 
 [node name="DoorGlowDown" type="Sprite2D" parent="Move" unique_id=498914942]
+light_mask = 0
 position = Vector2(3, 4.5)
 
 [node name="DoorGlowUp" type="Sprite2D" parent="Move" unique_id=132437854]
+light_mask = 0
 position = Vector2(3, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]

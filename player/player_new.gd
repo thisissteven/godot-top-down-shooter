@@ -8,8 +8,7 @@ extends CharacterBody2D
 @onready var loco: LocomotionComponent        = $LocomotionComponent
 @onready var shooting_timer: Timer            = $ShootingTimer
 @onready var facing: FacingComponent          = $FacingComponent
-@onready var shine_light                      = $ShineLight
-@onready var shadow_light                     = $ShadowLight
+@onready var shine_light                      = $Sprite/ShineLight
 @onready var anim_director: AnimationDirector = $AnimationDirector
 @onready var sprite: Node2D                   = $Sprite
 @onready var arm_pivot: Node2D                = $Sprite/ArmPivot
@@ -65,15 +64,10 @@ func _on_flashlight_pressed() -> void:
 
 	if turning_on:
 		shine_light.enabled  = true
-		shadow_light.enabled = true
 		shine_light.energy   = 0.0
-		shadow_light.energy  = 0.0
 
 		flashlight_tween = create_tween()
-		flashlight_tween.tween_property(shine_light,  "energy", 0.4, 0.2)
-		flashlight_tween.parallel().tween_property(shadow_light, "energy", 0.4, 0.2)
+		flashlight_tween.tween_property(shine_light,  "energy", 1.0, 0.2)
 	else:
 		shine_light.enabled  = false
-		shadow_light.enabled = false
-		shine_light.energy   = 0.4
-		shadow_light.energy  = 0.4
+		shine_light.energy   = 1.0
