@@ -128,7 +128,7 @@ occluder_light_mask = 2
 [node name="DoorSprite" type="Sprite2D" parent="Move" unique_id=1483452890]
 texture = ExtResource("3_3efpe")
 
-[node name="DoorLights" type="Sprite2D" parent="Move" unique_id=784834198]
+[node name="DoorLights" type="PointLight2D" parent="Move" unique_id=257756849]
 light_mask = 0
 material = SubResource("CanvasItemMaterial_sogik")
 texture = ExtResource("3_sogik")
@@ -146,7 +146,6 @@ y_sort_enabled = true
 shape = SubResource("RectangleShape2D_gusx3")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=863609821]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1120338185]
 shape = SubResource("CapsuleShape2D_o3jxg")

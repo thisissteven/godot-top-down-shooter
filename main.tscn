@@ -13,9 +13,6 @@ light_mode = 1
 y_sort_enabled = true
 script = ExtResource("1_dg77c")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=251499732]
-color = Color(0.28235295, 0.28235295, 0.28235295, 1)
-
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1405763568]
 z_index = -1
 scroll_scale = Vector2(0.05, 0.05)
@@ -29,7 +26,7 @@ scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_0odxb")
 
 [node name="PlayerNew" parent="." unique_id=170901621 instance=ExtResource("3_ryguw")]
-position = Vector2(162, 395)
+position = Vector2(676, 303)
 
 [node name="PlayerCamera" parent="." unique_id=1890953946 node_paths=PackedStringArray("target") instance=ExtResource("6_7mycd")]
 position = Vector2(320, 180)

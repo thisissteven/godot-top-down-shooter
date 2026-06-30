@@ -1,8 +1,4 @@
 extends CharacterBody2D
-
-@export var projectile_scene: PackedScene
-@export var fire_rate := 10
-
 @onready var input_component: InputComponent  = $InputComponent
 @onready var equipment: EquipmentComponent    = $EquipmentComponent
 @onready var loco: LocomotionComponent        = $LocomotionComponent

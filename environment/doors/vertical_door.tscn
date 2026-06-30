@@ -158,7 +158,7 @@ position = Vector2(0, 32)
 [node name="DoorSprite" type="Sprite2D" parent="Move" unique_id=1483452890]
 texture = ExtResource("1_710md")
 
-[node name="DoorLights" type="Sprite2D" parent="Move" unique_id=145767200]
+[node name="DoorLights" type="PointLight2D" parent="Move" unique_id=1955075370]
 light_mask = 0
 material = SubResource("CanvasItemMaterial_xejuo")
 texture = ExtResource("4_xejuo")
@@ -181,7 +181,6 @@ occluder = SubResource("OccluderPolygon2D_lnbyf")
 occluder_light_mask = 2
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1153636873]
-visible = false
 position = Vector2(0, 2.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=802261004]

@@ -391,7 +391,6 @@ terrain_set_0/terrain_0/color = Color(0.7050267, 4.3317675e-07, 0.3591145, 1)
 sources/0 = SubResource("TileSetAtlasSource_vqaso")
 
 [node name="TopWalls" type="TileMapLayer" unique_id=1921369934 groups=["wall"]]
-light_mask = 0
 z_index = 99
 tile_set = SubResource("TileSet_uuaxm")
 script = ExtResource("2_fwmgq")

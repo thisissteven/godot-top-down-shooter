@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://bbfji7rf4tlgx"]
 
-[ext_resource type="Texture2D" uid="uid://r0g7quc7fmwt" path="res://assets/Thin Light.png" id="1_jaf75"]
+[ext_resource type="Texture2D" uid="uid://clnrhu66tgqq6" path="res://assets/Thin Light 05.png" id="1_jaf75"]
 
 [node name="WallLightSource" type="PointLight2D" unique_id=1943813006]
-texture_filter = 2
 range_item_cull_mask = 9
 texture = ExtResource("1_jaf75")
-texture_scale = 0.36
+texture_scale = 0.48

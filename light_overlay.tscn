@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://blpjq4n7ef48u"]
+
+[ext_resource type="Script" uid="uid://n3nipittw10d" path="res://light_overlay.gd" id="1_16e5c"]
+
+[node name="LightOverlay" type="Node2D" unique_id=1472645373 groups=["light_overlay"]]
+script = ExtResource("1_16e5c")
+darkness = 0.88

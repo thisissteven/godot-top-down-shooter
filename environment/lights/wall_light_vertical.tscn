@@ -2,18 +2,15 @@
 
 [ext_resource type="Script" uid="uid://dh837whhh8ld5" path="res://environment/lights/wall_light.gd" id="1_gvpkp"]
 [ext_resource type="Texture2D" uid="uid://cdmskblr314yw" path="res://assets/StationLightGlow2.png" id="2_7sakt"]
-[ext_resource type="PackedScene" uid="uid://bbfji7rf4tlgx" path="res://environment/lights/wall_light_source.tscn" id="3_kf4qx"]
+[ext_resource type="Texture2D" uid="uid://clnrhu66tgqq6" path="res://assets/Thin Light 05.png" id="2_qi5rc"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0odxb"]
 light_mode = 1
 
-[node name="WallLight" type="Node2D" unique_id=1977846784]
+[node name="WallLight" type="Node2D" unique_id=1977846784 groups=["wall_light"]]
 script = ExtResource("1_gvpkp")
-light_color = Color(1, 1, 1, 1)
-use_color_palette = false
+light_texture = ExtResource("2_qi5rc")
 
 [node name="Light" type="Sprite2D" parent="." unique_id=1486303145]
 material = SubResource("CanvasItemMaterial_0odxb")
 texture = ExtResource("2_7sakt")
-
-[node name="WallLightSource" parent="." unique_id=1943813006 instance=ExtResource("3_kf4qx")]

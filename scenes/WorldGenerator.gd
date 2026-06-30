@@ -9,6 +9,13 @@ extends WorldGeneratorBase
 			generate()
 		run = false
 
+func _ready() -> void:
+	$BottomWalls.modulate = Color("ababab")
+	$OuterBottomWalls.modulate = Color("ababab")
+	$StationUnderside.modulate = Color("ababab")
+	$Windows.modulate = Color("ababab")
+	$Tiles.modulate = Color("ababab")
+	$TopWalls.modulate = Color("434343ff")
 
 func generate() -> void:
 	super.generate()
@@ -20,10 +27,4 @@ func generate() -> void:
 	$OuterBottomWalls.generate()
 	$StationUnderside.generate()
 	$WallLights.generate()
-	
-	$BottomWalls.modulate = Color("ababab")
-	$OuterBottomWalls.modulate = Color("ababab")
-	$StationUnderside.modulate = Color("ababab")
-	$Windows.modulate = Color("ababab")
-	$Tiles.modulate = Color("bcbcbc")
-	$TopWalls.modulate = Color("666666")
+	$LightOverlay.setup_from_generated_lights()
