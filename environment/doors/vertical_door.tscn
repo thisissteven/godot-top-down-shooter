@@ -158,7 +158,7 @@ position = Vector2(0, 32)
 [node name="DoorSprite" type="Sprite2D" parent="Move" unique_id=1483452890]
 texture = ExtResource("1_710md")
 
-[node name="DoorLights" type="PointLight2D" parent="Move" unique_id=1955075370]
+[node name="DoorLights" type="Sprite2D" parent="Move" unique_id=47729265]
 light_mask = 0
 material = SubResource("CanvasItemMaterial_xejuo")
 texture = ExtResource("4_xejuo")

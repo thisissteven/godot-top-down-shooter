@@ -128,7 +128,7 @@ occluder_light_mask = 2
 [node name="DoorSprite" type="Sprite2D" parent="Move" unique_id=1483452890]
 texture = ExtResource("3_3efpe")
 
-[node name="DoorLights" type="PointLight2D" parent="Move" unique_id=257756849]
+[node name="DoorLights" type="Sprite2D" parent="Move" unique_id=1453509915]
 light_mask = 0
 material = SubResource("CanvasItemMaterial_sogik")
 texture = ExtResource("3_sogik")

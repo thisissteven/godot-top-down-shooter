@@ -17,18 +17,16 @@ const FLICKER_PAUSE  := 0.25
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var detection_area: Area2D = $Area2D
-@onready var door_lights: PointLight2D = $Move/DoorLights
+@onready var door_lights: Sprite2D = $Move/DoorLights
 @onready var door_glow_down: Sprite2D = $Move/DoorGlowDown
 @onready var door_glow_up: Sprite2D = $Move/DoorGlowUp
 
-var _light_nodes: Array
+var _light_nodes: Array[Sprite2D]
 var _player_inside := false
 var _interacting := false
 var _flicker_tween: Tween = null
 
 func _ready() -> void:
-	door_glow_down.z_index = 1024
-	door_glow_up.z_index = 1024
 	state = [State.UNLOCKED, State.OPENED].pick_random()
 	_light_nodes = [door_lights, door_glow_down, door_glow_up]
 	_setup_glow(door_glow_down, 6, 8, 0.6)
@@ -46,18 +44,12 @@ func _apply_state() -> void:
 
 func _set_lights_color(color: Color) -> void:
 	for node in _light_nodes:
-		if node is Sprite2D:
-			node.modulate = color
-		elif node is PointLight2D:
-			node.color = color
-			
+		node.modulate = color
+
 func _set_lights_alpha(alpha: float) -> void:
 	for node in _light_nodes:
-		if node is Sprite2D:
-			node.modulate.a = alpha
-		elif node is PointLight2D:
-			node.color.a = alpha
-
+		node.modulate.a = alpha
+		
 # --- Door movement ---
 
 func _open_door() -> void:

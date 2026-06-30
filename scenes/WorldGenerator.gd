@@ -9,6 +9,12 @@ extends WorldGeneratorBase
 			generate()
 		run = false
 
+@export var run_light_mask := false:
+	set(value):
+		if value and Engine.is_editor_hint():
+			generate_light_mask()
+		run_light_mask = false
+
 func _ready() -> void:
 	$BottomWalls.modulate = Color("ababab")
 	$OuterBottomWalls.modulate = Color("ababab")
@@ -27,4 +33,14 @@ func generate() -> void:
 	$OuterBottomWalls.generate()
 	$StationUnderside.generate()
 	$WallLights.generate()
-	$LightOverlay.setup_from_generated_lights()
+
+	
+func generate_light_mask() -> void:
+	var map_layers: Array[Node] = [
+		$Tiles, 
+		$BottomWalls, 
+		$Windows, 
+		$OuterBottomWalls, 
+		$StationUnderside
+	]
+	$LightOverlay.setup_from_generated_lights(map_layers)
