@@ -45,6 +45,7 @@ var _already_hit: Array[Node] = []   # prevent double-hitting same target
 # ── Lifecycle ─────────────────────────────────────────────────────────────────
 
 func _ready() -> void:
+	add_to_group("projectile")
 	_lifetime_remaining = lifetime
 	_pierce_remaining = pierce_count
 	rotation = _direction.angle()
@@ -110,7 +111,6 @@ func _on_body_entered(body: Node2D) -> void:
 	# Handle solid walls / TileMap collision.
 	if body.is_in_group(&"wall"):
 		_expire()
-
 
 func _is_valid_target(node: Node) -> bool:
 	# Look for a FactionComponent to check allegiance.

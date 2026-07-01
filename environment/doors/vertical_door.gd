@@ -3,9 +3,9 @@ extends StaticBody2D
 enum State { LOCKED, UNLOCKED, OPENED }
 
 const LIGHT_COLORS := {
-	State.LOCKED:   Color(0.7, 0.1, 0.1),
-	State.UNLOCKED: Color(1.0, 0.7, 0.0),
-	State.OPENED:   Color(0.1, 0.7, 0.2),
+	State.LOCKED:   Color(0.812, 0.102, 0.102, 1.0),
+	State.UNLOCKED: Color(1.0, 0.792, 0.0, 1.0),
+	State.OPENED:   Color(0.102, 1.0, 0.2, 1.0),
 }
 
 const FLICKER_DIM    := 0.15
@@ -26,6 +26,7 @@ var _light_nodes: Array[Sprite2D]
 var _player_inside := false
 var _interacting := false
 var _flicker_tween: Tween = null
+var _last_animation_played: String = "close"
 
 func _ready() -> void:
 	state = [State.UNLOCKED, State.OPENED].pick_random()
@@ -34,10 +35,47 @@ func _ready() -> void:
 	_setup_glow(door_glow_up, 4, 8, 0.6)
 	animation_player.play("close")
 	animation_player.seek(animation_player.current_animation_length, true)
+	_last_animation_played = "close"
 	detection_area.body_entered.connect(_on_body_entered)
 	detection_area.body_exited.connect(_on_body_exited)
 	_apply_state()
 
+@onready var overlay := get_tree().get_first_node_in_group("light_overlay")
+
+func _process(_delta: float) -> void:
+	if not overlay:
+		return
+
+	var is_default_position := not animation_player.is_playing() and _last_animation_played == "close"
+
+	if is_default_position:
+		for i in _light_nodes.size():
+			var node := _light_nodes[i]
+			node.visible = true
+			if node.modulate.a <= 0.001 or not node.texture:
+				overlay.remove_dynamic_light(_door_light_id(i))
+				continue
+			overlay.update_dynamic_light(
+				_door_light_id(i),
+				node.global_position,
+				node.texture,
+				node.modulate,
+				node.scale
+			)
+	else:
+		for i in _light_nodes.size():
+			var node := _light_nodes[i]
+			node.visible = false
+			overlay.remove_dynamic_light(_door_light_id(i))
+			
+func _door_light_id(index: int) -> String:
+	return "door_light_" + str(get_instance_id()) + "_" + str(index)
+
+func _exit_tree() -> void:
+	if overlay:
+		for i in _light_nodes.size():
+			overlay.remove_dynamic_light(_door_light_id(i))
+			
 # --- State ---
 
 func _apply_state() -> void:
@@ -58,12 +96,14 @@ func _open_door() -> void:
 	var length := animation_player.current_animation_length
 	animation_player.play("open")
 	animation_player.seek(length - pos)
+	_last_animation_played = "open"
 
 func _close_door() -> void:
 	var pos := animation_player.current_animation_position
 	var length := animation_player.current_animation_length
 	animation_player.play("close")
 	animation_player.seek(length - pos)
+	_last_animation_played = "close"
 
 # --- Interact sequence ---
 

@@ -4,21 +4,31 @@ extends TileMapLayer
 @export var top_wall_layer: TopWalls
 @export var source_id := 0
 @export var floor_tiles := [
-	Vector2i(0,0), # Main floor (90%)
-	Vector2i(1,0),
-	Vector2i(2,0),
 	Vector2i(3,0),
 	Vector2i(4,0),
 	Vector2i(5,0),
 	Vector2i(6,0),
-	Vector2i(7,0)
+	Vector2i(7,0),
+	Vector2i(8,0),
+	Vector2i(9,0),
 ]
+
+@export_enum("First", "Second", "Third")
+var main_floor := 0
+
+const MAIN_FLOOR_COORDS := [
+	Vector2i(0, 0),
+	Vector2i(1, 0),
+	Vector2i(2, 0),
+]
+
 @export_range(0.0,1.0)
 var main_floor_chance := 0.85
 @export var seed_value := 0
 @export var sinkhole_areas := 8
 @export var sinkhole_min_tiles := 12
 @export var sinkhole_max_tiles := 32
+
 var rng := RandomNumberGenerator.new()
 var initialized := false
 
@@ -297,7 +307,7 @@ func _grow_sinkhole(start: Vector2i, target_size: int, rect: Rect2i, wall_adjace
 	
 func _pick_floor_tile():
 	if rng.randf() <= main_floor_chance:
-		return floor_tiles[0]
+		return MAIN_FLOOR_COORDS[main_floor]
 	return floor_tiles[
 		rng.randi_range(
 			1,

@@ -26,6 +26,11 @@ extends Node2D
 
 ## How dark the unlit areas are. 0 = invisible overlay, 1 = pitch black.
 @export var darkness : float = 1.0
+## Intensity multiplier (e.g., 1.0 = normal, 3.0 = extra bright)
+@export var intensity : float = 2.5
+@export var darkness_tint : Color = Color(0.05, 0.05, 0.15)
+@export var selected_color : Color = Color(0.677, 0.699, 0.917, 1.0)
+@export_range(0.0, 1.0) var selected_scale : float = 0.5
 
 @onready var _viewport     : SubViewport = $SubViewport
 @onready var _container    : Node2D      = $SubViewport/LightContainer
@@ -55,37 +60,76 @@ func init(world_rect: Rect2) -> void:
     _rect.texture  = _viewport.get_texture()
 
     _rect.material.set_shader_parameter("darkness", darkness)
+    _rect.material.set_shader_parameter("light_intensity", intensity)
+    _rect.material.set_shader_parameter("darkness_tint", darkness_tint)
+    
+    rebuild()
 
+var _dynamic_stamps: Dictionary = {}  # id (String) -> Sprite2D
+var _rebuild_queued := false
+
+## Coalesced rebuild — safe to call multiple times in the same frame
+## (e.g. several lights changing/dying at once). Use this instead of
+## rebuild() directly from gameplay code.
+func request_rebuild() -> void:
+    if _rebuild_queued:
+        return
+    _rebuild_queued = true
+    call_deferred("_do_rebuild")
+
+func _do_rebuild() -> void:
+    _rebuild_queued = false
     rebuild()
 
 
-## Rebuild the light stamp list and re-render the viewport.
-## Cheap: only called when lights are added or removed.
-# Added to LightOverlay.gd
+## For lights that move/animate every frame (door glows, player flashlight).
+## Call every frame while the light should be visible, with a stable id —
+## the same stamp gets updated in place instead of duplicated.
+func update_dynamic_light(id: String, world_position: Vector2, texture: Texture2D, color: Color = Color.WHITE, local_scale: Vector2 = Vector2.ONE, local_rotation: float = 0.0) -> void:
+    var stamp: Sprite2D = _dynamic_stamps.get(id)
+    if not stamp:
+        stamp = Sprite2D.new()
+        stamp.centered = true
+        var mat := CanvasItemMaterial.new()
+        mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+        stamp.material = mat
+        _container.add_child(stamp)
+        _dynamic_stamps[id] = stamp
 
-## Nodes in this group are treated as "always lit": their footprint
-## is stamped at full brightness into the SubViewport, so the
-## darkness shader never darkens that area — no z-index or
-## per-sprite shader needed.
-const ALWAYS_LIT_GROUP := "always_lit"
+    stamp.texture  = texture
+    stamp.position = world_position
+    stamp.rotation = local_rotation
+    stamp.modulate = color
+    stamp.scale    = local_scale
+
+    _viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+
+## Call when a dynamic light should stop existing (door fully closed
+## and off, light destroyed, etc).
+func remove_dynamic_light(id: String) -> void:
+    if _dynamic_stamps.has(id):
+        _dynamic_stamps[id].queue_free()
+        _dynamic_stamps.erase(id)
+        _viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func rebuild() -> void:
     for child in _container.get_children():
-        child.free()
+        if not _dynamic_stamps.values().has(child):
+            child.free()
 
-    # ── Normal point lights (existing) ──────────────────────────
     var lights := get_tree().get_nodes_in_group("wall_light")
     for light in lights:
         if not light.has_method("get_light_stamp_data"):
             continue
 
-        var data : Dictionary = light.get_light_stamp_data()
+        var data : Dictionary = light.get_light_stamp_data(selected_color)
 
         var stamp := Sprite2D.new()
         stamp.texture   = data["texture"]
-        stamp.modulate  = data.get("modulate", Color.WHITE)
-        stamp.scale     = data.get("scale", Vector2.ONE)
+        stamp.modulate  = selected_color
+        stamp.scale     = Vector2(selected_scale, selected_scale)
         stamp.position  = data["position"]
         stamp.centered  = true
 
@@ -96,30 +140,8 @@ func rebuild() -> void:
         _container.add_child(stamp)
         stamp.owner = owner
 
-    var always_lit := get_tree().get_nodes_in_group(ALWAYS_LIT_GROUP)
-    for node in always_lit:
-        if not node.has_method("get_always_lit_stamp_data"):
-            continue
-
-        var data : Dictionary = node.get_always_lit_stamp_data()
-        # data: { "position": Vector2, "texture": Texture2D, "scale": Vector2 }
-
-        var stamp := Sprite2D.new()
-        stamp.texture   = data["texture"]
-        stamp.position  = data["position"]
-        stamp.scale     = data.get("scale", Vector2.ONE)
-        stamp.centered  = true
-        stamp.modulate  = Color.WHITE   # full brightness wherever the texture has alpha
-
-        var mat := CanvasItemMaterial.new()
-        mat.blend_mode  = CanvasItemMaterial.BLEND_MODE_ADD
-        stamp.material  = mat
-
-        _container.add_child(stamp)
-
     _viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
-# Added to LightOverlay.gd
 
 ## Computes the world-space bounding rect from all registered wall lights,
 ## expanding each light's contribution by its glow texture's radius
@@ -137,13 +159,13 @@ func compute_world_rect_from_lights() -> Rect2:
         if not light.has_method("get_light_stamp_data"):
             continue
 
-        var data : Dictionary = light.get_light_stamp_data()
+        var data : Dictionary = light.get_light_stamp_data(selected_color)
         var pos    : Vector2  = data["position"]
         var tex    : Texture2D = data["texture"]
-        var scale  : Vector2  = data.get("scale", Vector2.ONE)
+        var local_scale  : Vector2  = data.get("scale", Vector2.ONE)
 
         # Half-extent of the glow texture in world space (it's centered).
-        var half_size := Vector2(tex.get_width(), tex.get_height()) * 0.5 * scale
+        var half_size := Vector2(tex.get_width(), tex.get_height()) * 0.5 * local_scale
 
         min_pos = min_pos.min(pos - half_size)
         max_pos = max_pos.max(pos + half_size)

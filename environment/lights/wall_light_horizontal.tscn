@@ -1,16 +1,31 @@
 [gd_scene format=3 uid="uid://bexkka61lsvqq"]
 
 [ext_resource type="Script" uid="uid://dh837whhh8ld5" path="res://environment/lights/wall_light.gd" id="1_wnh3k"]
-[ext_resource type="Texture2D" uid="uid://clnrhu66tgqq6" path="res://assets/Thin Light 05.png" id="2_6jjrf"]
+[ext_resource type="Texture2D" uid="uid://r0g7quc7fmwt" path="res://assets/Thin Light.png" id="2_6jjrf"]
 [ext_resource type="Texture2D" uid="uid://bhpi0yf2oqteu" path="res://environment/lights/StationLightGlow.png" id="2_wnh3k"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0odxb"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6jjrf"]
+blend_mode = 1
 light_mode = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6jjrf"]
+radius = 10.012492
 
 [node name="WallLight" type="Node2D" unique_id=1977846784 groups=["wall_light"]]
 script = ExtResource("1_wnh3k")
+light_color = Color(1, 1, 1, 1)
 light_texture = ExtResource("2_6jjrf")
+use_color_palette = false
 
 [node name="Light" type="Sprite2D" parent="." unique_id=1486303145]
-material = SubResource("CanvasItemMaterial_0odxb")
+material = SubResource("CanvasItemMaterial_6jjrf")
 texture = ExtResource("2_wnh3k")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=222436916]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2110654628]
+position = Vector2(0, 4.5)
+shape = SubResource("CircleShape2D_6jjrf")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

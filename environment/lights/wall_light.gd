@@ -33,7 +33,7 @@ enum GlowShape     { CONE, RADIAL, STRIP }
 @export var use_color_palette: bool = true
 
 @export var palette: Array[Color] = [
-	Color("ffffff")
+	Color("447cffff")
 ]
 
 @export var glow_direction: GlowDirection = GlowDirection.DOWN:
@@ -49,28 +49,18 @@ func _ready() -> void:
 	mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	
 	core_sprite.material = mat
+	_rebuild_color()
 	
 	if not glow_direction == GlowDirection.DOWN:
 		core_sprite.z_index  = 98
 
 ## Called by LightOverlay when building stamps.
-func get_light_stamp_data() -> Dictionary:
-	_pick_random_color()
-	_rebuild_color()
+func get_light_stamp_data(selected_color: Color) -> Dictionary:
+	core_sprite.modulate = selected_color
 	return {
 		"position" : global_position,
 		"texture"  : light_texture,          # your existing @export var
-		"modulate" : light_color,        # whatever Color you apply to your glow sprite
-		"scale"    : Vector2(0.6, 0.6),           # adjust if you resize glows per light
 	}
-
-## When this light is freed, tell the overlay to rebuild
-## so the hole disappears cleanly.
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_PREDELETE:
-		var overlay := get_tree().get_first_node_in_group("light_overlay") if get_tree() else null
-		if overlay:
-			overlay.rebuild()
 
 # ─────────────────────────────────────────────
 #  Helpers — rebuild
@@ -98,3 +88,12 @@ func _facing_vector() -> Vector2:
 		GlowDirection.LEFT:  return Vector2(-1, 0)
 		GlowDirection.RIGHT: return Vector2(1,  0)
 	return Vector2.ZERO
+
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	if area.is_in_group("projectile"):
+		remove_from_group('wall_light')
+		var overlay := get_tree().get_first_node_in_group("light_overlay")
+		if overlay:
+			overlay.rebuild()
+		queue_free()

@@ -142,10 +142,12 @@ light_mask = 0
 position = Vector2(3, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=552738547]
+visible = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_gusx3")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=863609821]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1120338185]
 shape = SubResource("CapsuleShape2D_o3jxg")

@@ -8,6 +8,8 @@ extends TileMapLayer
 
 @export var top_wall_layer: TopWalls
 @export var bottom_wall_layer: BottomWalls
+@export var top_wall_windows: TopWallWindows
+@export var floor_layer: TilesBase
 
 @export_group("Strip Filtering")
 ## Strip must be strictly longer than this to be a candidate
@@ -35,11 +37,22 @@ extends TileMapLayer
 @export var h_bot_left_tile  := Vector2i(0, 1)
 @export var h_bot_mid_tile   := Vector2i(1, 1)
 @export var h_bot_right_tile := Vector2i(2, 1)
+@export var outer_h_left_tile      := Vector2i(0, 2)
+@export var outer_h_mid_tile       := Vector2i(1, 2)
+@export var outer_h_right_tile     := Vector2i(2, 2)
+@export var outer_h_bot_left_tile  := Vector2i(0, 3)
+@export var outer_h_bot_mid_tile   := Vector2i(1, 3)
+@export var outer_h_bot_right_tile := Vector2i(2, 3)
 
 @export_group("Vertical Window Atlas Coords")
 @export var v_top_tile := Vector2i(0, 0)
 @export var v_mid_tile := Vector2i(0, 1)
 @export var v_bot_tile := Vector2i(0, 2)
+
+@export_group("Horizontal Top Wall Window Atlas")
+@export var h_tw_left_tile  := Vector2i(0, 0)
+@export var h_tw_mid_tile   := Vector2i(1, 0)
+@export var h_tw_right_tile := Vector2i(2, 0)
 
 var _rng := RandomNumberGenerator.new()
 var initialized := false
@@ -47,16 +60,15 @@ var initialized := false
 func _ready() -> void:
 	initialized = true
 
-
 func generate() -> void:
-	#if not initialized:
-		#await ready
-
 	if not top_wall_layer:
 		push_error("WindowPlacer: Assign top_wall_layer in the Inspector.")
 		return
 	if not bottom_wall_layer:
 		push_error("WindowPlacer: Assign bottom_wall_layer in the Inspector.")
+		return
+	if not top_wall_windows:
+		push_error("WindowPlacer: Assign top_wall_windows in the Inspector.")
 		return
 	if max_windows_per_strip == 0:
 		print("WindowPlacer: max_windows_per_strip is 0, nothing to place.")
@@ -268,28 +280,31 @@ func _paint_horizontal_window(cells: Array) -> void:
 		# Remove top wall
 		top_wall_layer.grid[cell.y][cell.x] = true
 		top_wall_layer.erase_cell(cell)
-		#_spawn_occluder(cell, top_wall_layer)
 
 		# Remove bottom wall
 		# bottom_walls places at top_cell + DOWN*h (h=1 default)
 		bottom_wall_layer.erase_cell(cell + Vector2i(0, 1))
 		
-
+		if floor_layer.get_cell_source_id(cell - Vector2i(0, 1)) == -1:
+			floor_layer.erase_cell(cell)
+			floor_layer.erase_cell(cell + Vector2i(0, 1))
+		
+		var is_outer_window = floor_layer.get_cell_source_id(cell + Vector2i(0, 2)) == -1
 		var top_atlas: Vector2i
 		var bot_atlas: Vector2i
 
 		if count == 1:
-			top_atlas = h_mid_tile
-			bot_atlas = h_bot_mid_tile
+			top_atlas = outer_h_mid_tile if is_outer_window else h_mid_tile
+			bot_atlas = outer_h_bot_mid_tile if is_outer_window else h_bot_mid_tile
 		elif i == 0:
-			top_atlas = h_left_tile
-			bot_atlas = h_bot_left_tile
+			top_atlas = outer_h_left_tile if is_outer_window else h_left_tile
+			bot_atlas = outer_h_bot_left_tile if is_outer_window else h_bot_left_tile
 		elif i == count - 1:
-			top_atlas = h_right_tile
-			bot_atlas = h_bot_right_tile
+			top_atlas = outer_h_right_tile if is_outer_window else h_right_tile
+			bot_atlas = outer_h_bot_right_tile if is_outer_window else h_bot_right_tile
 		else:
-			top_atlas = h_mid_tile
-			bot_atlas = h_bot_mid_tile
+			top_atlas = outer_h_mid_tile if is_outer_window else h_mid_tile
+			bot_atlas = outer_h_bot_mid_tile if is_outer_window else h_bot_mid_tile
 
 		# Draw top half
 		set_cell(
@@ -297,14 +312,31 @@ func _paint_horizontal_window(cells: Array) -> void:
 			horizontal_source_id,
 			top_atlas
 		)
-
+		
 		# Draw bottom half one tile lower
 		set_cell(
 			cell + Vector2i(0, 1),
 			horizontal_source_id,
 			bot_atlas
 		)
-			
+		
+		var top_wall_atlas: Vector2i
+
+		if count == 1:
+			top_wall_atlas = h_tw_mid_tile
+		elif i == 0:
+			top_wall_atlas = h_tw_left_tile
+		elif i == count - 1:
+			top_wall_atlas = h_tw_right_tile
+		else:
+			top_wall_atlas = h_tw_mid_tile
+		
+		top_wall_windows.set_cell(
+			cell,
+			0,
+			top_wall_atlas
+		)
+
 		
 func _paint_vertical_window(cells: Array) -> void:
 	var count := cells.size()
@@ -330,6 +362,11 @@ func _paint_vertical_window(cells: Array) -> void:
 			atlas = v_mid_tile
 
 		set_cell(cell, vertical_source_id, atlas)
+		top_wall_windows.set_cell(
+			cell,
+			vertical_source_id,
+			atlas
+		)
 		
 			
 func _spawn_occluder(cell: Vector2i, layer: TileMapLayer) -> void:

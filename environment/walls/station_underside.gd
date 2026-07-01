@@ -31,7 +31,7 @@ func _is_window_bottom(cell: Vector2i) -> bool:
 		return false
 
 	var atlas := windows_layer.get_cell_atlas_coords(cell)
-	return atlas.y == 1
+	return atlas.y == 1 or atlas.y == 3
 
 
 func _is_support_cell(cell: Vector2i) -> bool:

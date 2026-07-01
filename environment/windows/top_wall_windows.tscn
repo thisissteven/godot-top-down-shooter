@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dc3wkysf14xkj"]
+
+[ext_resource type="Texture2D" uid="uid://driytp6k3vrwx" path="res://environment/windows/tww_horizontal.png" id="1_1klhc"]
+[ext_resource type="Texture2D" uid="uid://cc5swajdh06td" path="res://environment/windows/tww_vertical.png" id="2_ifcpl"]
+[ext_resource type="Script" uid="uid://elhkfwqc0q4j" path="res://environment/windows/top_wall_windows.gd" id="3_7nal3"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ungv"]
+texture = ExtResource("1_1klhc")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5876l"]
+texture = ExtResource("2_ifcpl")
+0:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_u5avq"]
+sources/0 = SubResource("TileSetAtlasSource_6ungv")
+sources/1 = SubResource("TileSetAtlasSource_5876l")
+
+[node name="TopWallWindows" type="TileMapLayer" unique_id=853306494]
+z_index = 99
+tile_set = SubResource("TileSet_u5avq")
+script = ExtResource("3_7nal3")
