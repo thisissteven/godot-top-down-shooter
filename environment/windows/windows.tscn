@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cm65qe8uhgcp1" path="res://environment/windows/window_placer.gd" id="1_fvbj8"]
 [ext_resource type="Texture2D" uid="uid://d0oragoql1ux6" path="res://environment/windows/window_horizontal.png" id="1_vob4a"]
 [ext_resource type="Texture2D" uid="uid://5af8rpma8okn" path="res://environment/windows/window_vertical.png" id="2_1nhm6"]
+[ext_resource type="PackedScene" uid="uid://b1hnm5v5if7fy" path="res://environment/windows/window_light_vertical.tscn" id="4_yp5j6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tmtl"]
 resource_name = "WindowsHorizontal"
@@ -72,3 +73,4 @@ light_mask = 5
 y_sort_enabled = true
 tile_set = SubResource("TileSet_07n45")
 script = ExtResource("1_fvbj8")
+vertical_window_light_scene = ExtResource("4_yp5j6")

@@ -4,7 +4,7 @@ enum State { LOCKED, UNLOCKED, OPENED }
 
 const LIGHT_COLORS := {
 	State.LOCKED:   Color(0.812, 0.102, 0.102, 1.0),
-	State.UNLOCKED: Color(1.0, 0.792, 0.0, 1.0),
+	State.UNLOCKED: Color(1.0, 0.745, 0.0, 1.0),
 	State.OPENED:   Color(0.102, 1.0, 0.2, 1.0),
 }
 

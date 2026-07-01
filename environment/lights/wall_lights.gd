@@ -6,6 +6,8 @@ extends Node2D
 @export var bottom_wall_layer: BottomWalls
 @export var wall_light_scene: PackedScene          # vertical wall light
 @export var horizontal_wall_light_scene: PackedScene  # horizontal wall light
+## Light Color
+@export var light_color: Color = Color("ffffff")
 
 @export_group("Placement")
 ## Minimum distance between two lights (in tiles, Chebyshev)
@@ -38,7 +40,8 @@ func generate() -> void:
 		return
 
 	for child in get_children():
-		child.free()
+		if child.name.begins_with("WallLight"):
+			child.free()
 
 	var rng := RandomNumberGenerator.new()
 	if seed_value == 0:
@@ -75,6 +78,7 @@ func generate() -> void:
 			var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
 
 			var light = wall_light_scene.instantiate()
+			light.set_color(light_color)
 			light.rotation = 0.0
 			light.position = Vector2(center_x, bottom_wall_center_y) + Vector2(0, 7)
 			light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
@@ -85,6 +89,7 @@ func generate() -> void:
 			var bottom_wall_center_y = (strip[0].y + 1) * tile_size.y + 0
 
 			var light = horizontal_wall_light_scene.instantiate()
+			light.set_color(light_color)
 			light.rotation = 0.0
 			light.position = Vector2(center_x, bottom_wall_center_y)
 			light.name = "WallLight_H_%d_%d" % [mid_cell.x, mid_cell.y]
@@ -118,6 +123,7 @@ func generate() -> void:
 		var top_wall_top_y = strip[0].y * tile_size.y
 
 		var light = horizontal_wall_light_scene.instantiate()
+		horizontal_wall_light_scene.set_color(light_color)
 		light.rotation = 0.0
 		light.position = Vector2(center_x, top_wall_top_y)
 		light.name = "WallLight_T_%d_%d" % [mid_cell.x, mid_cell.y]
@@ -158,6 +164,7 @@ func generate() -> void:
 			glow_direction = WallLight.GlowDirection.RIGHT
 
 		var light = wall_light_scene.instantiate()
+		light.set_color(light_color)
 		light.rotation = 0.0
 		light.position = Vector2(center_x, center_y)
 		light.name = "WallLight_V_%d_%d" % [mid_cell.x, mid_cell.y]

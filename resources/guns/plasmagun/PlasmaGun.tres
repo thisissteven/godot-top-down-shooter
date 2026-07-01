@@ -7,8 +7,9 @@
 script = ExtResource("1_wf8f5")
 gun_name = "PlasmaGun"
 weapon_type = 2
-fire_rate = 1.0
-spread_degrees = 0.0
+fire_rate = 30.0
+spread_degrees = 1.0
+pellets_per_shot = 20
 magazine_size = 999
 reserve_ammo = 999
 projectile_scene = ExtResource("1_h6y4q")

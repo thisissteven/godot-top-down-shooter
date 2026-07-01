@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b1hnm5v5if7fy"]
+
+[ext_resource type="Texture2D" uid="uid://cqvq5vgy8jdcx" path="res://environment/windows/window_light_strip.png" id="1_j8j7a"]
+[ext_resource type="Script" uid="uid://cybl0g86gc8nf" path="res://environment/windows/window_light_vertical.gd" id="1_vswbc"]
+[ext_resource type="Texture2D" uid="uid://clnrhu66tgqq6" path="res://assets/Thin Light 05.png" id="2_x8bdx"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_x8bdx"]
+blend_mode = 1
+light_mode = 1
+
+[node name="WindowLightVertical" type="Node2D" unique_id=1911013169 groups=["wall_light"]]
+z_index = 99
+script = ExtResource("1_vswbc")
+light_color = Color(0.3137255, 0.44705883, 0.5647059, 1)
+light_texture = ExtResource("2_x8bdx")
+glow_alpha = 0.5
+glow_scale = 0.25
+
+[node name="LightStripLeft" type="Sprite2D" parent="." unique_id=438589201]
+modulate = Color(0.3137255, 0.44705883, 0.5647059, 1)
+material = SubResource("CanvasItemMaterial_x8bdx")
+position = Vector2(-4.5, 0)
+texture = ExtResource("1_j8j7a")
+
+[node name="LightStripRight" type="Sprite2D" parent="." unique_id=2139242193]
+modulate = Color(0.3137255, 0.44705883, 0.5647059, 1)
+material = SubResource("CanvasItemMaterial_x8bdx")
+position = Vector2(4.5, 0)
+texture = ExtResource("1_j8j7a")

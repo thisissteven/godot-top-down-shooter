@@ -28,6 +28,8 @@ enum GlowShape     { CONE, RADIAL, STRIP }
 
 @export var glow_alpha: float = 1.0:
 	set(value): glow_alpha = value; _rebuild_color()
+	
+@export var glow_scale: float = 0.5;
 
 ## When true, randomize_color picks from the palette instead of a random hue.
 @export var use_color_palette: bool = true
@@ -53,13 +55,18 @@ func _ready() -> void:
 	
 	if not glow_direction == GlowDirection.DOWN:
 		core_sprite.z_index  = 98
+	
+func set_color(selected_color: Color):
+	light_color = selected_color
+	_rebuild_color()
 
 ## Called by LightOverlay when building stamps.
-func get_light_stamp_data(selected_color: Color) -> Dictionary:
-	core_sprite.modulate = selected_color
+func get_light_stamp_data() -> Dictionary:
 	return {
 		"position" : global_position,
-		"texture"  : light_texture,          # your existing @export var
+		"texture"  : light_texture,
+		"color": light_color,
+		"scale": Vector2(glow_scale, glow_scale)
 	}
 
 # ─────────────────────────────────────────────

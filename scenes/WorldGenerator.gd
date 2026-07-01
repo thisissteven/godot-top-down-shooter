@@ -16,13 +16,16 @@ extends WorldGeneratorBase
 		run_light_mask = false
 
 func coloring():
-	$BottomWalls.modulate = Color("8e8e8eff")
+	$BottomWalls.modulate = Color("b1b1b1ff")
+	for door in $Doors.get_children():
+		var door_sprite = door.get_node("Move/DoorSprite")
+		door_sprite.modulate = Color("ababab")
 	$OuterBottomWalls.modulate = Color("ababab")
 	$StationUnderside.modulate = Color("ababab")
-	$Windows.modulate = Color("8e8e8eff")
-	$Tiles.modulate = Color("4e84a7ff")
-	$TopWalls.modulate = Color("434343ff")
-	$TopWallWindows.modulate = Color("434343ff")
+	$Windows.modulate = Color("b1b1b1ff")
+	$Tiles.modulate = Color("d5ffd8ff")
+	$TopWalls.modulate = Color("6d6d6dff")
+	$TopWallWindows.modulate = Color("6d6d6dff")
 
 func _ready() -> void:
 	coloring()

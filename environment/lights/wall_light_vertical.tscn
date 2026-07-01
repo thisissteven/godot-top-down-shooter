@@ -14,6 +14,7 @@ light_mode = 1
 script = ExtResource("1_gvpkp")
 light_color = Color(1, 1, 1, 1)
 light_texture = ExtResource("2_kf4qx")
+glow_scale = 0.35
 use_color_palette = false
 
 [node name="Light" type="Sprite2D" parent="." unique_id=1486303145]
